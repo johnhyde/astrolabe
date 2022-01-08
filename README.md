@@ -1,5 +1,14 @@
 # Astrolabe
+Astrolabe (%astrolabe) is a one-stop shop %docket app for exploring Urbit address space. Main features: ID Search, Sigil Search, Sky Chart, and Ship View (for viewing a given ship's details). Astrolabe integrates with %pals wherever possible, and contains documentation to explain the many quirks of Urbit address space to a new user.
 
+# Justification
+There should be a place on Urbit to explore Urbit address space. It will help new Urbiters get their bearings, and be a useful tool for anyone who wants to explore. Having open-source tools for this in one place _on Urbit_ is important.
+I like the name _Astrolabe_, because it's an old-timey guide to the heavenly bodies. _Planisphere_ could also be cool.
+
+# Proposal
+To read and discuss the full proposal, join the dedicated group on Urbit: `~poster-hoster-midlev-mindyr/astrolabe`
+
+# The Code
 ## Desk
 
 The desk currently has the minimum amount of files necessary to distribute an application and should be distributable immediately. Any further Hoon development should happen here.
