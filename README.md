@@ -6,7 +6,7 @@ There should be a place on Urbit to explore Urbit address space. It will help ne
 I like the name _Astrolabe_, because it's an old-timey guide to the heavenly bodies. _Planisphere_ could also be cool.
 
 # Proposal
-To read and discuss the full proposal, join the dedicated group on Urbit: `~poster-hoster-midlev-mindyr/astrolabe`
+You can read about the proposal [here](https://urbit.org/grants/astrolabe), and discuss in the dedicated group on Urbit: `~poster-hoster-midlev-mindyr/astrolabe`
 
 # The Code
 ## Desk

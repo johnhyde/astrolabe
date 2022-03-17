@@ -1,39 +1,35 @@
 <script lang="ts">
-  import { validateId } from '../lib/id';
+  import ValidationErrors from './ValidationProblems.svelte';
 
-  export let search: string = "";
+  import { validateIdSearchText, convertIdSearchTextToQuery } from '../lib/id';
+
+  export let searchText: string = 'der';
+  export let searchQuery: RegExp = /~der/;
   let problems: Array<string> = [];
 
-  function updateSearch(e) {
-    let newSearch = e.target.value;
-    problems = validateId(newSearch);
+  $: {
+    problems = validateIdSearchText(searchText);
     if (problems.length === 0) {
-      search = newSearch;
+      searchQuery = convertIdSearchTextToQuery(searchText);
+    } else {
+      searchQuery = undefined;
     }
   }
 </script>
 
 <div class="flex justify-center">
-  <input type="text" class="m-8 px-4 py-2 grow max-w-md rounded-full"
-    placeholder="Enter an ID or Azimuth number. '*' is wildcard."
-    value={search} 
-    on:change={updateSearch}
-    />
+  <div class="relative grow max-w-md rounded-full">
+    <input type="text" class="p-4 py-2 w-full rounded-full"
+      spellcheck="false"
+      placeholder="Enter an ID or Azimuth number. '*' is wildcard."
+      bind:value={searchText}
+      />
+    <button class="absolute right-0 w-10 h-10 rounded-full bg-black transition-opacity opacity-10 hover:opacity-40"></button>
+  </div>
 </div>
 
-<div class="m-8">
-  {#if problems.length > 0}
-    <p>
-      Sorry, the ID you entered is invalid:
-    </p>
-    {#each problems as problem}
-      <p>
-        {problem}
-      </p>
-    {/each}
-    <p>
-      <!-- TODO: add link to doc -->
-      You can read more here.
-    </p>
-  {/if}
-</div>
+{#if searchText !== '' && problems.length > 0}
+  <div class="flex justify-center">
+    <ValidationErrors {problems}></ValidationErrors>
+  </div>
+{/if}

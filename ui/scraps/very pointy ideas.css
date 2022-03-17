@@ -1,0 +1,8 @@
+very pointy
+clip-path: polygon(25% 0%, 0% 50%, 25% 100%, 100% 100%, 75% 50%, 100% 0%);
+
+less pointy
+clip-path: polygon(25% 0%, 0% 50%, 25% 100%, 100% 100%, 100% 0%);
+
+sharper point
+clip-path: polygon(100% 0%, 0% 50%, 100% 100%, 100% 100%, 100% 0%);

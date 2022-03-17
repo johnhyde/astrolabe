@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev:only": "vite",
+    "dev:only": "vite --port 4000",
     "build:only": "vite build",
     "tailwind:watch": "cross-env TAILWIND_MODE=watch cross-env NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/tailwind-output.css -w",
     "tailwind:build": "cross-env TAILWIND_MODE=build cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/tailwind-output.css",
@@ -33,6 +33,7 @@
     "@tlon/phonemes-js": "^1.0.0",
     "@tlon/sigil-js": "^1.4.5",
     "@urbit/api": "^2.1.0",
-    "@urbit/http-api": "^2.1.0"
+    "@urbit/http-api": "^2.1.0",
+    "urbit-ob": "^5.0.1"
   }
 }
