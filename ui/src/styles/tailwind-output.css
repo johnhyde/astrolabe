@@ -444,12 +444,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-left: auto;
   margin-right: auto;
 }
-.mt-0 {
-  margin-top: 0px;
-}
-.mb-8 {
-  margin-bottom: 2rem;
-}
 .-mt-2 {
   margin-top: -0.5rem;
 }
@@ -529,9 +523,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .rounded-lg {
   border-radius: 0.5rem;
-}
-.rounded {
-  border-radius: 0.25rem;
 }
 .border-b {
   border-bottom-width: 1px;
