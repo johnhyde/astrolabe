@@ -1,18 +1,24 @@
 <script lang="ts">
-  import ValidationErrors from './ValidationProblems.svelte';
+  import ValidationProblems from './ValidationProblems.svelte';
 
-  import { validateIdSearchText, convertIdSearchTextToQuery } from '../lib/id';
+  import { SearchAnalysis, analyzeSearch } from '../lib/id';
 
-  export let searchText: string = 'der';
+  export let patp: string = undefined;
   export let searchQuery: RegExp = /~der/;
-  let problems: Array<string> = [];
+  let searchText = 'der';
+  let analysis: SearchAnalysis;
 
   $: {
-    problems = validateIdSearchText(searchText);
-    if (problems.length === 0) {
-      searchQuery = convertIdSearchTextToQuery(searchText);
+    analysis = analyzeSearch(searchText);
+    if (analysis.queryIsValid) {
+      searchQuery = analysis.query;
     } else {
       searchQuery = undefined;
+    }
+    if (analysis.patpIsValid) {
+      patp = analysis.patp;
+    } else {
+      patp = undefined;
     }
   }
 </script>
@@ -27,9 +33,22 @@
     <button class="absolute right-0 w-10 h-10 rounded-full bg-black transition-opacity opacity-10 hover:opacity-40"></button>
   </div>
 </div>
-
-{#if searchText !== '' && problems.length > 0}
+<div class="bg-gray-300 p-2 rounded-lg">
+  <p>
+    text: {searchText}
+  </p>
+  <p>
+    query: {searchQuery}
+  </p>
+</div>
+{#if searchText !== '' && analysis && analysis.queryProblems.length > 0}
   <div class="flex justify-center">
-    <ValidationErrors {problems}></ValidationErrors>
+    <ValidationProblems type="Query Problems" problems={analysis.queryProblems}></ValidationProblems>
   </div>
 {/if}
+
+<!-- {#if searchText !== '' && analysis && analysis.patpProblems.length > 0}
+  <div class="flex justify-center">
+    <ValidationProblems type="ID Problems" problems={analysis.patpProblems}></ValidationProblems>
+  </div>
+{/if} -->

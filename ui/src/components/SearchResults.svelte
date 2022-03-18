@@ -4,13 +4,15 @@
   import ShipListing from './ShipListing.svelte';
   import SearchResultNavButtons from './SearchResultNavButtons.svelte';
   import ShipView from './ShipView.svelte';
-  export const searchText : string = '';
   export let searchQuery : RegExp;
+  export let patp : string;
   let contactsList = [];
   let selectedShipIndex: number;
 
   $: {
-    store.search(searchQuery)
+    if (!patp) {
+      store.search(searchQuery)
+    }
     // if (searchQuery) {
     //   store.search(searchQuery)
     // } else {
@@ -37,13 +39,16 @@
   }
 </script>
 
-<!-- TODO: find out why this doesn't update as expected -->
+<!-- should actually switch on whether field is empty -->
+<!-- searchQuery is undefined when query is invalid -->
 <!-- {#if searchQuery === undefined}
   <p class="p-6 rounded-lg bg-white">
     Hello, ~{window.ship}, would you like to search?
   </p>
 {/if} -->
-{#if selectedShip}
+{#if patp}
+  <ShipView {patp} />
+{:else if selectedShip}
   {#if contactsList.length > 1}
     <SearchResultNavButtons
       index={selectedShipIndex}
