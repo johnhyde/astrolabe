@@ -12,4 +12,4 @@ function filterObject(obj, predicate) {
 export {
   listStrings,
   filterObject,
-}
+};

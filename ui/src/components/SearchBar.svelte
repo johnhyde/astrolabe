@@ -5,7 +5,7 @@
 
   export let patp: string = undefined;
   export let searchQuery: RegExp = /~der/;
-  let searchText = 'der';
+  let searchText = '';
   let analysis: SearchAnalysis;
 
   $: {
@@ -33,14 +33,14 @@
     <button class="absolute right-0 w-10 h-10 rounded-full bg-black transition-opacity opacity-10 hover:opacity-40"></button>
   </div>
 </div>
-<div class="bg-gray-300 p-2 rounded-lg">
+<!-- <div class="bg-gray-300 p-2 rounded-lg">
   <p>
     text: {searchText}
   </p>
   <p>
     query: {searchQuery}
   </p>
-</div>
+</div> -->
 {#if searchText !== '' && analysis && analysis.queryProblems.length > 0}
   <div class="flex justify-center">
     <ValidationProblems type="Query Problems" problems={analysis.queryProblems}></ValidationProblems>

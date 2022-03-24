@@ -2,6 +2,7 @@
   import { link, replace } from 'svelte-spa-router'
   import { analyzeSearch, normalizeId } from '../lib/id';
   import { linkToShip } from '../lib/link';
+  import SearchBar from "../components/SearchBar.svelte";
   import ShipView from '../components/ShipView.svelte';
   import ValidationProblems from '../components/ValidationProblems.svelte';
   export let params: any = {};

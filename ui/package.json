@@ -10,7 +10,8 @@
     "dev": "concurrently \"npm run dev:only\" \"npm run tailwind:watch\"",
     "build": "npm run tailwind:build && npm run build:only",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "install": "npm run build && ../install.sh "
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",

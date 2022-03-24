@@ -1,10 +1,19 @@
 <script lang="ts">
+  import type { Scry } from '@urbit/http-api';
+  import UrbitApi from '@urbit/http-api';
+  import { settings } from '@urbit/api';
   import { clan, sein, patp2dec } from 'urbit-ob';
+
   import { link } from 'svelte-spa-router'
+  import { normalizeId } from '../lib/id';
   import { linkToShip } from '../lib/link';
   import Sigil from "./Sigil.svelte";
   export let patp: string;
   let parentChain: any[];
+  let rawPointInfoPromise: any;
+  let rawPointInfo: any = {};
+  let pointInfo: any = {};
+  const api: UrbitApi = new UrbitApi('');
 
   $: shipClass = clan(patp);
   $: azPoint = ['galaxy', 'star', 'planet'].includes(shipClass);
@@ -28,6 +37,45 @@
     parentChain = parents.map(parent => {
       return { patp: parent, link: linkToShip(parent) };
     });
+  }
+  $: {
+    rawPointInfo = {};
+    if (azPoint) {
+      rawPointInfoPromise = api.scry<any>({ app: 'astrolabe', path: `/point/${patp}` });
+      rawPointInfoPromise.then((info) => {
+        rawPointInfo = info;
+      });
+    }
+  }
+  $: {
+    pointInfo = {};
+    let status, life, rift;
+    if (!azPoint) {
+    } else if (rawPointInfo.point) {
+      const { point } = rawPointInfo;
+      status = point.dominion.toUpperCase();
+      if (status.length == 2) {
+        status = `Activated on ${status}?`;
+      } else {
+        status = 'Spawned?'
+      }
+      life = point.net.keys.life;
+      rift = point.net.rift;
+      const { sponsor } = point.net;
+      if (sponsor.has) {
+        pointInfo.sponsor = normalizeId(sponsor.who);
+      }
+    } else {
+      status = 'Unspawned';
+      life = 0;
+      rift = 0;
+    }
+    pointInfo = {
+      ...pointInfo,
+      status,
+      life,
+      rift,
+    };
   }
 </script>
 
@@ -54,5 +102,39 @@
         {/each}
       </p>
     {/if}
+    {#if shipClass !== 'galaxy'}
+      <p>
+        {#if pointInfo.sponsor && shipClass !== 'galaxy'}
+          Sponsor:
+          <a use:link={linkToShip(pointInfo.sponsor)}>{pointInfo.sponsor}</a>
+        {:else}
+          Unsponsored
+        {/if}
+      </p>
+    {/if}
+    {#if pointInfo.status}
+      <p>
+        Status:
+        {pointInfo.status}
+      </p>
+      <p>
+        Life:
+        {pointInfo.life}
+      </p>
+      <p>
+        Rift:
+        {pointInfo.rift}
+      </p>
+    {/if}
+    {#await rawPointInfoPromise}
+      Loading Azimuth info...
+    {:then value}
+      {#if value.point}
+        <p>
+          Raw Info:
+          {@html JSON.stringify(rawPointInfo, null, 2)}
+        </p>
+      {/if}
+    {/await}
   </div>
 </div>

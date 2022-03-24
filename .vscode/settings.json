@@ -1,0 +1,52 @@
+{
+  "saveEditorLayout.list": [
+    {
+      "name": "gall agent",
+      "orientation": 0,
+      "documents": [
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/desk/sur/astrolabe.hoon",
+          "column": 1
+        },
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/desk/app/astrolabe.hoon",
+          "column": 1
+        },
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/extras/scraps/json-lib.hoon",
+          "column": 2
+        },
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/base-desk/lib/naive.hoon",
+          "column": 3
+        },
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/extras/scraps/scry thoughts.txt",
+          "column": 3
+        },
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/desk/mar/astrolabe/point.hoon",
+          "column": 4
+        },
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/install.sh",
+          "column": 5
+        },
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/desk/lib/astrolabe.hoon",
+          "column": 5
+        }
+      ]
+    },
+    {
+      "name": "ui",
+      "orientation": 0,
+      "documents": [
+        {
+          "fsPath": "/Users/john/ws/urbit-apps/astrolabe/ui/src/components/ShipView.svelte",
+          "column": 1
+        }
+      ]
+    }
+  ]
+}

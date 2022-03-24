@@ -3,19 +3,19 @@
 # Taken from: https://github.com/timlucmiptev/btc-agents/blob/master/install.sh
 # by ~timluc-miptev
 #
-usage() { printf "Usage: $0 [-w] URBIT_PIER_DIRECTORY  \n(-w: flag to watch and live copy code)\n" 1>&2; exit 1; }
+usage() { printf "Usage: $0 [-w] URBIT_DESK_DIRECTORY  \n(-w: flag to watch and live copy code)\n" 1>&2; exit 1; }
 
 if [ $# -eq 0 ]; then
     usage
     exit 2
 fi
-PIER=$1
-EXCLUDE_FILE=ignore_files.txt
+DESK=$1
+EXCLUDE_FILE=config/ignore_files_on_install.txt
 
 while getopts "w" opt; do
     case ${opt} in
         w) WATCH_MODE="true"
-           PIER=$2
+           DESK=$2
            ;;
         *) usage
            ;;
@@ -24,16 +24,17 @@ done
 
 if [ -z "$WATCH_MODE" ]; then
     echo "Installed %astrolabe"
-    # rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $PIER/
-    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $PIER/
+    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./base-desk/* $DESK/
+    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $DESK/
 
 else
-   echo "Watching for changes to copy to ${PIER}..."
+   echo "Watching for changes to copy to ${DESK}..."
    while [ 0 ]
    do
     sleep 0.8
-    # rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $PIER/
-    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $PIER/
+    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./base-desk/* $DESK/
+    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $DESK/
 
    done
 fi
+ls
