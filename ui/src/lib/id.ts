@@ -1,5 +1,10 @@
-import type { Patp } from '@urbit/api';
-import { listStrings } from './utils';
+import BN from 'bn.js';
+import type { Patp } from '@urbit/api'
+import { hex2patp, patp2hex, patp as any2patp } from 'urbit-ob';
+import { isStringNaN, listStrings } from './utils';
+
+// 340282366920938463463374607431768211455
+const largestValidAzNumber = (new BN(256)).pow(new BN(16)).sub(new BN(1));
 
 type Problem = string;
 
@@ -7,9 +12,11 @@ class SearchAnalysis {
   queryProblems: Problem[] = [];
   private _search: string = '';
   patpProblems: Problem[] = [];
+  isNumber: boolean = false;
+  azNumber: BN;
 
-  constructor(search: string) {
-    this.search = search;
+  constructor(search?: string) {
+    this.search = search || '';
   }
 
   get searchIsSigged() {
@@ -23,8 +30,12 @@ class SearchAnalysis {
     return convertSearchTextToRegex(search);
   }
 
+  get azHex(): string {
+    return hex2patp(this.azNumber.toString('hex'));
+  }
+
   get patp(): Patp {
-    return normalizeId(this._search);
+    return this.isNumber ? this.azHex : normalizeId(this._search);
   }
 
   get queryIsValid(): boolean {
@@ -85,6 +96,7 @@ class SearchAnalysis {
   resetAnalysis() {
     this.queryProblems = [];
     this.patpProblems = [];
+    this.isNumber = false;
   }
 
   // mergeAnalysis(analysis: SearchAnalysis): void {
@@ -96,6 +108,18 @@ class SearchAnalysis {
 
   analyze(): void {
     this.resetAnalysis();
+    if (!isStringNaN(this._search)) {
+      let num = new BN(this._search);
+      if (num.gt(largestValidAzNumber)) {
+        this.pushPatpProblem(azNumberTooBig);
+      } else if (num.negative === 1) {
+        this.pushPatpProblem(azNumberNegative);
+      } else {
+        this.isNumber = true;
+        this.azNumber = num;
+      }
+      return;
+    }
     let search = normalizeIdAndDesig(this._search);
     
     // Validate patp is not empty
@@ -299,6 +323,8 @@ const moonFiller = `${wildWord}-${wildWord}`;
 const cometFiller = `-${wildWord}-${wildWord}-${wildWord}--${wildWord}-${wildWord}-${wildWord}-`;
 
 // Error Messages
+const azNumberNegative = `The number you entered is negative. Urbit IDs must be non-negative integers.`;
+const azNumberTooBig = `The number you entered is too large. The largest possible Urbit ID is 256^16 - 1 (${largestValidAzNumber.toString()}).`;
 const emptyPatpMessage = "ID cannot be empty.";
 const improperSigMessage = "There should only be one ~ in an ID, at the beginning.";
 const cannotInferMoonPatpMessage = "Please enter the full moon ID, rather than using the '^' abbreviation.";
@@ -350,6 +376,7 @@ function invalidFragmentsMessage(fragments: string[]) {
   return `${wordListString} cannot match any prefix/suffix combinations.`;
 }
 
+
 function sig(str: string): string {
   if (str[0] !== '~') {
     return '~' + str;
@@ -369,11 +396,43 @@ function sanitizeSearch(search: string): string {
 }
 
 function normalizeId(patp: string): string {
-  return sig(sanitizeSearch(patp));
+  return unpadPatp(sig(sanitizeSearch(patp)));
 }
 
 function normalizeIdAndDesig(patp: string): string {
-  return desig(sanitizeSearch(patp));
+  return desig(normalizeId(patp));
+}
+
+function unpadPatp(patp: string): string {
+  try {
+    return hex2patp(patp2hex(patp));
+  } catch {
+    return patp;
+  }
+}
+
+// Adapted from cite() in urbit/pkg/npm/api/lib/lib.ts
+// to handle those rare comets which start with dozzod
+function cite(ship: string) {
+  let patp = ship,
+    shortened = '';
+  if (patp === null || patp === '') {
+    return null;
+  }
+  if (patp.startsWith('~')) {
+    patp = patp.substr(1);
+  }
+  // comet
+  if (patp.length >= 35) {
+    shortened = '~' + patp.slice(0, 6) + '_' + patp.slice(-6);
+    return shortened;
+  }
+  // moon
+  if (patp.length >= 20) {
+    shortened = '~' + patp.slice(-13, -7) + '^' + patp.slice(-6);
+    return shortened;
+  }
+  return `~${patp}`;
 }
 
 function splitIdIntoWords(str: string): string[] {
@@ -429,8 +488,6 @@ function suffixSearchValid(search: string, options = {}) {
   return syllableSearchValid(search, suffixes, options);
 }
 
-
-
 function analyzeSearch(search: string): SearchAnalysis {
   return new SearchAnalysis(search);
 }
@@ -439,6 +496,7 @@ export {
   SearchAnalysis,
   normalizeId,
   normalizeIdAndDesig,
+  cite,
   convertSearchTextToRegex,
   analyzeSearch,
 };

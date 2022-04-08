@@ -1,5 +1,6 @@
 /-  astrolabe
-/+  naive, default-agent, dbug
+/+  naive, default-agent, dbug, agentio
+/$  udon-to-docu  %udon  %docu
 |%
 +$  versioned-state
   $%  state-0
@@ -11,9 +12,11 @@
 =|  state-0
 =*  state  -
 ^-  agent:gall
+=<
 |_  =bowl:gall
 +*  this  .
     def   ~(. (default-agent this %.n) bowl)
+    hc    ~(. +> bowl)
 ::
 ++  on-init
   ^-  (quip card _this)
@@ -31,11 +34,31 @@
   ?+    path  (on-peek:def path)
       [%x %point @ ~]
     =,  bowl
-    =/  point  .^(noun %gx /(scot %p our)/azimuth/(scot %da now)/point/[&3.path]/noun)
-    ``astrolabe-point+!>((upoint:astrolabe point))
+    :-  ~  :-  ~  :-  %astrolabe-point
+    !>  .^(upoint:astrolabe %gx (scrio:hc %azimuth /point/[&3.path]/noun))
+      [%x %doc ^]
+    =/  doc-path=^path  t.t.path
+    =/  doc  (read-doc:hc doc-path)
+    ?~  doc
+      `~
+    ``json+!>(s+u.doc)
   ==
 ::
 ++  on-agent  on-agent:def
 ++  on-arvo   on-arvo:def
 ++  on-fail   on-fail:def
+--
+::
+|_  =bowl:gall
+++  scrio  ~(scry agentio bowl)
+++  read-doc
+  |=  =path
+  =/  doc-path=^path  :(weld /doc/usr path /udon)
+  ^-  (unit @t)
+  ?.  .^(? %cu (scrio q.byk.bowl doc-path))
+    ~
+  =/  mme=(each manx *)  (mule |.((udon-to-docu .^(@t %cx (scrio q.byk.bowl doc-path)))))
+  ?:  ?=(%.n -.mme)
+    ~
+  `(crip (en-xml:html p.mme))
 --

@@ -24,17 +24,21 @@ done
 
 if [ -z "$WATCH_MODE" ]; then
     echo "Installed %astrolabe"
+    rm -r $DESK/*
     rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./base-desk/* $DESK/
+    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./docs-dev-desk/* $DESK/
     rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $DESK/
 
 else
-   echo "Watching for changes to copy to ${DESK}..."
-   while [ 0 ]
-   do
-    sleep 0.8
-    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./base-desk/* $DESK/
-    rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $DESK/
+    echo "Watching for changes to copy to ${DESK}..."
+    rm -r $DESK/*
+    while [ 0 ]
+    do
+        sleep 0.8
+        rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./base-desk/* $DESK/
+        rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./docs-dev-desk/* $DESK/
+        rsync -r --copy-links --exclude-from=$EXCLUDE_FILE ./desk/* $DESK/
 
-   done
+    done
 fi
 ls

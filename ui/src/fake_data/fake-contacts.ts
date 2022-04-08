@@ -1,4 +1,7 @@
-export default {
+
+import type { Contacts } from '@urbit/api';
+
+const fakeContacts: Contacts = {
   "~bus": {
     "status": "busbusbus",
     "last-updated": 1614902970000,
@@ -90,3 +93,5 @@ export default {
     ]
   },
 };
+
+export default fakeContacts;

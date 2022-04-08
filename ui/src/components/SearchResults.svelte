@@ -4,8 +4,8 @@
   import ShipListing from './ShipListing.svelte';
   import SearchResultNavButtons from './SearchResultNavButtons.svelte';
   import ShipView from './ShipView.svelte';
-  export let searchQuery : RegExp;
-  export let patp : string;
+  export let searchQuery: RegExp;
+  export let patp: string;
   let contactsList = [];
   let selectedShipIndex: number;
 

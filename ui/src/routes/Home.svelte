@@ -5,7 +5,7 @@
   let searchQuery: RegExp;
 </script>
 
-<div class="m-8 flex flex-col space-y-8">
+<div class="m-8 flex flex-col items-center space-y-8">
   <SearchBar bind:patp bind:searchQuery />
   <SearchResults {patp} {searchQuery}/>
 </div>

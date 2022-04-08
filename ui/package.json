@@ -35,6 +35,12 @@
     "@tlon/sigil-js": "^1.4.5",
     "@urbit/api": "^2.1.0",
     "@urbit/http-api": "^2.1.0",
+    "bn.js": "^5.2.0",
+    "i": "^0.3.7",
+    "npm": "^8.6.0",
+    "sass": "^1.50.0",
+    "svelte-copy-to-clipboard": "^0.2.5",
+    "tippy.js": "^6.3.7",
     "urbit-ob": "^5.0.1"
   }
 }

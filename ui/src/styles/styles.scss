@@ -1,0 +1,11 @@
+@import 'tailwind-output.css';
+@import 'tippy.css';
+@import 'docs.scss';
+
+body {
+  @apply bg-navy;
+}
+
+a {
+  @apply underline underline-offset-2;
+}

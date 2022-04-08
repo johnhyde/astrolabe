@@ -1,0 +1,5 @@
+@import 'tippy.js/dist/tippy.css';
+
+.tippy-box[data-theme~='astrolabe'] {
+  @apply bg-navy rounded-md px-1 text-white text-base border border-white break-words;
+}

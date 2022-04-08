@@ -1,0 +1,33 @@
+.doc {
+  h1, h2, h3, h4 {
+    @apply font-bold;
+  }
+
+  h1 {
+    @apply text-2xl
+  }
+
+  h2 {
+    @apply text-xl
+  }
+
+  h3 {
+    @apply text-lg
+  }
+
+  ul, ol {
+    @apply list-inside;
+
+    li p {
+      @apply inline;
+    }
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+}
