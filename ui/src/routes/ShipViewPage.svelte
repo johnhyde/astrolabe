@@ -1,11 +1,12 @@
 <script lang="ts">
   import { link, replace } from 'svelte-spa-router'
+  import docs from '../stores/docs';
   import { SearchAnalysis } from '../lib/id';
   import { linkToShip } from '../lib/link';
   import SearchBar from "../components/SearchBar.svelte";
   import ShipView from '../components/ShipView.svelte';
   import ValidationProblems from '../components/ValidationProblems.svelte';
-  import DocModal from '../components/DocModal.svelte';
+  import DocModal from '../components/Doc.svelte';
   export let params: any = {};
   let patp: string;
   let analysis: SearchAnalysis = new SearchAnalysis();
@@ -35,10 +36,10 @@
   <!-- <a use:link={"/"} class="p-4 bg-white rounded-lg text-center">Go Home</a> -->
   <!-- <SearchBar bind:searchText={search} bind:analysis /> -->
   <SearchBar bind:analysis bind:search />
+  <button on:click={() => docs.show('urbit-id')}>docs</button>
   {#if analysis.patpIsValid}
   <ShipView patp={analysis.patp} />
   {:else if (search.length > 0)}
     <ValidationProblems problems={analysis.patpProblems} />
   {/if}
-  <DocModal path="test" />
 </div>

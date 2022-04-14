@@ -1,17 +1,29 @@
 <script lang="ts">
-  import store from '../stores/store';
+  import { createEventDispatcher } from 'svelte';
+  import DocContent from './DocContent.svelte';
+  import Hamburger from './buttons/Hamburger.svelte';
+  
+  export let path: string;
+  
+  const dispatch = createEventDispatcher();
+  function close() {
+    dispatch('close');
+  }
 
-  export let path:string;
+  function navigate(path) {
+    dispatch('navigate', path);
+  }
 </script>
 
-<div class="doc">
-  {#await store.getDoc(path)}
-    <h3>Loading page...</h3>
-  {:then docHtml}
-    {@html docHtml}
-  {:catch error}
-    <h1>Oops!</h1>
-    <h2>Couldn't load the doc at /{path}</h2>
-    <p>Please DM ~midlev-mindyr so he can fix this.</p>
-  {/await}
+<div class="p-8 rounded-lg bg-white">
+  <div class="flex">
+    <Hamburger />
+    <div class="flex-grow text-center text-xl">
+      Help
+    </div>
+    <button class="w-10" on:click={close}>
+      X
+    </button>
+  </div>
+  <DocContent {path} on:navigate />
 </div>

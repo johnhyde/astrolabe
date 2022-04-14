@@ -1,13 +1,14 @@
 <script lang="ts">
   import Router from 'svelte-spa-router';
-  import Urbit from '@urbit/http-api';
-  import { Charges, ChargeUpdateInitial, scryCharges } from '@urbit/api';
   import Home from './routes/Home.svelte';
+  import HelpPage from './routes/HelpPage.svelte';
   import ShipViewPage from './routes/ShipViewPage.svelte';
+  import HelpModal from './components/HelpModal.svelte';
   import "./styles/styles.scss";
 
   const routes = {
     // '/': Home,
+    '/help/:path?': HelpPage,
     '/:patp?': ShipViewPage,
     '/ship/:patp?': ShipViewPage,
     '*': Home,
@@ -15,5 +16,6 @@
 </script>
 
 <main>
+  <HelpModal />
   <Router {routes} />
 </main>

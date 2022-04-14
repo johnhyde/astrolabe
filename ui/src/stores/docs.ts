@@ -5,7 +5,7 @@ const docs = {};
 // import type { AppState, Contacts } from '../types/store';
 
 const initStore: any = {
-  showDoc: false,
+  show: false,
   path: '',
 };
 
@@ -22,13 +22,20 @@ async function getDoc(path): Promise<string> {
   }
 }
 
-async function showDoc(path) {
+function show(path) {
   update($store => ({
     ...$store,
     path,
-    showDoc: true,
+    show: true,
+  }));
+}
+
+function hide() {
+  update($store => ({
+    ...$store,
+    show: false,
   }));
 }
 
 
-export default { subscribe, getDoc, showDoc };
+export default { subscribe, getDoc, show, hide };
