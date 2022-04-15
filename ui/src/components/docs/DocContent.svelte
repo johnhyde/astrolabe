@@ -2,8 +2,8 @@
  
   import { createEventDispatcher } from 'svelte';
 
-  import docLinks from "../actions/docLinks";
-  import docs from "../stores/docs";
+  import docLinks from "../../actions/docLinks";
+  import docs from "../../stores/docs";
  
   export let path:string;
  

@@ -1,6 +1,6 @@
 .doc {
   h1, h2, h3, h4 {
-    @apply font-bold;
+    @apply font-bold mt-2 py-2;
   }
 
   h1 {
@@ -15,11 +15,19 @@
     @apply text-lg
   }
 
+  p {
+    @apply py-2;
+  }
+
   ul, ol {
     @apply list-inside;
 
-    li p {
-      @apply inline;
+    li {
+      @apply py-1;
+
+      & * {
+        @apply inline;
+      }
     }
   }
 
@@ -29,5 +37,9 @@
 
   ol {
     @apply list-decimal;
+  }
+
+  code {
+    @apply bg-orange-gold px-0.5 rounded;
   }
 }

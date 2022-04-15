@@ -11,6 +11,7 @@ module.exports = {
       colors: {
         navy: '#1f243c',
         gold: '#fcd34d',
+        'orange-gold': '#f7d392',
       }
     },
     screens: {

@@ -1,8 +1,14 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { push } from 'svelte-spa-router';
-  import Doc from '../components/Doc.svelte';
+  import docs from '../stores/docs';
+  import Doc from '../components/docs/Doc.svelte';
   export let params: any = {};
   $: path = params.path || '';
+
+  onMount(() => {
+    docs.hide();
+  });
 
   // $: title = path ? capitalizeWords(path.replace(/-/g, ' ')) : 'Help';
 
@@ -15,4 +21,6 @@
   }
 </script>
 
-<Doc {path} on:close={closeDoc} on:navigate={navigate} />
+<div class="m-4 2xs:m-8 md:max-w-xl md:mx-auto">
+  <Doc {path} on:close={closeDoc} on:navigate={navigate} />
+</div>

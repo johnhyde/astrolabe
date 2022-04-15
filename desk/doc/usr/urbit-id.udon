@@ -1,7 +1,71 @@
+:-  ~[comments+&]
 ;>
-## What is an Urbit ID
+# What is an Urbit ID?
 
-It's pretty cool actually:
-- secure
-- unique
-- fun to say (_sometimes_)
+An Urbit ID is like an account on the Urbit network. You can’t use Urbit without an Urbit ID.
+
+Every active Urbit ID has a number of properties:
+
+- `@p` (pronounced pat-pee) - A permanent, unique identifier, e.g. ~zod or ~midlev-mindyr.
+  This often functions like a username or email address.
+  Every `@p` is equivalent to a number ≥ 0 and > 256¹⁶, with longer `@p`s giving larger numbers.
+  The length of a `@p` indicates what class of ID it is.
+  [Read More](/~/scry/docs/usr/astrolabe/patpee.html)
+
+- Public and Private Keys - These allow you to cryptographically prove your ownership of an ID.
+  This is a bit like having a password for an account, or signing a document.
+  All messages on Urbit are automatically signed and verified, so you know they’re authentic.
+  [Read More](/~/scry/docs/usr/astrolabe/keys.html)
+
+- Ship - A ship is an Urbit computer, which is always tied to the Urbit ID it was booted with.
+  When you boot Urbit for the first time, you provide your keys and we call this booting a “ship”.
+  When you use this computer on the network, you are “piloting” your “ship”.
+  Your ship stores all your data and apps.
+
+## Classes of Urbit ID
+
+There are 5 classes of Urbit ID:
+[Galaxy](/~/scry/docs/usr/astrolabe/galaxy.html),
+[Star](/~/scry/docs/usr/astrolabe/star.html),
+[Planet](/~/scry/docs/usr/astrolabe/planet.html),
+[Moon](/~/scry/docs/usr/astrolabe/moon.html), and
+[Comet](/~/scry/docs/usr/astrolabe/comet.html).
+
+Galaxies, stars, and planets are [Azimuth points](/~/scry/docs/usr/astrolabe/azimuth.html),
+and work very similarly.
+Moons and comets are a bit different.
+
+
+### Azimuth Points
+
+An [Azimuth point](/~/scry/docs/usr/astrolabe/azimuth.html) is just an Urbit ID which is secured on the Ethereum blockchain.
+Galaxies, stars, and planets are NFTs, governed by the Azimuth smart contract.
+Owning an Azimuth point lets you reset your keys, spawn new IDs, and transfer ownership
+to someone else, among other things.
+
+When Ethereum got popular and transactions became very expensive, a
+[Layer 2 solution]((/~/scry/docs/usr/astrolabe/l2.html))
+was developed (commonly called "L2"), which allows Azimuth points to be spawned, transferred,
+etc. basically for free.
+
+### Moons
+
+Moons are created, owned, and controlled by a parent ID, either a galaxy, star, or planet.
+Moons are free and easy to create, and each Azimuth point can create about 4 billion.
+Moons can use the Urbit network just like any other ID, but they are inextricably linked to their parents.
+[Read More](/~/scry/docs/usr/astrolabe/moon.html)
+
+### Comets
+
+Comets are essentially unlimited, and can be created for free by anyone.
+They're good for new people exploring the network, operating somewhat anonymously,
+and testing things out. However, the keys for a comet can't be changed, so they are
+not a viable long-term ID. Also, since anyone can boot a comet, comets might be viewed
+with distrust in some contexts.
+
+# Further Reading:
+
+- [A more technical overview](https://urbit.org/using/id/overview)
+- From the Operator’s Guide:
+  [Which ID should I buy?](https://operators.urbit.org/guides/which-id-should-i-buy)
+- [Azimuth FAQ](https://azimuth.network/#faq)

@@ -15,7 +15,7 @@
   }
 </script>
 
-<main>
+<main class="h-full overflow-y-auto">
   <HelpModal />
   <Router {routes} />
 </main>

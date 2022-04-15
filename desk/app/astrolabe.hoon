@@ -57,8 +57,9 @@
   ^-  (unit @t)
   ?.  .^(? %cu (scrio q.byk.bowl doc-path))
     ~
-  =/  mme=(each manx *)  (mule |.((udon-to-docu .^(@t %cx (scrio q.byk.bowl doc-path)))))
+  =/  mme=(each manx tang)  (mule |.((udon-to-docu .^(@t %cx (scrio q.byk.bowl doc-path)))))
   ?:  ?=(%.n -.mme)
+    %-  (slog p.mme)
     ~
   `(crip (en-xml:html p.mme))
 --

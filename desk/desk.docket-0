@@ -1,6 +1,7 @@
 :~  title+'Astrolabe'
-    info+'An Urbit app that does great things'
-    color+0x2e.4347
+    info+'Your guide to the Urbit constellations'
+    color+0x1f.243c
+    image+'https://raw.githubusercontent.com/johnhyde/astrolabe/main/ui/src/assets/astrolabe.svg'
     glob-http+['https://bootstrap.urbit.org/glob-0v5.hurm4.ejod5.ngg9h.iub9i.n1j7o.glob' 0v5.hurm4.ejod5.ngg9h.iub9i.n1j7o]
     base+'astrolabe'
     version+[0 0 1]
