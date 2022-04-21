@@ -1,0 +1,10 @@
+;>
+[< What is an Urbit ID?](/~/scry/docs/usr/astrolabe/urbit-id.html)
+
+# Comets
+
+Comets are essentially unlimited, and can be created for free by anyone.
+They're good for new people exploring the network, operating somewhat anonymously,
+and testing things out. However, the keys for a comet can't be changed, so it's not
+not a viable long-term ID. Also, since anyone can boot a comet, comets might be viewed
+with distrust in some contexts.

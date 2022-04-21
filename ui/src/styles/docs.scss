@@ -20,14 +20,14 @@
   }
 
   ul, ol {
-    @apply list-inside;
+    @apply pl-5;
 
     li {
       @apply py-1;
 
-      & * {
-        @apply inline;
-      }
+      // & * {
+      //   @apply inline;
+      // }
     }
   }
 
@@ -41,5 +41,7 @@
 
   code {
     @apply bg-orange-gold px-0.5 rounded;
+    // @apply bg-gray-300 px-0.5 rounded;
+    font-size: 0.9375em;
   }
 }

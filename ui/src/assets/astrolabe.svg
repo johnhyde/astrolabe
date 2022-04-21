@@ -28,8 +28,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.4798268"
-     inkscape:cx="377.21945"
-     inkscape:cy="262.59475"
+     inkscape:cx="452.24652"
+     inkscape:cy="416.81707"
      inkscape:window-width="1549"
      inkscape:window-height="1080"
      inkscape:window-x="490"
@@ -153,19 +153,19 @@
        x2="240"
        y2="120"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.5,0,0,1.5,-59.999998,-59.999998)" />
+       gradientTransform="matrix(1.8333333,0,0,1.8333333,-99.999996,-99.999996)" />
   </defs>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="display:inline;fill:url(#linearGradient4362);fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:none;fill:url(#linearGradient4362);fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4185"
-       width="360"
-       height="360"
-       x="-60"
-       y="-60"
+       width="440"
+       height="440"
+       x="-100"
+       y="-100"
        inkscape:label="bg" />
     <circle
        style="display:inline;fill:none;fill-rule:evenodd;stroke:url(#linearGradient3030);stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"

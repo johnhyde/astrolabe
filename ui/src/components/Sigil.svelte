@@ -28,7 +28,6 @@
   }
 </script>
 
-<!-- <div style="height: {size}px; width: {size}px;" > -->
 <div>
   {#if displaySigil}
     {@html svgString}

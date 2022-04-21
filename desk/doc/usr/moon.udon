@@ -1,0 +1,8 @@
+;>
+[< What is an Urbit ID?](/~/scry/docs/usr/astrolabe/urbit-id.html)
+
+# Moons
+
+Moons are created, owned, and controlled by a parent ID, either a galaxy, star, or planet.
+Moons are free and easy to create, and each Azimuth point can create about 4 billion.
+Moons can use the Urbit network just like any other ID, but they are inextricably linked to their parents.

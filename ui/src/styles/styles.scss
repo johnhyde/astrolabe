@@ -7,5 +7,7 @@ body {
 }
 
 a {
-  @apply underline underline-offset-2;
+  @apply underline underline-offset-2 decoration-gold-s2;
+  // @apply underline underline-offset-2 decoration-gold;
+  // @apply underline underline-offset-2 decoration-orange-gold;
 }

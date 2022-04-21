@@ -1,4 +1,35 @@
 ;>
-# Galaxy
+[< What is an Urbit ID?](/~/scry/docs/usr/astrolabe/urbit-id.html)
 
-A galaxy is a big boi.
+# Galaxies
+
+Galaxies are the rarest and highest ranking class of Urbit ID, as there are only 256 of them.
+Together, they form the [Galactic Senate](https://urbit.org/docs/glossary/senate)
+which has the power make changes to the Urbit ID system.
+Galaxies help route communication on the network, and each one can spawn 255 [stars](/~/scry/docs/usr/astrolabe/star.html).
+
+## @p
+
+A galaxy `@p` is just one phoneme, 3 letters. E.g. `~zod`, `~bus`, and `~fes` are galaxies.
+
+## Spawning
+
+Each galaxy can spawn 255 stars.
+These stars will have 2-phoneme `@p`s starting with a prefix, and ending with the galaxy's `@p`.
+E.g. `~zod` spawned `~marzod`, `~binzod`, and `~wanzod`, among others.
+
+## Sponsoring
+
+A galaxy can sponsor stars and planets, although usually planets are sponsored by stars.
+By default, a galaxy will sponsor all its children, although it can sponsor others as well.
+
+Galaxies perform peer discovery for their sponsees, meaning that they tell other Urbit IDs
+where they can find their sponsees so that they can communicate directly withthem—similar to
+asking a DNS server to tell you where to look for google.com.
+Thus, it is crucially important that galaxies be online and reachable.
+
+## [The Galactic Senate](https://urbit.org/docs/glossary/senate)
+
+Galaxy owners can [vote](https://urbit.org/docs/glossary/voting) on proposals
+to upgrade the logic of [Azimuth](/~/scry/docs/usr/astrolabe/azimuth.html)
+or approve the content of a document.

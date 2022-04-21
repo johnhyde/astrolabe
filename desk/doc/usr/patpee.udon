@@ -1,4 +1,104 @@
 ;>
-# What is a `@p`?
+# What is a @p?
 
-It's just a number written as some syllables!
+First of all, it's pronounced "pat-pee", and we'll see why later.
+
+## It's a name
+
+Your `@p` is your name on Urbit, and it's designed to be pronounceable.
+A `@p` starts with a tilde (`~`), and is made up of 3-letter phonemes/syllables, a combination of prefixes and suffixes.
+There are 256 prefixes, and 256 suffixes.
+`~zod` and `~bus` are galaxies, so their whole `@p`s are just one suffix.
+
+Most `@p`s are made up of 6-letter "words" ( a prefix + a suffix), joined by hyphens.
+E.g. `~midlev-mindyr` has the prefixes `mid` and `min` and the suffixes `lev` and `dyr`.
+You can see a list of prefixes and suffixes [here](/~/scry/docs/usr/astrolabe/phonemes.html).
+
+## It's a number
+
+A `@p` is actually just a way to write a non-negative integer with phonemes.
+That means every `@p` can be written as a number, and any non-negative integer can be written as a `@p`.
+- `~zod` is 0 (the first galaxy)
+- `~marzod` is 256 (the first star)
+- `~dapnep-ronmyl` is 65536 (256², the first planet)
+- `~sampel-palnet` is 1624961343.
+- `~doznec-dozzod-dozzod` is 4294967296 (256⁴, the first moon, moon of `~zod`)
+
+For [Azimuth points](/~/scry/docs/usr/astrolabe/azimuth.html), this number is also
+called the Azimuth number, and it's stored on the blockchain instead of a `@p`.
+The highest Azimuth number is 256⁴ - 1 (4294967295).
+Everything above that is a moon, a comet, or not a valid ID number.
+
+## It's a username / email address / phone number
+
+A `@p` is the unique identifier for a ship, and it's used all throughout Urbit, in the code and in user-facing apps.
+A `@p` can't be changed.
+It will always refer to the same Urbit ID, and that Urbit ID will always have the same `@p`.
+A given ID may change owners, however, and you can always buy a new ID with a new `@p`.
+
+## How to tell a ship's class
+
+It's easy to tell the class of a ship by looking at its `@p`.
+- If it's just 1 phoneme, a suffix, like `~zod` or `~bus`, it's a [galaxy](/~/scry/docs/usr/astrolabe/galaxy.html).
+
+- If it has 2 phonemes, a prefix and a suffix, like `~marzod` or `~batbus`, it's a [star](/~/scry/docs/usr/astrolabe/star.html).
+
+  The suffix of a star `@p` is its parent galaxy, so the parent of `~marzod` is `~zod`, and the parent of `~batbus` is `~bus`.
+
+- If it has 4 phonemes separated by a hyphen, like `~sampel-palnet`, it's a [planet](/~/scry/docs/usr/astrolabe/planet.html).
+
+  Unlike stars, planet `@p`s don't contain the `@p` of their parent—the names are scrambled
+  to give each star a good variety of planet `@p`s to spawn.
+
+- If it has 8 phonemes, like `~poster-hoster-midlev-mindyr`, it's a [moon](/~/scry/docs/usr/astrolabe/moon.html).
+
+  If it has 4 phonemes separated by a caret, like `~midlev^mindyr`, that's an abbreviated moon `@p`.
+  The last 4 phonemes of a moon `@p` give its parent, and are used in the abbreviation.
+
+- If it has 16 phonemes, like `~dirbec-morfeb-ritlys-timsef--padnum-mapnep-nolfel-binzod`,
+  or more likely 4 phonemes separated by an underscore, like `~dirbec_binzod`,
+  it's a [comet](/~/scry/docs/usr/astrolabe/comet.html).
+
+  You may notice a double hyphen in the center of the full comet `@p`.
+  This is part of the required syntax of a `@p`, and makes it easier to read.
+  The abbreviation combines the first and last "words" of the `@p` with an underscore. 
+
+
+## The thing about `doz` and `zod`
+
+Remember that a `@p` is actually just a way of writing a number.
+Technically, a `@p` is a base-256 number, as it's composed of prefixes and suffixes,
+and there are 256 of each. Sure, you could write a number with just prefixes, or just suffixes,
+but it wouldn't be as interesting to read, and it wouldn't be a valid `@p`.
+
+So each phoneme is equivalent to a number, 0-255.
+`doz` is the prefix version of 0, and `zod` is the suffix version of 0.
+Just as we usually don't write leading zeroes in our numbers, we omit the equivalent
+of leading zeroes in `@p`s.
+This is why you will never see `~dozler`, or `~dozzod-palnet`. It would be sort of like writing `000218` or `0000032591`. It's just `~ler` and `~palnet`. You might, however, run into `~dozler-palnet`, as planet `@p`s are never shortened to 3 phonemes.
+
+One place you're likely to see these show up is in moon `@p`s.
+A moon `@p` is one or two "words" of the parent's choosing, plus the parent's `@p`.
+E.g. `~sampel-palnet` could create `~dister-sampel-palnet` or `~mister-master-sampel-palnet`,
+among others.
+
+If a galaxy or a star creates a moon,
+its `@p` must be "padded out" to make up the last 4 phonemes of the moon `@p`.
+`~ler` could thus create `~faster-dozzod-dozler` or `~poster-hoster-dozzod-dozler`.
+See how `doz` and `zod` were used to pad out `ler` to 4 phonemes?
+Similarly, `~palnet` could create `~walrus-dozzod-palnet` or `~doznec-tortul-dozzod-palnet`.
+
+## Why is it called a "patpee"?
+
+In Hoon, Urbit's typed programming language, numbers can have different "auras",
+depending on what they represent. Some auras include `@u` for an unsigned integer,
+`@t` for arbitrary text stored as a number, `@if` for an IPv4 address, and of course
+`@p` for writing a number in phonemes.
+
+So why the "pat"?
+Hoon involves a lot more symbols than most programming languages (e.g. `.!=?|+:%^$;~-` and so on).
+To help programmers talk out loud about Hoon, each symbol is associated with a 3-letter phoneme.
+In this system, `=/` is pronounced "tisfas", `%-` is "cenhep", and, you guessed it, `@` is "pat".
+
+In short, `@p` is originally a programming term, the programmers pronounce it "pat-pee",
+so that's how it's pronounced.

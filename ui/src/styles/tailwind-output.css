@@ -460,21 +460,33 @@ Ensure the default browser behavior of the `hidden` attribute.
 .-m-2 {
   margin: -0.5rem;
 }
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
 .mx-8 {
   margin-left: 2rem;
   margin-right: 2rem;
+}
+.my-1\.5 {
+  margin-top: 0.375rem;
+  margin-bottom: 0.375rem;
+}
+.my-1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
 }
-.mx-4 {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .mt-2 {
   margin-top: 0.5rem;
@@ -494,14 +506,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .ml-4 {
   margin-left: 1rem;
 }
-.-mt-1\.5 {
-  margin-top: -0.375rem;
+.mt-4 {
+  margin-top: 1rem;
 }
 .-mt-1 {
   margin-top: -0.25rem;
-}
-.mt-4 {
-  margin-top: 1rem;
 }
 .ml-3 {
   margin-left: 0.75rem;
@@ -515,11 +524,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .ml-2 {
   margin-left: 0.5rem;
 }
-.-mt-0\.5 {
-  margin-top: -0.125rem;
-}
 .-mt-0 {
   margin-top: -0px;
+}
+.-mt-0\.5 {
+  margin-top: -0.125rem;
 }
 .block {
   display: block;
@@ -572,11 +581,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-7 {
   height: 1.75rem;
 }
-.w-10 {
-  width: 2.5rem;
-}
 .w-full {
   width: 100%;
+}
+.w-10 {
+  width: 2.5rem;
 }
 .w-12 {
   width: 3rem;
@@ -658,25 +667,26 @@ Ensure the default browser behavior of the `hidden` attribute.
 .justify-center {
   justify-content: center;
 }
+.gap-1\.5 {
+  gap: 0.375rem;
+}
+.gap-1 {
+  gap: 0.25rem;
+}
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
 }
-.space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
+.space-y-8 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
-  margin-top: calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.375rem * var(--tw-space-y-reverse));
+  margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(2rem * var(--tw-space-y-reverse));
 }
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
-}
-.space-y-8 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(2rem * var(--tw-space-y-reverse));
 }
 .space-x-3 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
@@ -709,20 +719,26 @@ Ensure the default browser behavior of the `hidden` attribute.
 .break-all {
   word-break: break-all;
 }
-.rounded-lg {
-  border-radius: 0.5rem;
-}
 .rounded-md {
   border-radius: 0.375rem;
 }
 .rounded-full {
   border-radius: 9999px;
 }
+.rounded-lg {
+  border-radius: 0.5rem;
+}
 .rounded {
   border-radius: 0.25rem;
 }
+.rounded-xl {
+  border-radius: 0.75rem;
+}
 .border {
   border-width: 1px;
+}
+.border-4 {
+  border-width: 4px;
 }
 .border-b {
   border-bottom-width: 1px;
@@ -739,9 +755,9 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-border-opacity: 1;
   border-color: rgb(31 36 60 / var(--tw-border-opacity));
 }
-.bg-white {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+.border-gold {
+  --tw-border-opacity: 1;
+  border-color: rgb(252 211 77 / var(--tw-border-opacity));
 }
 .bg-gold {
   --tw-bg-opacity: 1;
@@ -758,6 +774,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-gray-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 .bg-orange-gold {
   --tw-bg-opacity: 1;
@@ -799,8 +819,9 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-bg-opacity: 1;
   background-color: rgb(253 230 138 / var(--tw-bg-opacity));
 }
-.p-8 {
-  padding: 2rem;
+.bg-gray-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 .p-4 {
   padding: 1rem;
@@ -810,6 +831,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .p-6 {
   padding: 1.5rem;
+}
+.p-8 {
+  padding: 2rem;
 }
 .p-3 {
   padding: 0.75rem;
@@ -828,6 +852,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .py-0 {
   padding-top: 0px;
   padding-bottom: 0px;
+}
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 .py-2 {
   padding-top: 0.5rem;
@@ -853,10 +881,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-left: 0.25rem;
   padding-right: 0.25rem;
 }
-.py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
 .pb-8 {
   padding-bottom: 2rem;
 }
@@ -871,6 +895,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .pt-0 {
   padding-top: 0px;
+}
+.pl-5 {
+  padding-left: 1.25rem;
 }
 .text-center {
   text-align: center;
@@ -896,10 +923,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .font-mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
@@ -915,6 +938,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 .text-base {
   font-size: 1rem;
@@ -976,6 +1003,13 @@ Ensure the default browser behavior of the `hidden` attribute.
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }
+.no-underline {
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
+}
+.underline-offset-2 {
+  text-underline-offset: 2px;
+}
 .opacity-50 {
   opacity: 0.5;
 }
@@ -1008,11 +1042,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   .\32xs\:mx-8 {
     margin-left: 2rem;
     margin-right: 2rem;
-  }
-
-  .\32xs\:my-8 {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
   }
 
   .\32xs\:py-8 {

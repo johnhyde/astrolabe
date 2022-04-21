@@ -2,7 +2,16 @@
 :: User docs
 ::
 :~  [/urbit-id/udon 'What is an Urbit ID?']
-    :: [/bar/udon 'bar docs']
+    [/galaxy/udon 'Galaxies']
+    [/star/udon 'Stars']
+    [/planet/udon 'Planets']
+    [/moon/udon 'Moons']
+    [/comet/udon 'Comets']
+    [/patpee/udon 'What is a @p?']
+    [/phonemes/udon 'Phonemes - Prefixes & Suffixes']
+    [/azimuth/udon 'What is Azimuth?']
+    [/l2/udon 'Layer 1 and Layer 2']
+    [/keys/udon 'Networking Keys']
     :: [/baz/udon 'baz docs']
 ==
 :: Developer docs

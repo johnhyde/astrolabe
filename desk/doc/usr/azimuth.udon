@@ -1,4 +1,51 @@
 ;>
 # Azimuth
 
-It's just NFTs!
+_Adapted from [the Glossary](https://urbit.org/docs/glossary/azimuth)_
+
+Azimuth is Urbit's identity layer, built as a suite of smart contracts on
+the Ethereum blockchain and several apps running locally on your
+[ship](/~/scry/docs/usr/astrolabe/urbit-id.html).
+It is Urbit's method of securing the digital identities that are required to use
+the [Arvo](https://urbit.org/docs/glossary/arvo) peer-to-peer network,
+without the need for a central authority.
+Azimuth identities (also called points) exist as non-fungible tokens (NFTs),
+which are owned by Ethereum addresses and can be transferred between such addresses.
+Identities can use the [claims](https://urbit.org/docs/glossary/claims)
+contract to make assertions – real-world or otherwise – about their owner.
+
+The primary way to interact with Azimuth and to manage your  (also called points)
+is through the [Bridge](https://bridge.urbit.org/) application.
+Bridge is a front-end for [Ecliptic](https://urbit.org/docs/glossary/ecliptic),
+the Azimuth contract that's used to perform actions on the blockchain.
+
+There are a limited number of Azimuth identities, which results in identities having value.
+Users are therefore more careful to maintain a good reputation,
+rather than using identities disposably.
+Undesirable behavior—spamming, scamming, and malware-spreading—will generally result in
+a [censure](https://urbit.org/docs/glossary/censure)
+from [galaxies](/~/scry/docs/usr/astrolabe/galaxy.html)
+and [stars](/~/scry/docs/usr/astrolabe/star.html), marking the bad actor.
+
+It should be noted that Azimuth isn't built just for Arvo.
+It can be used as an identity system for other projects.
+
+## Layer 1 and Layer 2
+
+All Azimuth transactions that happen directly on Ethereum (the default) are considered to
+be on "Layer 1", or L1 for short.
+However, Ethereum gas prices can make simple L1 transactions like spawning a planet very
+expensive.
+In 2021, Tlon developed a "Layer 2" solution (a.k.a. L2) whereby many transactions can be
+"rolled up" and posted to Ethereum at once, to be validated by each Urbit ship.
+This dramatically reduces gas costs, and Tlon provides a roller which is free for public use.
+
+[Read More about L1 and L2](/~/scry/docs/usr/astrolabe/l2.html)
+
+## Further Reading
+
+- [The Azimuth concepts page](https://urbit.org/docs/azimuth/azimuth):
+  A more in-depth explanation of Azimuth.
+- [Install instructions](https://urbit.org/getting-started/):
+  Guide to installing Urbit, which includes instructions on booting with your Urbit identity.
+- [Understanding Urbit ID](https://urbit.org/understanding-urbit/urbit-id)

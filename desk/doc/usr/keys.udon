@@ -1,8 +1,63 @@
 ;>
-# Public and Private Keys
+# Networking Keys
 
-You can use these for _cryptography_
+Each Urbit ship proves its identity on the network by signing its messages
+with a pair of networking keys. By signing a message with a private key,
+you prove that you are the owner of the associated public key.
 
-# What is Breaching?
+Since public keys are stored in [Azimuth](/~/scry/docs/usr/astrolabe/azimuth.html),
+other ships can verify your identity by checking your signatures.
 
-That's when you not only reset your keys, but also everything else.
+## Keyfile
+
+A keyfile is just a file containing your networking keys. It is used when
+booting Arvo (Urbit's OS) for the first time, and the information within
+is baked into the resulting ship. After this, the keyfile should be deleted
+to prevent accidentally double-booting in the future.
+
+## Changing Keys
+
+If your private key is compromised, you can change your keys in Bridge and
+update your ship by running `|rekey 'new-private-key-goes-here'` in Dojo (the terminal).
+This will increase your `life` number in Azimuth, which is just a record of how many
+times your keys have been revised. This number will also be incremented if you
+set new keys in the course of performing a factory reset.
+
+Since keys must be set before a ship can be booted,
+all active Urbit IDs will have a `life` of at least 1.
+
+# Performing a Factory Reset (a.k.a. Breaching)
+
+When using the network, ships keep track of the order of all the messages they've sent
+and received, and use this to ensure that they process messages properly.
+This is called continuity.
+
+Performing a factory reset means breaking continuity—asking the rest of the network
+to forget your past messages and treat you like a new ship. It also involves clearing
+your own event log, and consequently all apps and data on the ship.
+Sometimes this is done to resolve networking errors, like those caused by double-booting.
+This is also appropriate when transferring an ID to someone else, to give them a fresh start.
+
+Because factory resets involve booting a fresh ship, you'll need to rejoin groups,
+reinstall apps, and generally start from scratch. Trying to continue using your old pier
+(the folder containing your data) will just cause more networking issues.
+There are, however, a few unofficial tools with which you can restore some data from
+a previous pier, and more will likely be built over time.
+
+If you want to avoid breaching, avoid double-booting and don't delete your pier.
+If you want to move your pier (e.g. to host your ship on a remote server), it is
+crucial that you shut down your ship before you start it somewhere else.
+If you have two different instances of the same ship trying to run at the same time,
+other ships will get confused and you will need to breach to communicate with them properly.
+Deleting your pier, or using an outdated archive of your pier will have the same effect.
+
+Breaching, or performing a factory reset, will increment your `rift` number in Azimuth,
+so this number is an indicator of how many times a ship has breached.
+Ships which have never breached have a `rift` of 0.
+
+# Further Reading
+
+- [Setting initial networking keys](https://urbit.org/using/id/using-bridge#set-your-networking-keys)
+- [Guide to Factory Resets](https://urbit.org/using/id/guide-to-resets)
+- [Life and Rift](https://urbit.org/docs/azimuth/life-and-rift)
+- [Glossary: Keyfile](https://urbit.org/docs/glossary/keyfile)

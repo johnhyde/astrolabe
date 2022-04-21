@@ -42,7 +42,29 @@
       </DocLink>
     </li>
   </ul>
-  <DocLink path="keys" on:navigate>
-    <h2>Keys</h2>
+  <DocLink path="patpee" on:navigate>
+    <h2>What is a @p?</h2>
   </DocLink>
+  <ul>
+    <li>
+      <DocLink path="phonemes" on:navigate>
+        <h3>Phonemes - Prefixes & Suffixes</h3>
+      </DocLink>
+    </li>
+  </ul>
+  <DocLink path="azimuth" on:navigate>
+    <h2>What is Azimuth?</h2>
+  </DocLink>
+  <ul>
+    <li>
+      <DocLink path="l2" on:navigate>
+        <h3>Layer 1 and Layer 2</h3>
+      </DocLink>
+    </li>
+    <li>
+      <DocLink path="keys" on:navigate>
+        <h3>Networking Keys</h3>
+      </DocLink>
+    </li>
+  </ul>
 </div>

@@ -1,14 +1,13 @@
 <script lang="ts">
   
-  import type { Scry } from '@urbit/http-api';
   import UrbitApi from '@urbit/http-api';
-  import { settings } from '@urbit/api';
   import { clan, sein, patp2dec } from 'urbit-ob';
   
   import { cite, normalizeId } from '../lib/id';
   import tooltip from "../actions/tooltip";
   import Sigil from "./Sigil.svelte";
   import GoldBadge from './GoldBadge.svelte';
+  import TooltipAndDocLink from "./TooltipAndDocLink.svelte";
   import ShipLink from './ShipLink.svelte';
   import EthAddressLink from './EthAddressLink.svelte';
   import CollapsibleContent from './CollapsibleContent.svelte';
@@ -81,6 +80,8 @@
       rawPointInfoPromise = api.scry<any>({ app: 'astrolabe', path: `/point/${patp}` });
       rawPointInfoPromise.then((info) => {
         rawPointInfo = info;
+      }).catch((error) => {
+        rawPointInfo.error = error;
       });
     }
   }
@@ -113,11 +114,13 @@
       if (sponsor.has) {
         pointInfo.sponsor = normalizeId(sponsor.who);
       }
-    } else {
-      layer = undefined;
+    } else if (rawPointInfo.error) {
+      // no info found
       spawnStatus = spawnStatusOptions.unspawned;
       life = 0;
       rift = 0;
+    } else {
+      // request pending
     }
     pointInfo = {
       ...pointInfo,
@@ -136,25 +139,40 @@
       <Sigil patp={patp} size={256} />
     </div>
     <div class="grow w-full min-w-0">
-      <h2 class="text-2xl text-center">{cite(patp)}</h2>
+      <h2 class="text-2xl text-center">
+        <TooltipAndDocLink
+          text="The ship's @p (click to learn more)"
+          doc="patpee" class="inline"
+        >
+          {cite(patp)}
+        </TooltipAndDocLink>
+      </h2>
       {#if (!azPoint)}
         <h3 class="text-lg text-center text-gray-700">{patp}</h3>
       {/if}
-      <h4 class="text-center text-gray-700 break-words" use:tooltip={"The integer representation of this ID"}>
-        {patp2dec(patp)}
+      <h4 class="text-center text-gray-700 break-words">
+        <!-- <TooltipAndDocLink
+          text="The integer representation of this ID"
+          doc="patpee" class="inline"
+        > -->
+          {patp2dec(patp)}
+        <!-- </TooltipAndDocLink> -->
       </h4>
-      <div class="w-full text-center space-y-1.5 -mt-1.5">
-        <span></span>
-        <GoldBadge title={"it's a " + shipClass}>{shipClass}</GoldBadge>
+      <div class="flex flex-wrap justify-center gap-1.5 my-1.5">
+        <GoldBadge title={"it's a " + shipClass} doc={shipClass}>{shipClass}</GoldBadge>
         {#if azPoint}
-          <GoldBadge title={pointInfo.spawnStatus.tooltip}>{pointInfo.spawnStatus.text}</GoldBadge>
+          {#if pointInfo.spawnStatus}
+            <GoldBadge title={pointInfo.spawnStatus.tooltip}>
+              {pointInfo.spawnStatus.text}
+            </GoldBadge>
+          {/if}
           {#if pointInfo.layer}
-            <GoldBadge title={pointInfo.layer.tooltip}>{pointInfo.layer.text}</GoldBadge>
+            <GoldBadge title={pointInfo.layer.tooltip} doc="l2">{pointInfo.layer.text}</GoldBadge>
           {/if}
         {:else if (shipClass === 'moon')}
           <span>of</span>
           <ShipLink patp={parentChain.at(-1)}></ShipLink>
-          {:else if (shipClass === 'comet')}
+        {:else if (shipClass === 'comet')}
           <span>under</span>
           <ShipLink patp={parentChain.at(-1)}></ShipLink>
         {/if}
@@ -175,7 +193,7 @@
             <div slot="content">
               {#await rawPointInfoPromise}
                 Loading Azimuth info...
-              {:then value}
+              {:then}
                 {#if shipClass !== 'galaxy'}
                   <p>
                     {#if pointInfo.sponsor && shipClass !== 'galaxy'}
@@ -187,16 +205,24 @@
                   </p>
                 {/if}
                 <p>
-                  <span use:tooltip={"Number of times this ship's keys have been set. Must be at least 1 to use the network."}>
+                  <TooltipAndDocLink
+                    text="Number of times this ship's keys have been set. Must be at least 1 to use the network."
+                    doc="keys"
+                    class="inline"
+                  >
                     Key Revision:
                     {pointInfo.life}
-                  </span>
+                  </TooltipAndDocLink>
                 </p>
                 <p>
-                  <span use:tooltip={"Number of times this ship has breached."}>
-                    Continuity:
+                  <TooltipAndDocLink
+                    text="Number of times this ship has breached."
+                    doc="keys"
+                    class="inline"
+                  >
+                    Factory Resets:
                     {pointInfo.rift}
-                  </span>
+                  </TooltipAndDocLink>
                 </p>
                 {#if pointInfo.proxies}
                   <p>

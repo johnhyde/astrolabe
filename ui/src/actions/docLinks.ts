@@ -1,7 +1,6 @@
 const docLinkRegex = /\/~\/scry\/docs\/usr\/astrolabe\/([-~._\w\d]+).html/;
 
 function convertDocLinks(node, onPathChange) {
-  console.log(node);
   const links = node.querySelectorAll('a');
   for (let link of links) {
     let match = link.href.match(docLinkRegex);

@@ -1,0 +1,9 @@
+;>
+[< What is an Urbit ID?](/~/scry/docs/usr/astrolabe/urbit-id.html)
+
+# Planets
+
+There are about 4.3 billion potential planets, so while they are not unlimited, they are
+widely accessible for the average user. Most people pilot a planet or a moon when using Urbit.
+As planets are the lowest rank of Azimuth point, they cannot spawn other points. Like galaxies
+and stars, however, they can create [moons](/~/scry/docs/usr/astrolabe/moon.html).

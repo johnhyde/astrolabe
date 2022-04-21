@@ -1,4 +1,60 @@
 ;>
-# Layer 2
+# What are Layer 1 and Layer 2?
 
-It's magic!
+## Layer 1 (L1) - Azimuth smart contracts
+
+All Azimuth transactions that happen directly on Ethereum (the default) are considered to
+be on "Layer 1", or L1 for short. The effects of these transactions are calculated and
+stored on the Ethereum blockchain, so a nontrivial amount of "gas" must be expended for
+each L1 transaction.
+
+## The need for a workaround
+
+In 2021, the Ethereum blockchain saw a large increase in traffic which caused
+gas prices to skyrocket. It became prohibitively expensive for many to spawn or set keys
+for new IDs, so Tlon started developing a workaround.
+
+## Layer 2 (L2) - Naive Rollups
+
+Tlon developed a "Layer 2" solution (a.k.a. L2) whereby many transactions can be
+"rolled up" and posted to Ethereum at once, to be validated by each Urbit ship.
+
+The technical term for this is "naive rollups" because transactions are combined and
+posted to Ethereum without being validated.
+Each Urbit ship validates the transactions locally to determine who actually owns what.
+
+Combining transactions and offloading computation
+from Ethereum to Urbit dramatically reduces gas costs.
+Using L2 is so cheap that Tlon provides a free "roller" which is used when performing
+L2 actions through Bridge.
+
+The introduction of L2 also makes it possible for new users to receive and start using
+Urbit IDs without ever interacting with the blockchain themselves, making Urbit generally
+more accessible.
+
+### Moving to Layer 2
+
+Most L2 actions require the ship to first "move to L2", which can be done through Bridge.
+Technically, this consists of transferring the ID to `0x1111111111111111111111111111111111111111`.
+This tells the Layer 2 code that the ship is on L2.
+After that, all Azimuth transactions will be done on L2. It is not possible to move
+an L2 ship back to L1.
+
+For galaxies and stars that want to spawn new IDs on L2, they can move only their spawn proxy
+to L2. They will remain on L1, but any new children will be on L2. This change is also irreversible.
+
+Galaxies cannot move fully to L2, but they can move their spawn proxy to L2. Note, however, that
+any stars locked in the Linear Release Contract are technically already spawned on L1,
+and would need to be transferred to L2 separately.
+
+### Sponsorship between L1 and L2
+
+A sponsor and its sponsee can live on separate layers, but unless they are both on L1,
+most sponsorship actions will need to take place on L2. This is the situation where an L1 ID
+can take actions on L2 without moving to L2.
+
+# Further Reading
+
+- [Technical Overview of L2](https://urbit.org/docs/azimuth/l2/layer2)
+- [Blog on Naive Rollups](https://urbit.org/blog/rollups)
+- [Technical Details about which ships can perform which L2 actions](https://urbit.org/docs/azimuth/l2/l2-actions)
