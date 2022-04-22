@@ -1,8 +1,8 @@
 /+  *astrolabe
-|_  pnt=upoint
+|_  pnt=point
 ++  grab
   |%
-  ++  noun  upoint
+  ++  noun  point
   ++  json  point:dejs
   --
 ++  grow

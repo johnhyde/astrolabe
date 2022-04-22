@@ -87,20 +87,29 @@
   }
   $: {
     pointInfo = {};
-    let spawnStatus: any, layer: any, life: number, rift: number;
+    let spawnStatus: any,
+      layer: any,
+      life: number,
+      rift: number,
+      spawnedCount: number;
     let keysSet = false;
     if (!azPoint) {
 
     } else if (rawPointInfo.point) {
       const { point } = rawPointInfo;
-      life = point.net.keys.life;
-      rift = point.net.rift;
+      const {
+        'probable-dominion': dominion,
+        npoint
+      } = point;
+      spawnedCount = point['spa-count'];
+      life = npoint.net.keys.life;
+      rift = npoint.net.rift;
       if (life > 0) {
         keysSet = true;
       }
 
-      pointInfo.proxies = point.own;
-      const { dominion } = point;
+      pointInfo.proxies = npoint.own;
+      // const { dominion } = npoint;
       layer = layerOptions[dominion];
 
       if (pointInfo.proxies.owner.address === '0x86cd9cd0992f04231751e3761de45cecea5d1801') {
@@ -110,7 +119,7 @@
       } else {
         spawnStatus = spawnStatusOptions.spawnedNoKeys;
       }
-      const { sponsor } = point.net;
+      const { sponsor } = npoint.net;
       if (sponsor.has) {
         pointInfo.sponsor = normalizeId(sponsor.who);
       }
@@ -129,6 +138,7 @@
       keysSet,
       life,
       rift,
+      spawnedCount,
     };
   }
 </script>
@@ -281,7 +291,7 @@
   </div>
   {#if canSpawnPoints}
     <div>
-      <h3 class="text-lg">Spawned Points</h3>
+      <h3 class="text-lg">Spawned Points: {pointInfo.spawnedCount || ''}</h3>
       <span class="text-green-600">// TODO</span>
     </div>
   {/if}

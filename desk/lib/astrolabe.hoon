@@ -11,40 +11,46 @@
   =,  enjs:format
   |%
   ++  point
-    |=  =upoint
+    |=  =^point
     ^-  json
-    ?~  upoint  (pairs ~)
-    =*  point  u.upoint
+    =*  unpoint  unpoint.point
+    ?~  unpoint  (pairs ~)
+    =*  npoint  u.unpoint
     %+  frond  %point
     %-  pairs  :~
-        [%dominion s+dominion.point]
-        :-  %own
-      =*  own  own.point
+        spa-count+(numb spa-count.point)
+        [%probable-dominion s+probable-dominion.point]
+        :-  %npoint
       %-  pairs  :~
-          owner+(address owner.own)
-          spawn-proxy+(address spawn-proxy.own)
-          management-proxy+(address management-proxy.own)
-          voting-proxy+(address voting-proxy.own)
-          transfer-proxy+(address transfer-proxy.own)
-      ==
-        :-  %net
-      =*  net  net.point
-      %-  pairs
-      :~  rift+(numb rift.net)
-          :-  %keys
+          [%dominion s+dominion.npoint]
+          :-  %own
+        =*  own  own.npoint
         %-  pairs  :~
-          life+(numb life.keys.net)
-          suite+(numb suite.keys.net)
-          auth+(numb auth.keys.net)
-          crypt+(numb crypt.keys.net)
+            owner+(address owner.own)
+            spawn-proxy+(address spawn-proxy.own)
+            management-proxy+(address management-proxy.own)
+            voting-proxy+(address voting-proxy.own)
+            transfer-proxy+(address transfer-proxy.own)
         ==
-          :-  %sponsor
-        %-  pairs  :~
-          has+b+has.sponsor.net
-          who+(ship who.sponsor.net)
+          :-  %net
+        =*  net  net.npoint
+        %-  pairs
+        :~  rift+(numb rift.net)
+            :-  %keys
+          %-  pairs  :~
+            life+(numb life.keys.net)
+            suite+(numb suite.keys.net)
+            auth+(numb auth.keys.net)
+            crypt+(numb crypt.keys.net)
+          ==
+            :-  %sponsor
+          %-  pairs  :~
+            has+b+has.sponsor.net
+            who+(ship who.sponsor.net)
+          ==
+            :-  %escape
+          (biff escape.net ship)
         ==
-          :-  %escape
-        (biff escape.net ship)
       ==
     ==
   ++  address
@@ -76,7 +82,7 @@
   |%
   ++  point
     |=  jon=json
-    ^-  upoint  ~
+    *^point
   --
 ::
 ++  share-dejs
