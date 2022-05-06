@@ -29,14 +29,14 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
 
 1. Spin up a comet or distribution ship.
 2. Mount an `%astrolabe` desk. In Dojo:
-  1. `|merge %astrolabe our %base` to create a new desk.
-  2. `|mount %work` to mount it.
+    1. `|merge %astrolabe our %base` to create a new desk.
+    2. `|mount %work` to mount it.
 3. Install the desk
-  1. From the root of the project: `./install.sh path/to/pier/astrolabe`
-  2. From the ship's dojo: `|commit %astrolabe`
-  3. (if using a comet as a middleman) `|public %astrolabe`
-  4. (if using a comet as a middleman) from the actual distribution ship: `|install ~comet-name %astrolabe`
-  5. (if using a comet as a middleman) from the actual distribution ship: `|pause %astrolabe`
+    1. From the root of the project: `./install.sh path/to/pier/astrolabe`
+    2. From the ship's dojo: `|commit %astrolabe`
+    3. (if using a comet as a middleman) `|public %astrolabe`
+    4. (if using a comet as a middleman) from the actual distribution ship: `|install ~comet-name %astrolabe`
+    5. (if using a comet as a middleman) from the actual distribution ship: `|pause %astrolabe`
 4. Build the UI with `npm run build` in the `ui` directory which will bundle all the code and assets into the `dist/` folder.
 5. Upload the `dist/` folder as a glob to your distribution ship. Example url: https://distribution.urbit-ship.com/docket/upload
 6. Publish the desk from dojo: `:treaty|publish %astrolabe`
