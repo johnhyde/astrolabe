@@ -28,8 +28,14 @@
   :_  this
   [%pass /azimuth-events %agent [our.bowl %azimuth] %watch /event]~
 ::
-++  on-save  on-save:def
-++  on-load  on-load:def
+++  on-save  !>(state)
+++  on-load
+  |=  old-state=vase
+  ^-  (quip card _this)
+  =/  old  !<(versioned-state old-state)
+  ?-  -.old
+    %0  `this(state old)
+  ==
 ++  on-poke  on-poke:def
 ++  on-watch  on-watch:def
 ++  on-leave  on-leave:def
@@ -46,6 +52,9 @@
     ?~  doc
       `~
     ``json+!>(s+u.doc)
+      [%x %spawned @ ~]
+    =/  =ship  `@p`(slav %p &3.path)
+    ``astrolabe-point-set+!>((~(get ju spa) ship))
   ==
 ++  on-agent
   |=  [=wire =sign:agent:gall]

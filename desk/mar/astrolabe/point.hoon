@@ -3,7 +3,7 @@
 ++  grab
   |%
   ++  noun  point
-  ++  json  point:dejs
+  :: ++  json  point:dejs
   --
 ++  grow
   |%

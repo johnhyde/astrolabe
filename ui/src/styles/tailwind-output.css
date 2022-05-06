@@ -509,6 +509,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mt-4 {
   margin-top: 1rem;
 }
+.mt-5 {
+  margin-top: 1.25rem;
+}
 .-mt-1 {
   margin-top: -0.25rem;
 }
@@ -526,6 +529,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .-mt-0 {
   margin-top: -0px;
+}
+.mt-3 {
+  margin-top: 0.75rem;
 }
 .-mt-0\.5 {
   margin-top: -0.125rem;
@@ -743,6 +749,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-b {
   border-bottom-width: 1px;
 }
+.border-t {
+  border-top-width: 1px;
+}
 .border-white {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
@@ -840,6 +849,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .p-1 {
   padding: 0.25rem;
+}
+.p-5 {
+  padding: 1.25rem;
 }
 .py-0\.5 {
   padding-top: 0.125rem;

@@ -25,7 +25,23 @@ To develop you'll need a running ship to point to. To do so you first need to ad
 
 Regardless of what you run to develop, Vite will hot-reload code changes as you work so you don't have to constantly refresh.
 
-### Deploying
+### Deploying with `glob-ames` glob
+
+1. Spin up a comet or distribution ship.
+2. Mount an `%astrolabe` desk. In Dojo:
+  1. `|merge %astrolabe our %base` to create a new desk.
+  2. `|mount %work` to mount it.
+3. Install the desk
+  1. From the root of the project: `./install.sh path/to/pier/astrolabe`
+  2. From the ship's dojo: `|commit %astrolabe`
+  3. (if using a comet as a middleman) `|public %astrolabe`
+  4. (if using a comet as a middleman) from the actual distribution ship: `|install ~comet-name %astrolabe`
+  5. (if using a comet as a middleman) from the actual distribution ship: `|pause %astrolabe`
+4. Build the UI with `npm run build` in the `ui` directory which will bundle all the code and assets into the `dist/` folder.
+5. Upload the `dist/` folder as a glob to your distribution ship. Example url: https://distribution.urbit-ship.com/docket/upload
+6. Publish the desk from dojo: `:treaty|publish %astrolabe`
+
+### Deploying with `glob-http` glob
 
 To deploy, run `npm run build` in the `ui` directory which will bundle all the code and assets into the `dist/` folder. This can then be made into a glob by doing the following:
 
@@ -41,7 +57,7 @@ To deploy, run `npm run build` in the `ui` directory which will bundle all the c
 10. Once you've uploaded the glob, you should then update the corresponding entry in the docket file at `desk/desk.docket-0`. Both the full URL and the hash should be updated to match the glob we just created, on the line that looks like this:
 
 ```hoon
-    glob-http+['https://bootstrap.urbit.org/glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]
+  glob-http+['https://bootstrap.urbit.org/glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]
 ```
 
 11. This can now be safely committed and deployed.

@@ -11,6 +11,7 @@
   import ShipLink from './ShipLink.svelte';
   import EthAddressLink from './EthAddressLink.svelte';
   import CollapsibleContent from './CollapsibleContent.svelte';
+  import ShipListing from './ShipListing.svelte';
 
   export let patp: string;
 
@@ -18,6 +19,9 @@
   let rawPointInfoPromise: any;
   let rawPointInfo: any = {};
   let pointInfo: any = {};
+  let rawSpawnedPointsPromise: any;
+  let rawSpawnedPoints: any = {};
+  let spawnedPoints: string[] = [];
   const api: UrbitApi = new UrbitApi('');
   const spawnStatusOptions = {
     unspawned: {
@@ -55,6 +59,7 @@
   $: shipClass = clan(patp);
   $: azPoint = ['galaxy', 'star', 'planet'].includes(shipClass);
   $: canSpawnPoints = ['galaxy', 'star'].includes(shipClass);
+  $: spawnableClassPlural = !canSpawnPoints ? '' : (shipClass === 'galaxy' ? 'Stars' : 'Planets');
   $: {
     let parents = [patp];
     let galaxyFound = false;
@@ -83,6 +88,23 @@
       }).catch((error) => {
         rawPointInfo.error = error;
       });
+    }
+  }
+  $: {
+    rawSpawnedPoints = {};
+    if (canSpawnPoints) {
+      rawSpawnedPointsPromise = api.scry<any>({ app: 'astrolabe', path: `/spawned/${patp}` });
+      rawSpawnedPointsPromise.then((info) => {
+        rawSpawnedPoints = info;
+      }).catch((error) => {
+        rawSpawnedPoints.error = error;
+      });
+    }
+  }
+  $: {
+    spawnedPoints = [];
+    if (rawSpawnedPoints.spawned) {
+      spawnedPoints = rawSpawnedPoints.spawned.map(patp => normalizeId(patp));
     }
   }
   $: {
@@ -290,9 +312,24 @@
     </div>
   </div>
   {#if canSpawnPoints}
-    <div>
-      <h3 class="text-lg">Spawned Points: {pointInfo.spawnedCount || ''}</h3>
-      <span class="text-green-600">// TODO</span>
+    <div class="mt-5 p-3 border-t">
+      {#await rawPointInfoPromise then}
+        <h3 class="text-lg">
+          {#if pointInfo.spawnedCount}
+          {pointInfo.spawnedCount} Spawned {spawnableClassPlural}:
+          {:else}
+            No Spawned {spawnableClassPlural}
+          {/if}
+        </h3>
+      {/await}
+      {#await rawSpawnedPointsPromise}
+        Loading {spawnableClassPlural}...
+      {:then}
+        <!-- TODO: pagination -->
+        {#each spawnedPoints as patp, i}
+          <ShipListing ship={{ patp }} linkToShip />
+        {/each}
+      {/await}
     </div>
   {/if}
 </div>

@@ -10,6 +10,16 @@
 ++  enjs
   =,  enjs:format
   |%
+  ++  point-set
+    |=  points=(set ^ship)
+    ^-  json
+    =+  point-list=~(tap in points)
+    %+  frond  %spawned
+    :-  %a
+    %+  turn
+      point-list
+    |=  who=^ship
+    (ship who)
   ++  point
     |=  =^point
     ^-  json

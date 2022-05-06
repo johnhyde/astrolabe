@@ -28,7 +28,7 @@
   }
 </script>
 
-<div>
+<div class="flex-grow" style:max-width="{size}px">
   {#if displaySigil}
     {@html svgString}
   {:else}
