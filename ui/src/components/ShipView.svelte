@@ -243,7 +243,7 @@
                     class="inline"
                   >
                     Key Revision:
-                    {pointInfo.life}
+                    {pointInfo.life || "n/a"}
                   </TooltipAndDocLink>
                 </p>
                 <p>
@@ -253,7 +253,7 @@
                     class="inline"
                   >
                     Factory Resets:
-                    {pointInfo.rift}
+                    {pointInfo.rift || "n/a"}
                   </TooltipAndDocLink>
                 </p>
                 {#if pointInfo.proxies}
