@@ -28,8 +28,9 @@ where they can find their sponsees so that they can communicate directly withthe
 asking a DNS server to tell you where to look for google.com.
 Thus, it is crucially important that galaxies be online and reachable.
 
-## [The Galactic Senate](https://urbit.org/docs/glossary/senate)
+## The Galactic Senate
 
+All galaxy owners are members of the [Galactic Senate](https://urbit.org/docs/glossary/senate).
 Galaxy owners can [vote](https://urbit.org/docs/glossary/voting) on proposals
 to upgrade the logic of [Azimuth](/~/scry/docs/usr/astrolabe/azimuth.html)
 or approve the content of a document.

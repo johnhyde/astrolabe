@@ -16,7 +16,7 @@
   }
 </script>
 
-<div class="flex flex-wrap p-4 border-b last:border-none items-center"
+<div class="flex flex-wrap p-4 border-b last:border-none items-center hover:bg-gray-300 cursor-pointer"
   on:click={handleClick}
   on:click
   >

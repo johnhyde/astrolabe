@@ -9,9 +9,9 @@
   const routes = {
     // '/': Home,
     '/help/:path?': HelpPage,
-    '/:patp?': ShipViewPage,
+    // '/:patp?': ShipViewPage,
     '/ship/:patp?': ShipViewPage,
-    '*': Home,
+    '*': ShipViewPage,
   }
 </script>
 

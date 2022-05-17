@@ -488,6 +488,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
 .mt-2 {
   margin-top: 0.5rem;
 }
@@ -535,6 +539,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .-mt-0\.5 {
   margin-top: -0.125rem;
+}
+.mt-10 {
+  margin-top: 2.5rem;
+}
+.mt-20 {
+  margin-top: 5rem;
 }
 .block {
   display: block;
@@ -620,6 +630,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .max-w-2xl {
   max-width: 42rem;
 }
+.max-w-xs {
+  max-width: 20rem;
+}
 .flex-shrink-0 {
   flex-shrink: 0;
 }
@@ -678,6 +691,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .gap-1 {
   gap: 0.25rem;
+}
+.gap-5 {
+  gap: 1.25rem;
 }
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
@@ -911,6 +927,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .pl-5 {
   padding-left: 1.25rem;
 }
+.pt-20 {
+  padding-top: 5rem;
+}
+.pt-10 {
+  padding-top: 2.5rem;
+}
 .text-center {
   text-align: center;
 }
@@ -1041,6 +1063,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .last\:border-none:last-child {
   border-style: none;
+}
+.hover\:bg-gray-300:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 .hover\:opacity-40:hover {
   opacity: 0.4;

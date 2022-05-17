@@ -4,7 +4,7 @@
     image+'https://raw.githubusercontent.com/johnhyde/astrolabe/main/ui/src/assets/astrolabe-tile.svg'
     glob-ames+[~dister-midlev-mindyr 0v0]
     base+'astrolabe'
-    version+[0 0 1]
+    version+[0 0 2]
     website+'https://github.com/johnhyde/astrolabe'
     license+'MIT'
 ==

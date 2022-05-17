@@ -19,7 +19,7 @@
   }
 </script>
 
-<div class=" rounded-lg bg-white">
+<div class="rounded-lg bg-white">
   <div class="flex p-4 border-navy">
     {#if !homePage}
       <Hamburger on:click={() => navigate('')} />

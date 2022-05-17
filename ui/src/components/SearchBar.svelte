@@ -7,13 +7,14 @@
   export let searchQuery: RegExp = /~der/;
   export let analysis: SearchAnalysis = new SearchAnalysis();
   export let search = '';
+  let debouncedSearch = search;
 
   // const placeholderText = "Enter a @p or non-negative integer. '*' is wildcard.";
   const placeholderText = "Enter a @p or non-negative integer";
 
   $: {
     // analysis.search = search;
-    analysis = new SearchAnalysis(search);
+    analysis = new SearchAnalysis(debouncedSearch);
     if (analysis.queryIsValid) {
       searchQuery = analysis.query;
     } else {
@@ -25,6 +26,14 @@
       patp = undefined;
     }
   }
+
+  let timer;
+  $: {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			debouncedSearch = search;
+		}, 300);
+	}
 </script>
 
 <!-- <div class="flex justify-center"> -->

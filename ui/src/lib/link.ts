@@ -1,3 +1,5 @@
-export function linkToShip(patp: string): string {
-  return `/ship/${patp}`;
+import { buildQuerystring } from './utils';
+
+export function linkToShip(patp: string, queryParams = {}): string {
+  return `/ship/${patp}` + buildQuerystring(queryParams);
 }

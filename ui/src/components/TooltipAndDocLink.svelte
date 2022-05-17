@@ -1,6 +1,6 @@
 <script lang="ts">
   import Tooltip from "./Tooltip.svelte";
-  import DocLink from './docs/DocLink.svelte'; // TODO try to add a link in the tooltip somehow or something, like:
+  import DocLink from './docs/DocLink.svelte'; // TODO try to add a link in the tooltip somehow or something
   export let text: string = '';
   export let doc: string = '';
   let className: string = '';

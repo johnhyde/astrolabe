@@ -1,4 +1,6 @@
 <script lang="ts">
+  import DocLink from './docs/DocLink.svelte';
+
   export let problems: Array<string> = [];
   export let type: string = undefined;
 </script>
@@ -15,7 +17,7 @@
   {/each}
   <p>
     <!-- TODO: add link to doc -->
-    You can read more here.
+    You can <DocLink modal path="patpee">read more here.</DocLink>
   </p>
 </div>
 

@@ -67,4 +67,7 @@
       </DocLink>
     </li>
   </ul>
+  <DocLink path="astrolabe" on:navigate>
+    <h2>About Astrolabe</h2>
+  </DocLink>
 </div>

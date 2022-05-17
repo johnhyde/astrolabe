@@ -33,7 +33,8 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
     2. `|mount %work` to mount it.
 3. Install the desk
     1. From the root of the project: `./install.sh path/to/pier/astrolabe`
-    2. From the ship's dojo: `|commit %astrolabe`
+    2. From the distribution ship's dojo: `:treaty|unpublish %astrolabe`
+    2. From middleman or distribution ship's dojo: `|commit %astrolabe`
     3. (if using a comet as a middleman) `|public %astrolabe`
     4. (if using a comet as a middleman) from the actual distribution ship: `|install ~comet-name %astrolabe`
     5. (if using a comet as a middleman) from the actual distribution ship: `|pause %astrolabe`
@@ -57,7 +58,7 @@ To deploy, run `npm run build` in the `ui` directory which will bundle all the c
 10. Once you've uploaded the glob, you should then update the corresponding entry in the docket file at `desk/desk.docket-0`. Both the full URL and the hash should be updated to match the glob we just created, on the line that looks like this:
 
 ```hoon
-  glob-http+['https://bootstrap.urbit.org/glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]
+    glob-http+['https://bootstrap.urbit.org/glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]
 ```
 
 11. This can now be safely committed and deployed.

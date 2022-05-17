@@ -17,10 +17,10 @@
 
   let parentChain: any[];
   let rawPointInfoPromise: any;
-  let rawPointInfo: any = {};
+  let rawPointInfo: any = null;
   let pointInfo: any = {};
   let rawSpawnedPointsPromise: any;
-  let rawSpawnedPoints: any = {};
+  let rawSpawnedPoints: any = null;
   let spawnedPoints: string[] = [];
   const api: UrbitApi = new UrbitApi('');
   const spawnStatusOptions = {
@@ -80,31 +80,31 @@
     parentChain = parents;
   }
   $: {
-    rawPointInfo = {};
+    rawPointInfo = null;
     if (azPoint) {
       rawPointInfoPromise = api.scry<any>({ app: 'astrolabe', path: `/point/${patp}` });
       rawPointInfoPromise.then((info) => {
         rawPointInfo = info;
       }).catch((error) => {
-        rawPointInfo.error = error;
+        rawPointInfo = { error };
       });
     }
   }
   $: {
-    rawSpawnedPoints = {};
+    rawSpawnedPoints = null;
     if (canSpawnPoints) {
       rawSpawnedPointsPromise = api.scry<any>({ app: 'astrolabe', path: `/spawned/${patp}` });
       rawSpawnedPointsPromise.then((info) => {
         rawSpawnedPoints = info;
       }).catch((error) => {
-        rawSpawnedPoints.error = error;
+        rawSpawnedPoints = { error };
       });
     }
   }
   $: {
     spawnedPoints = [];
-    if (rawSpawnedPoints.spawned) {
-      spawnedPoints = rawSpawnedPoints.spawned.map(patp => normalizeId(patp));
+    if (rawSpawnedPoints?.spawned) {
+      spawnedPoints = rawSpawnedPoints?.spawned.map(patp => normalizeId(patp));
     }
   }
   $: {
@@ -117,39 +117,41 @@
     let keysSet = false;
     if (!azPoint) {
 
-    } else if (rawPointInfo.point) {
-      const { point } = rawPointInfo;
-      const {
-        'probable-dominion': dominion,
-        npoint
-      } = point;
-      spawnedCount = point['spa-count'];
-      life = npoint.net.keys.life;
-      rift = npoint.net.rift;
-      if (life > 0) {
-        keysSet = true;
-      }
+    } else if (rawPointInfo) {
+      if (rawPointInfo.point) {
+        const { point } = rawPointInfo;
+        const {
+          'probable-dominion': dominion,
+          npoint
+        } = point;
+        spawnedCount = point['spa-count'];
+        life = npoint.net.keys.life;
+        rift = npoint.net.rift;
+        if (life > 0) {
+          keysSet = true;
+        }
 
-      pointInfo.proxies = npoint.own;
-      // const { dominion } = npoint;
-      layer = layerOptions[dominion];
+        pointInfo.proxies = npoint.own;
+        // const { dominion } = npoint;
+        layer = layerOptions[dominion];
 
-      if (pointInfo.proxies.owner.address === '0x86cd9cd0992f04231751e3761de45cecea5d1801') {
-        spawnStatus = spawnStatusOptions.locked; 
-      } else if (keysSet) {
-        spawnStatus = spawnStatusOptions.spawned;
+        if (pointInfo.proxies.owner.address === '0x86cd9cd0992f04231751e3761de45cecea5d1801') {
+          spawnStatus = spawnStatusOptions.locked; 
+        } else if (keysSet) {
+          spawnStatus = spawnStatusOptions.spawned;
+        } else {
+          spawnStatus = spawnStatusOptions.spawnedNoKeys;
+        }
+        const { sponsor } = npoint.net;
+        if (sponsor.has) {
+          pointInfo.sponsor = normalizeId(sponsor.who);
+        }
       } else {
-        spawnStatus = spawnStatusOptions.spawnedNoKeys;
+        // no info found
+        spawnStatus = spawnStatusOptions.unspawned;
+        life = 0;
+        rift = 0;
       }
-      const { sponsor } = npoint.net;
-      if (sponsor.has) {
-        pointInfo.sponsor = normalizeId(sponsor.who);
-      }
-    } else if (rawPointInfo.error) {
-      // no info found
-      spawnStatus = spawnStatusOptions.unspawned;
-      life = 0;
-      rift = 0;
     } else {
       // request pending
     }
