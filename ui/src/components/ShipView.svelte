@@ -93,7 +93,7 @@
   $: {
     rawSpawnedPoints = null;
     if (canSpawnPoints) {
-      rawSpawnedPointsPromise = api.scry<any>({ app: 'astrolabe', path: `/spawned/${patp}` });
+      rawSpawnedPointsPromise = api.scry<any>({ app: 'astrolabe', path: `/point/${patp}/spawned` });
       rawSpawnedPointsPromise.then((info) => {
         rawSpawnedPoints = info;
       }).catch((error) => {
@@ -103,8 +103,8 @@
   }
   $: {
     spawnedPoints = [];
-    if (rawSpawnedPoints?.spawned) {
-      spawnedPoints = rawSpawnedPoints?.spawned.map(patp => normalizeId(patp));
+    if (rawSpawnedPoints?.points) {
+      spawnedPoints = rawSpawnedPoints?.points.map(patp => normalizeId(patp));
     }
   }
   $: {

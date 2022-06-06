@@ -1,8 +1,8 @@
 /+  *astrolabe
-|_  points=(set ship)
+|_  points=(list ship)
 ++  grab
   |%
-  ++  noun  (set ship)
+  ++  noun  (list ship)
   --
 ++  grow
   |%

@@ -36,7 +36,7 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
     2. From the distribution ship's dojo: `:treaty|unpublish %astrolabe`
     2. From middleman or distribution ship's dojo: `|commit %astrolabe`
     3. (if using a comet as a middleman) `|public %astrolabe`
-    4. (if using a comet as a middleman) from the actual distribution ship: `|install ~comet-name %astrolabe`
+    4. (if using a comet as a middleman) from the actual distribution ship: `|install ~comet-name %astrolabe` or `|resume %astrolabe`
     5. (if using a comet as a middleman) from the actual distribution ship: `|pause %astrolabe`
 4. Build the UI with `npm run build` in the `ui` directory which will bundle all the code and assets into the `dist/` folder.
 5. Upload the `dist/` folder as a glob to your distribution ship. Example url: https://distribution.urbit-ship.com/docket/upload
