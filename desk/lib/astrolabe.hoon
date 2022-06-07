@@ -14,6 +14,9 @@
 ++  rev-q
   |=  a=@
   (rev 3 4 a)
+++  switch-words
+  |=  a=@
+  (rev 4 2 a)
 ++  add-d
   |=  [a=@ b=@]
   (rev-q (add (rev-q a) b))
@@ -99,6 +102,36 @@
   =/  =search-syls  (search-text-to-search-syls search-text)
   :-  search-syls
   (search-syls-to-search-opts search-syls)
+::
+++  reverse-list     :: that is, put first 2 in back "abcd" -> "cdab"
+  |*  lst=(list)
+  ^-  _lst
+  %+  weld
+    (slag 2 lst)
+  (scag 2 lst)
+++  reverse-search
+  |=  search=search-full
+  ^-  search-full
+  :-  (reverse-list search-syls.search)
+  (reverse-list search-opts.search)
+++  estimate-search-pain
+  |=  search=search-full
+  =/  opts  search-opts.search
+  =|  acc=@
+  |-
+  ?~  opts  acc
+  =/  new-acc
+    (add (mul acc 2) (lent i.opts))
+  $(acc new-acc, opts t.opts)
+++  maybe-reverse-search
+  |=  [search=search-full fopoints=opoints ropoints=opoints]
+  ^-  [[points=opoints reversed=?] search-full]
+  =/  search-pain  (estimate-search-pain search)
+  =/  rsearch  (reverse-search search)
+  =/  rsearch-pain  (estimate-search-pain rsearch)
+  ?:  (gth search-pain rsearch-pain)
+    [[ropoints %.y] rsearch]
+  [[fopoints %.n] search]
 ++  tape-matches
   |=  [search=tape cand=tape]
   ^-  ?
@@ -205,12 +238,15 @@
     |=  =^point
     ^-  json
     =*  unpoint  unpoint.point
-    ?~  unpoint  (pairs ~)
     =*  npoint  u.unpoint
     %+  frond  %point
-    %-  pairs  :~
+    %-  pairs  :*
+        ship+(ship ship.point)
         spa-count+(numb spa-count.point)
         [%probable-dominion s+probable-dominion.point]
+        [%sponsor-chain a+(turn sponsor-chain.point ship)]
+        ?~  unpoint  ~
+        :_  ~
         :-  %npoint
       %-  pairs  :~
           [%dominion s+dominion.npoint]

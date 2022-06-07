@@ -12,7 +12,8 @@
   ==
 +$  state-1
   $:  %1
-      =opoints
+      fopoints=opoints :: forward ordered points
+      ropoints=opoints :: reversed ordered points, e.g. .~palnet-sampel
   ==
 ::
 +$  spawned  (jug ship ship)
@@ -114,26 +115,28 @@
 ++  get-nas  .^(^state:naive %gx (scrio %azimuth /nas/noun))
 ++  put-in-opoints
   |=  =ship
-  ^-  _opoints
-  (put:ors opoints (to-q ship) ~)
+  ^-  _state
+  =.  fopoints
+    (put:ors fopoints (to-q ship) ~)
+  =.  ropoints
+    (put:ors ropoints (switch-words (to-q ship)) ~)
+  state
 ++  on-naive-state
   |=  nas=^state:naive
   ^-  (quip card _state)
   =+  points=points.nas ::  =points, eh?
-  =.  opoints
-    |-
-    ^-  _opoints
-    ?~  points  opoints
-    =/  =ship  -.n.points
-    ::  traverse tree of points and add @ps to opoints with ^sein, you know
-    =.  opoints  (put-in-opoints ship)
-    $(points l.points, opoints $(points r.points))
-  `state
+  :-  ~
+  |-
+  ^-  _state
+  ?~  points  state
+  =/  =ship  -.n.points
+  =.  state  (put-in-opoints ship)
+  $(points l.points, state $(points r.points))
 ::
 ++  on-naive-diff
   |=  =diff:naive
   ^-  (quip card _state)
-  =?  opoints  ?=([%tx [* * * %spawn ship *] *] diff)
+  =?  state  ?=([%tx [* * * %spawn ship *] *] diff)
     %-  put-in-opoints
     ship.tx.raw-tx.diff
   `state
@@ -143,20 +146,25 @@
   ^-  ?
   ?=  [%tx [* * * %spawn ship *] *]  diff
 ::
+++  get-unpoint-term
+  |=  ship-name=term
+  .^(unpoint %gx (scrio %azimuth /point/[ship-name]/noun))
+::
+++  get-unpoint
+  |=  =ship
+  (get-unpoint-term (scot %p ship))
+::
 ++  get-point
   |=  ship-name=term
   ^-  point
   =/  =ship  `@p`(slav %p ship-name)
-  =/  unpoint  (get-unpoint ship-name)
-  :*  unpoint
+  =/  unpoint  (get-unpoint-term ship-name)
+  :*  ship
+      unpoint
       (spa-count ship)
-      (sponsor-chain unpoint)
-      (probable-dominion unpoint)
+      (sponsor-chain ship unpoint)
+      (probable-dominion ship unpoint)
   ==
-::
-++  get-unpoint
-  |=  ship-name=term
-  .^(unpoint %gx (scrio %azimuth /point/[ship-name]/noun))
 ::
 ++  run-spawned-points
   |*  [agg=mold targ=ship]
@@ -191,21 +199,21 @@
   +(agg)
 ::
 ++  run-wildcard-search
-  |*  [agg=mold search=search-full =page-info]
+  |*  [agg=mold search=search-full points=opoints =page-info]
   |=  f=$-([agg @q] agg)
   ^-  agg
   =/  s-syls  search-syls.search
   ~&  s-syls
   =/  s-opts  search-opts.search
-  =+  =agg
+  =|  =agg
   =+  [llb=.~zod rrb=`@q`(sub (bex 32) 1)]
   =|  agg-count=@
   |-
   ^-  _agg
-  ?~  opoints
+  ?~  points
     :: ~&  "nothing here, going up"
     agg
-  =*  n=@q  `@`-.n.opoints
+  =/  n=@q  `@`-.n.points
   =/  lrb=@q  ?:  (gth n 0)  (sub-d n 1)  .~zod
   =/  rlb=@q  (add-d n 1)
   =/  left-view  (range-contains-search llb lrb s-opts)
@@ -213,41 +221,53 @@
   :: ~&  "left side: {<?:(contains.left-view 'Y' 'N')>} {<llb>} - {<lrb>} contains {<s-opts>}"
   =/  right-view  (range-contains-search rlb rrb s-opts)
   =?  agg  contains.left-view
-    $(opoints l.opoints, rrb lrb, s-opts opts.left-view)
+    $(points l.points, rrb lrb, s-opts opts.left-view)
   =?  agg  (matches-search s-syls n)
     =/  fits  (fits-on-page agg-count page-info) 
     =.  agg-count  +(agg-count)
     ?:  fits  (f agg n)  agg
   :: ~&  "right side: {<?:(contains.right-view 'Y' 'N')>} {<rlb>} - {<rrb>} contains {<s-opts>}"
   =?  agg  contains.right-view
-    $(opoints r.opoints, llb rlb, s-opts opts.right-view)
+    $(points r.points, llb rlb, s-opts opts.right-view)
   agg
 ::
 ++  search-opoints
   |=  =search-text
   ^-  (list ship)
   =/  =search-full  (search-text-to-search-full search-text)
+  =^  spoints  search-full
+    (maybe-reverse-search search-full fopoints ropoints)
   =/  results
-    %-  (run-wildcard-search (list @q) search-full *page-info)
+    %- 
+      (run-wildcard-search (list @q) search-full points.spoints *page-info)
     |=  [agg=(list @q) result=@q]
     [result agg]
+  =?  results  reversed.spoints
+    (turn results switch-words)
   %-  flop
   (turn results to-p)
 ::
 ++  sponsor-chain
-  |=  =unpoint
-  ^-  (list ship)
+  |=  [=ship =unpoint]
+  ^-  (list ^ship)
   ?~  unpoint  ~
   =/  sponsor  sponsor.net.u.unpoint
   ?.  has.sponsor  ~
-  [who.sponsor ~] ::  todo: lookup parent
+  =/  spon  who.sponsor
+  ?:  =(spon ship)  ~
+  :-  spon
+  =/  spon-point  (get-unpoint spon)
+  $(ship spon, unpoint spon-point)
 ::
 ++  probable-dominion
-  |=  =unpoint
+  |=  [=ship =unpoint]
   ^-  dominion:naive
   ?^  unpoint
     dominion.u.unpoint
-  %l1 ::  todo: lookup parent
+  =/  parent  (^sein:title ship)
+  ?:  =(parent ship)  %l1
+  =/  parent-point  (get-unpoint parent)
+  $(ship parent, unpoint parent-point)
 ::
 ++  read-doc
   |=  =path

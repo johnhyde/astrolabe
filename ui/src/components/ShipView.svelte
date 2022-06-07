@@ -1,5 +1,4 @@
 <script lang="ts">
-  
   import UrbitApi from '@urbit/http-api';
   import { clan, sein, patp2dec } from 'urbit-ob';
   
@@ -11,11 +10,13 @@
   import ShipLink from './ShipLink.svelte';
   import EthAddressLink from './EthAddressLink.svelte';
   import CollapsibleContent from './CollapsibleContent.svelte';
+  import ShipChain from './ShipChain.svelte';
   import ShipListing from './ShipListing.svelte';
 
   export let patp: string;
 
   let parentChain: any[];
+  let sponsorChain: any[];
   let rawPointInfoPromise: any;
   let rawPointInfo: any = null;
   let pointInfo: any = {};
@@ -124,27 +125,33 @@
           'probable-dominion': dominion,
           npoint
         } = point;
-        spawnedCount = point['spa-count'];
-        life = npoint.net.keys.life;
-        rift = npoint.net.rift;
-        if (life > 0) {
-          keysSet = true;
-        }
-
-        pointInfo.proxies = npoint.own;
-        // const { dominion } = npoint;
         layer = layerOptions[dominion];
-
-        if (pointInfo.proxies.owner.address === '0x86cd9cd0992f04231751e3761de45cecea5d1801') {
-          spawnStatus = spawnStatusOptions.locked; 
-        } else if (keysSet) {
-          spawnStatus = spawnStatusOptions.spawned;
+        spawnedCount = point['spa-count'];
+        sponsorChain = point['sponsor-chain'].reverse();
+        if (npoint) {
+          life = npoint.net.keys.life;
+          rift = npoint.net.rift;
+          if (life > 0) {
+            keysSet = true;
+          }
+  
+          pointInfo.proxies = npoint.own;  
+          if (pointInfo.proxies.owner.address === '0x86cd9cd0992f04231751e3761de45cecea5d1801') {
+            spawnStatus = spawnStatusOptions.locked; 
+          } else if (keysSet) {
+            spawnStatus = spawnStatusOptions.spawned;
+          } else {
+            spawnStatus = spawnStatusOptions.spawnedNoKeys;
+          }
+          // const { sponsor } = npoint.net;
+          // if (sponsor.has) {
+          //   pointInfo.sponsor = normalizeId(sponsor.who);
+          // }
         } else {
-          spawnStatus = spawnStatusOptions.spawnedNoKeys;
-        }
-        const { sponsor } = npoint.net;
-        if (sponsor.has) {
-          pointInfo.sponsor = normalizeId(sponsor.who);
+          // no info found
+          spawnStatus = spawnStatusOptions.unspawned;
+          life = 0;
+          rift = 0;
         }
       } else {
         // no info found
@@ -215,10 +222,7 @@
         {#if parentChain.length > 0}
           <p>
             {parentChain.length === 1 ? 'Parent:' : 'Parent Chain:'}
-            {#each parentChain as parent, index}
-            {#if index > 0}{' > '}{/if}
-              <ShipLink patp={parent}></ShipLink>
-            {/each}
+            <ShipChain shipChain={parentChain}></ShipChain>
           </p>
         {/if}
         {#if azPoint}
@@ -231,8 +235,15 @@
                 {#if shipClass !== 'galaxy'}
                   <p>
                     {#if pointInfo.sponsor && shipClass !== 'galaxy'}
-                      Sponsor:
-                      <ShipLink patp={pointInfo.sponsor}></ShipLink>
+                      <!-- Sponsor:
+                      <ShipLink patp={pointInfo.sponsor}></ShipLink> -->
+
+                      {#if sponsorChain.length > 0}
+                        <p>
+                          {sponsorChain.length === 1 ? 'Sponsor:' : 'Sponsor Chain:'}
+                          <ShipChain shipChain={sponsorChain}></ShipChain>
+                        </p>
+                      {/if}
                     {:else}
                       Unsponsored
                     {/if}
