@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-import api from '../lib/api';
+import { getDoc } from '../lib/api';
 const docs = {};
 // import type { AppState, Contacts } from '../types/store';
 
@@ -12,11 +12,11 @@ const initStore: any = {
 const store = writable(initStore);
 const { subscribe, update, set } = store;
 
-async function getDoc(path): Promise<string> {
+async function getCachedDoc(path): Promise<string> {
   if (docs[path]) {
     return docs[path];
   } else {
-    const doc = await api.scry<string>({ app: 'astrolabe', path: `/doc/${path}` });
+    const doc = await getDoc(path);
     docs[path] = doc;
     return doc;
   }
@@ -37,5 +37,9 @@ function hide() {
   }));
 }
 
-
-export default { subscribe, getDoc, show, hide };
+export default {
+  subscribe,
+  getDoc: getCachedDoc,
+  show,
+  hide
+};

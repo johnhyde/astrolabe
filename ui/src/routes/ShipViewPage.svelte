@@ -4,6 +4,7 @@
   import { SearchAnalysis } from '../lib/id';
   import { linkToShip } from '../lib/link';
   import SearchBar from "../components/SearchBar.svelte";
+  import SearchResults from "../components/SearchResults.svelte";
   import ShipView from '../components/ShipView.svelte';
   import ValidationProblems from '../components/ValidationProblems.svelte';
   import HomeScreenTiles from '../components/HomeScreenTiles.svelte';
@@ -44,8 +45,10 @@
   <SearchBar bind:analysis bind:search />
   {#if analysis.patpIsValid}
     <ShipView patp={analysis.patp} />
+  {:else if (analysis.queryIsValid)}
+    <SearchResults query={analysis.query} search={analysis.search} />
   {:else if (analysis.search.length > 0)}
-    <ValidationProblems problems={analysis.patpProblems} />
+    <ValidationProblems problems={analysis.queryProblems} />
   {:else}
     <HomeScreenTiles />
   {/if}

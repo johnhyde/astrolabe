@@ -17,5 +17,4 @@ export interface StoreState {
   connection: ConnectionStatus;
   subscription?: unknown;
   ship: Patp;
-  docs: Docs;
 }

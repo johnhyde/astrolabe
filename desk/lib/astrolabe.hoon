@@ -109,10 +109,17 @@
   %+  weld
     (slag 2 lst)
   (scag 2 lst)
+++  pad-search-syls
+  |=  =search-syls
+  ^-  ^search-syls
+  =/  padding  (search-text-to-search-syls "dozzoddozzod")
+  %+  weld
+    search-syls
+  (slag (lent search-syls) padding)
 ++  reverse-search
   |=  search=search-full
   ^-  search-full
-  :-  (reverse-list search-syls.search)
+  :-  (reverse-list (pad-search-syls search-syls.search))
   (reverse-list search-opts.search)
 ++  estimate-search-pain
   |=  search=search-full
@@ -123,15 +130,29 @@
   =/  new-acc
     (add (mul acc 2) (lent i.opts))
   $(acc new-acc, opts t.opts)
+:: ++  estimate-search-pain
+::   |=  search=search-full
+::   =/  max-pain  (bex 32)
+::   =/  opts  search-opts.search
+::   =|  acc=@
+::   |-
+::   ?~  opts  acc
+::   =/  level-pain  (div (mul max-pain (lent i.opts)) 256)
+::   =/  new-acc
+::     (add (mul acc 2) (lent i.opts))
+::   $(acc new-acc, opts t.opts)
+++  estimate-search-text-pain
+  |=  =search-text
+  (estimate-search-pain (search-text-to-search-full search-text))
 ++  maybe-reverse-search
   |=  [search=search-full fopoints=opoints ropoints=opoints]
-  ^-  [[points=opoints reversed=?] search-full]
+  ^-  [[points=opoints reversed=? pain=@] =search-full]
   =/  search-pain  (estimate-search-pain search)
   =/  rsearch  (reverse-search search)
   =/  rsearch-pain  (estimate-search-pain rsearch)
   ?:  (gth search-pain rsearch-pain)
-    [[ropoints %.y] rsearch]
-  [[fopoints %.n] search]
+    [[ropoints %.y rsearch-pain] rsearch]
+  [[fopoints %.n search-pain] search]
 ++  tape-matches
   |=  [search=tape cand=tape]
   ^-  ?
@@ -149,14 +170,15 @@
 ++  matches-search
   |=  [search=search-syls cand-atom=@]
   =/  cand  (rip 3 cand-atom)
-  =?  cand  =(cand ~)
-    (limo ~[0])
   |-
   ^-  ?
-  ?~  search  =(~ cand)
-  ?~  cand  %.n
-  ?:  (syl-matches i.search i.cand)
-    $(search t.search, cand t.cand)
+  ?~  search  =(cand ~)
+  :: =?  cand  =(cand ~)
+  ::   `(lest @)`~[0]
+  =/  nncand  ^-  (lest @) 
+    ?~  cand  ~[0]  cand
+  ?:  (syl-matches i.search i.nncand)
+    $(search t.search, cand t.nncand)
   %.n
 ::
 ++  opts-in-range

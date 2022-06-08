@@ -1,42 +1,45 @@
 <script lang="ts">
   import { Groups, Rolodex } from '@urbit/api';
+  import { searchPoints } from '../lib/api';
   import store from '../stores/store';
   import ShipListing from './ShipListing.svelte';
   import SearchResultNavButtons from './SearchResultNavButtons.svelte';
   import ShipView from './ShipView.svelte';
-  export let searchQuery: RegExp;
-  export let patp: string;
+  export let query: RegExp;
+  export let search: string;
+  // export let patp: string;
   let contactsList = [];
   let selectedShipIndex: number;
 
-  $: {
-    if (!patp) {
-      store.search(searchQuery)
-    }
-    // if (searchQuery) {
-    //   store.search(searchQuery)
-    // } else {
-    //   store.reset();
-    // }
-  }
-  $: {
-    contactsList = Object.entries($store?.contacts).map(([patp, ship]) => {
-      return {
-        ...ship,
-        patp,
-      };
-    });
-    if (contactsList.length === 1) {
-      selectedShipIndex = 0;
-    } else {
-      selectedShipIndex = null;
-    }
-  }
-  $: selectedShip = contactsList[selectedShipIndex]
+  $: searchedPointsP = searchPoints(search)
+  // $: {
+  //   // if (!patp) {
+  //     store.search(query)
+  //   // }
+  //   // if (searchQuery) {
+  //   //   store.search(searchQuery)
+  //   // } else {
+  //   //   store.reset();
+  //   // }
+  // }
+  // $: {
+  //   contactsList = Object.entries($store?.contacts).map(([patp, ship]) => {
+  //     return {
+  //       ...ship,
+  //       patp,
+  //     };
+  //   });
+  //   if (contactsList.length === 1) {
+  //     selectedShipIndex = 0;
+  //   } else {
+  //     selectedShipIndex = null;
+  //   }
+  // }
+  // $: selectedShip = contactsList[selectedShipIndex]
 
-  function updateIndex(e) {
-    selectedShipIndex = e.detail.index;
-  }
+  // function updateIndex(e) {
+  //   selectedShipIndex = e.detail.index;
+  // }
 </script>
 
 <!-- should actually switch on whether field is empty -->
@@ -46,7 +49,7 @@
     Hello, ~{window.ship}, would you like to search?
   </p>
 {/if} -->
-{#if patp}
+<!-- {#if patp}
   <ShipView {patp} />
 {:else if selectedShip}
   {#if contactsList.length > 1}
@@ -57,12 +60,23 @@
       />
   {/if}
   <ShipView patp={selectedShip.patp} />
-{:else}
-  <div class="flex justify-center">
-    <div class="max-w-md w-full rounded-lg bg-white">
-      {#each contactsList as contact, i (contact.patp)}
-        <ShipListing ship={contact} on:click={() => selectedShipIndex = i}/>
-      {/each}
-    </div>
+{:else} -->
+{query}
+{search}
+{#await searchedPointsP}
+Loading...
+{:then { points }}
+  <div class="max-w-md w-full rounded-lg bg-white">
+    <!-- {#each contactsList as contact, i (contact.patp)}
+      <ShipListing ship={contact} on:click={() => selectedShipIndex = i}/>
+    {/each} -->
+    {#each points as patp, i (patp)}
+      <ShipListing ship={{ patp }} linkToShip />
+    {/each}
   </div>
-{/if}
+{:catch}
+  <div class="max-w-md w-full rounded-lg bg-white">
+    Search Too Broad
+  </div>
+{/await}
+<!-- {/if} -->

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-import api from '../lib/api';
+import { api } from '../lib/api';
 import type { StoreState, Contacts } from '../types/store';
 import { filterObject } from '../lib/utils';
 import fakeContacts from '../fake_data/fake-contacts';
@@ -11,7 +11,6 @@ const initStore: StoreState = {
   contacts: {},
   connection: 'disconnected',
   ship: window.ship,
-  docs: {},
 };
 
 const store = writable(initStore);
@@ -40,32 +39,5 @@ function reset() {
   set(initStore);
 }
 
-function getDoc(path) {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = subscribe(async ({ docs }) => {
-      try {
-        if (docs[path]) {
-          resolve(docs[path]);
-        } else {
-          const doc = await api.scry<string>({ app: 'astrolabe', path: `/doc/${path}` });
-          update(($store: StoreState): StoreState => {
-            return {
-              ...$store,
-              docs: {
-                ...$store.docs,
-                [path]: doc,
-              },
-            }
-          });
-          resolve(doc);
-        }
-      } catch (error) {
-        reject(error);
-      }
-    });
-    unsubscribe();
-  });
-}
 
-
-export default { subscribe, search, reset, getDoc };
+export default { subscribe, search, reset };

@@ -1,9 +1,8 @@
 <script lang="ts">
-  import UrbitApi from '@urbit/http-api';
   import { clan, sein, patp2dec } from 'urbit-ob';
   
   import { cite, normalizeId } from '../lib/id';
-  import tooltip from "../actions/tooltip";
+  import { getPoint, getSpawnedPoints } from '../lib/api';
   import Sigil from "./Sigil.svelte";
   import GoldBadge from './GoldBadge.svelte';
   import TooltipAndDocLink from "./TooltipAndDocLink.svelte";
@@ -23,7 +22,6 @@
   let rawSpawnedPointsPromise: any;
   let rawSpawnedPoints: any = null;
   let spawnedPoints: string[] = [];
-  const api: UrbitApi = new UrbitApi('');
   const spawnStatusOptions = {
     unspawned: {
       text: 'unspawned',
@@ -83,7 +81,7 @@
   $: {
     rawPointInfo = null;
     if (azPoint) {
-      rawPointInfoPromise = api.scry<any>({ app: 'astrolabe', path: `/point/${patp}` });
+      rawPointInfoPromise = getPoint(patp);
       rawPointInfoPromise.then((info) => {
         rawPointInfo = info;
       }).catch((error) => {
@@ -94,7 +92,7 @@
   $: {
     rawSpawnedPoints = null;
     if (canSpawnPoints) {
-      rawSpawnedPointsPromise = api.scry<any>({ app: 'astrolabe', path: `/point/${patp}/spawned` });
+      rawSpawnedPointsPromise = getSpawnedPoints(patp);
       rawSpawnedPointsPromise.then((info) => {
         rawSpawnedPoints = info;
       }).catch((error) => {

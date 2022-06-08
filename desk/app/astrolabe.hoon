@@ -136,6 +136,12 @@
 ++  on-naive-diff
   |=  =diff:naive
   ^-  (quip card _state)
+  ~&  %+  weld  "received diff:naive: {<-.diff>}"
+  ?+  -.diff  ""
+    %nonce  " ship: {<ship.diff>}"
+    %tx  " from: {<ship.from.tx.raw-tx.diff>} - {<+<.tx.raw-tx.diff>}"
+    %point  " ship: {<ship.diff>} - {<+>-.diff>}"
+    ==
   =?  state  ?=([%tx [* * * %spawn ship *] *] diff)
     %-  put-in-opoints
     ship.tx.raw-tx.diff
@@ -201,35 +207,37 @@
 ++  run-wildcard-search
   |*  [agg=mold search=search-full points=opoints =page-info]
   |=  f=$-([agg @q] agg)
-  ^-  agg
+  ^-  [count=@ =agg]
   =/  s-syls  search-syls.search
   ~&  s-syls
   =/  s-opts  search-opts.search
-  =|  =agg
+  =|  res=[count=@ =agg]
   =+  [llb=.~zod rrb=`@q`(sub (bex 32) 1)]
-  =|  agg-count=@
+  :: =<  +
   |-
-  ^-  _agg
+  ^-  _res
   ?~  points
     :: ~&  "nothing here, going up"
-    agg
+    res
+  ?:  (gth count.res 1.000)  ~|(%search-too-broad !!)
   =/  n=@q  `@`-.n.points
   =/  lrb=@q  ?:  (gth n 0)  (sub-d n 1)  .~zod
   =/  rlb=@q  (add-d n 1)
   =/  left-view  (range-contains-search llb lrb s-opts)
   :: ~&  "arrived at {<n>}"
-  :: ~&  "left side: {<?:(contains.left-view 'Y' 'N')>} {<llb>} - {<lrb>} contains {<s-opts>}"
+  :: ~&  "left side: {<?:(contains.left-view 'Y' 'N')>} {<llb>} - {<lrb>}"
   =/  right-view  (range-contains-search rlb rrb s-opts)
-  =?  agg  contains.left-view
+  =?  res  contains.left-view
     $(points l.points, rrb lrb, s-opts opts.left-view)
-  =?  agg  (matches-search s-syls n)
-    =/  fits  (fits-on-page agg-count page-info) 
-    =.  agg-count  +(agg-count)
-    ?:  fits  (f agg n)  agg
-  :: ~&  "right side: {<?:(contains.right-view 'Y' 'N')>} {<rlb>} - {<rrb>} contains {<s-opts>}"
-  =?  agg  contains.right-view
+  =?  res  (matches-search s-syls n)
+    =/  fits  (fits-on-page count.res page-info) 
+    =.  count.res  +(count.res)
+    =?  agg.res  fits  (f agg.res n)
+    res
+  :: ~&  "right side: {<?:(contains.right-view 'Y' 'N')>} {<rlb>} - {<rrb>}"
+  =?  res  contains.right-view
     $(points r.points, llb rlb, s-opts opts.right-view)
-  agg
+  res
 ::
 ++  search-opoints
   |=  =search-text
@@ -237,15 +245,18 @@
   =/  =search-full  (search-text-to-search-full search-text)
   =^  spoints  search-full
     (maybe-reverse-search search-full fopoints ropoints)
+  ?:  (gth pain.spoints 2.820)  ~|(%search-predicted-too-broad !!)
   =/  results
     %- 
       (run-wildcard-search (list @q) search-full points.spoints *page-info)
     |=  [agg=(list @q) result=@q]
     [result agg]
-  =?  results  reversed.spoints
-    (turn results switch-words)
+  ~&  "returning {<(lent agg.results)>} of {<count.results>} results"
+  =/  ships  agg.results
+  =?  ships  reversed.spoints
+    (turn ships switch-words)
   %-  flop
-  (turn results to-p)
+  (turn ships to-p)
 ::
 ++  sponsor-chain
   |=  [=ship =unpoint]

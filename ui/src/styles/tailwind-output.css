@@ -1106,6 +1106,10 @@ Ensure the default browser behavior of the `hidden` attribute.
     max-width: 42rem;
   }
 
+  .md\:max-w-lg {
+    max-width: 32rem;
+  }
+
   .md\:flex-row {
     flex-direction: row;
   }
