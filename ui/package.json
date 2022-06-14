@@ -37,6 +37,7 @@
     "@urbit/api": "^2.1.0",
     "@urbit/http-api": "^2.1.0",
     "bn.js": "^5.2.0",
+    "lodash": "^4.17.21",
     "svelte-copy-to-clipboard": "^0.2.5",
     "tippy.js": "^6.3.7",
     "urbit-ob": "^5.0.1"

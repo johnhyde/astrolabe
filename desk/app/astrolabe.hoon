@@ -145,6 +145,9 @@
   =?  state  ?=([%tx [* * * %spawn ship *] *] diff)
     %-  put-in-opoints
     ship.tx.raw-tx.diff
+  =?  state  ?=([%point @ %owner *] diff)
+    %-  put-in-opoints
+    ship.diff
   `state
 ::
 ++  is-spawn-tx
@@ -248,7 +251,7 @@
   ?:  (gth pain.spoints 2.820)  ~|(%search-predicted-too-broad !!)
   =/  results
     %- 
-      (run-wildcard-search (list @q) search-full points.spoints *page-info)
+      (run-wildcard-search (list @q) search-full points.spoints [0 0])
     |=  [agg=(list @q) result=@q]
     [result agg]
   ~&  "returning {<(lent agg.results)>} of {<count.results>} results"

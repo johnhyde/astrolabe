@@ -720,6 +720,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
 }
+.divide-y > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
 .justify-self-start {
   justify-self: start;
 }
@@ -728,6 +733,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .overflow-auto {
   overflow: auto;
+}
+.overflow-hidden {
+  overflow: hidden;
 }
 .overflow-scroll {
   overflow: scroll;
@@ -762,11 +770,20 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-4 {
   border-width: 4px;
 }
+.border-8 {
+  border-width: 8px;
+}
 .border-b {
   border-bottom-width: 1px;
 }
 .border-t {
   border-top-width: 1px;
+}
+.border-l {
+  border-left-width: 1px;
+}
+.border-l-8 {
+  border-left-width: 8px;
 }
 .border-white {
   --tw-border-opacity: 1;
@@ -783,6 +800,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-gold {
   --tw-border-opacity: 1;
   border-color: rgb(252 211 77 / var(--tw-border-opacity));
+}
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+.border-gray-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(156 163 175 / var(--tw-border-opacity));
 }
 .bg-gold {
   --tw-bg-opacity: 1;
@@ -1068,6 +1093,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
+.hover\:bg-gray-400:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+}
+.hover\:bg-gray-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
 .hover\:opacity-40:hover {
   opacity: 0.4;
 }
@@ -1104,10 +1137,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .md\:max-w-2xl {
     max-width: 42rem;
-  }
-
-  .md\:max-w-lg {
-    max-width: 32rem;
   }
 
   .md\:flex-row {

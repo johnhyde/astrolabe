@@ -1,45 +1,65 @@
 <script lang="ts">
-  import { Groups, Rolodex } from '@urbit/api';
+  
+  import type { Patp, Rolodex } from '@urbit/api';
   import { searchPoints } from '../lib/api';
   import store from '../stores/store';
-  import ShipListing from './ShipListing.svelte';
-  import SearchResultNavButtons from './SearchResultNavButtons.svelte';
-  import ShipView from './ShipView.svelte';
+  import ShipListings from './ShipListings.svelte';
+
   export let query: RegExp;
   export let search: string;
   // export let patp: string;
-  let contactsList = [];
+  let combinedSearchResults = [];
+  let searchedPoints: Patp[] = [];
   let selectedShipIndex: number;
 
   $: searchedPointsP = searchPoints(search)
-  // $: {
-  //   // if (!patp) {
-  //     store.search(query)
-  //   // }
-  //   // if (searchQuery) {
-  //   //   store.search(searchQuery)
-  //   // } else {
-  //   //   store.reset();
-  //   // }
-  // }
-  // $: {
-  //   contactsList = Object.entries($store?.contacts).map(([patp, ship]) => {
-  //     return {
-  //       ...ship,
-  //       patp,
-  //     };
-  //   });
-  //   if (contactsList.length === 1) {
-  //     selectedShipIndex = 0;
-  //   } else {
-  //     selectedShipIndex = null;
-  //   }
-  // }
-  // $: selectedShip = contactsList[selectedShipIndex]
+  $: {
+    searchedPointsP.then((points) => {
+      searchedPoints = points;
+    });
+  }
 
-  // function updateIndex(e) {
-  //   selectedShipIndex = e.detail.index;
-  // }
+  $: {
+    // if (!patp) {
+      store.search(query)
+    // }
+    // if (searchQuery) {
+    //   store.search(searchQuery)
+    // } else {
+    //   store.reset();
+    // }
+  }
+  $: {
+    const contactSearchResults = JSON.parse(JSON.stringify($store.contactSearchResults));
+    const contacts = [];
+    const nonContacts = [];
+    searchedPoints.forEach(patp => {
+      const contact = contactSearchResults[patp];
+      if (contact) {
+        contacts.push({ ...contact, patp });
+        delete contactSearchResults[patp];
+      } else {
+        nonContacts.push({ patp });
+      }
+    });
+    const nonAzimuthContacts = Object.entries(contactSearchResults).map(([patp, ship]) => {
+      return {
+        ...ship,
+        patp,
+      };
+    });
+    combinedSearchResults = [...contacts, ...nonAzimuthContacts, ...nonContacts];
+    if (combinedSearchResults.length === 1) {
+      selectedShipIndex = 0;
+    } else {
+      selectedShipIndex = null;
+    }
+  }
+  $: selectedShip = combinedSearchResults[selectedShipIndex]
+
+  function updateIndex(e) {
+    selectedShipIndex = e.detail.index;
+  }
 </script>
 
 <!-- should actually switch on whether field is empty -->
@@ -51,32 +71,36 @@
 {/if} -->
 <!-- {#if patp}
   <ShipView {patp} />
-{:else if selectedShip}
-  {#if contactsList.length > 1}
+{:else if selectedShip}-->
+  <!-- {#if contactsList.length > 1}
     <SearchResultNavButtons
       index={selectedShipIndex}
       totalResults={contactsList.length}
       on:updateIndex={updateIndex}
       />
-  {/if}
-  <ShipView patp={selectedShip.patp} />
+  {/if} -->
+<!--  <ShipView patp={selectedShip.patp} />
 {:else} -->
-{query}
-{search}
-{#await searchedPointsP}
-Loading...
-{:then { points }}
-  <div class="max-w-md w-full rounded-lg bg-white">
-    <!-- {#each contactsList as contact, i (contact.patp)}
-      <ShipListing ship={contact} on:click={() => selectedShipIndex = i}/>
-    {/each} -->
-    {#each points as patp, i (patp)}
-      <ShipListing ship={{ patp }} linkToShip />
-    {/each}
-  </div>
-{:catch}
-  <div class="max-w-md w-full rounded-lg bg-white">
-    Search Too Broad
-  </div>
-{/await}
-<!-- {/if} -->
+<div class="max-w-md w-full rounded-lg bg-white overflow-hidden">
+  {#await searchedPointsP}
+    <p class="p-8 text-center">
+      Searching all spawned points...
+    </p>
+  {:catch}
+     <p class="p-8 text-center">
+      Your search is too broad, please be more specific.
+    </p>
+  {/await}
+  {#if combinedSearchResults.length === 0}
+    <p class="p-8 text-center">
+      No spawned ships match your search.
+    </p>
+  {:else}
+    <ShipListings
+      ships={combinedSearchResults}
+      on:click={({ detail: i }) => selectedShipIndex = i}
+      linkToShips differentiateContacts
+    />
+  {/if}
+</div>
+    <!-- {/if} -->

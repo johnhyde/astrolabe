@@ -11,6 +11,7 @@
     '/help/:path?': HelpPage,
     // '/:patp?': ShipViewPage,
     '/ship/:patp?': ShipViewPage,
+    '/search/:patp?': ShipViewPage,
     '*': ShipViewPage,
   }
 </script>

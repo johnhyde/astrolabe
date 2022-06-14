@@ -162,11 +162,17 @@
   ?:  |(=(i.search i.cand) =(i.search '*'))
     $(search t.search, cand t.cand)
   %.n
+++  tosd
+  |=  [a=@ =pfsf]
+  %-  ?:(=(%prefix pfsf) tos:po tod:po)
+  a
+++  syl-equals
+  |=  [=syl cand=@]
+  =((crip tape.syl) (tosd cand pfsf.syl))
 ++  syl-matches
   |=  [=syl cand=@]
   ::  todo check cand < 256
-  =/  tof  ?:  =(%prefix pfsf.syl)  tos:po  tod:po
-  (tape-matches tape.syl (trip (tof cand)))
+  (tape-matches tape.syl (trip (tosd cand pfsf.syl)))
 ++  matches-search
   |=  [search=search-syls cand-atom=@]
   =/  cand  (rip 3 cand-atom)
@@ -175,11 +181,15 @@
   ?~  search  =(cand ~)
   :: =?  cand  =(cand ~)
   ::   `(lest @)`~[0]
-  =/  nncand  ^-  (lest @) 
-    ?~  cand  ~[0]  cand
-  ?:  (syl-matches i.search i.nncand)
-    $(search t.search, cand t.nncand)
-  %.n
+  ?~  cand
+    ?&  (syl-equals i.search 0)
+        $(search t.search)
+    ==
+  :: =/  nncand  ^-  (lest @) 
+  ::   ?~  cand  ~[0]  cand
+  ?&  (syl-matches i.search i.cand)
+      $(search t.search, cand t.cand)
+  ==
 ::
 ++  opts-in-range
   |=  [lb=@ rb=@ opts=(list @)]

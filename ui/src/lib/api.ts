@@ -1,6 +1,14 @@
 import UrbitApi from '@urbit/http-api';
+import type { ContactUpdate, Patp, Group, Contact, Rolodex } from '@urbit/api';
+import _get from 'lodash/get';
+import { compose } from 'lodash/fp';
+
+import { normalizeId } from './id';
+
 console.log(`Initializing Urbit API at ${Date()}`);
-const api: UrbitApi = new UrbitApi('');
+const api: UrbitApi = new UrbitApi('', '', window.desk);
+api.ship = window.ship;
+// api.connect();
 
 function scry<T = any>(path: string): Promise<T> {
   return api.scry<T>({ app: 'astrolabe', path });
@@ -14,12 +22,63 @@ function getSpawnedPoints(patp: string): Promise<any> {
   return scry<any>(`/point/${patp}/spawned`);
 }
 
-function searchPoints(search: string): Promise<any> {
-  return scry<any>(`/search/${search}`);
+async function searchPoints(search: string): Promise<Patp[]> {
+  const { points } = await scry<any>(`/search/${search}`);
+  return points.map(normalizeId);
 }
 
 function getDoc(path: string): Promise<string> {
   return scry<string>(`/doc/${path}`);
+}
+
+function initialContacts(json: ContactUpdate, contacts: Rolodex): Rolodex {
+  const data = _get(json, 'initial', false);
+  if (data) {
+    contacts = data.rolodex;
+  }
+  return contacts;
+};
+
+function  addContact(json: ContactUpdate, contacts: Rolodex): Rolodex {
+  const data = _get(json, 'add', false);
+  if (data) {
+    contacts[data.ship] = data.contact;
+  }
+  return contacts;
+};
+
+function removeContact(json: ContactUpdate, contacts: Rolodex): Rolodex {
+  const data = _get(json, 'remove', false);
+  if (
+    data &&
+    (data.ship in contacts)
+  ) {
+    delete contacts[data.ship];
+  }
+  return contacts;
+};
+
+function handleContactUpdateEvent(updateContacts) {
+  return ({ 'contact-update': contactUpdate }) => {
+    console.log(`received contact-update: ${Object.keys(contactUpdate)}`)
+    const reducers = [initialContacts, addContact, removeContact];
+    const reducer = compose(reducers.map(r => sta => r(contactUpdate, sta)));
+    updateContacts(reducer);
+  };
+}
+
+function subscribeToContacts(e: (data: any) => void): Promise<any> {
+  return api.subscribe({
+    app: 'contact-store',
+    path: '/all',
+    event: handleContactUpdateEvent(e),
+    err: () => {
+      console.error(`Subscription to contact-store/all just get "err"`);
+    },
+    quit: () => {
+      console.error(`Subscription to contact-store/all just get "quit"`)
+    }
+  })
 }
 
 export {
@@ -29,4 +88,5 @@ export {
   getSpawnedPoints,
   searchPoints,
   getDoc,
+  subscribeToContacts,
 };

@@ -24,11 +24,19 @@
       if (paramChangedMoreRecently) {
         search = params.patp;
       } else {
-        if (analysis.patpIsValid && analysis.search === search) {
-          if (analysis.patp === search) {
-            push(linkToShip(analysis.patp));
+        if (analysis.search === search) {
+          if (!analysis.patpIsValid) {
+            if (search) {
+              push(`/search/${search}`);
+            } else {
+              push('/');
+            }
           } else {
-            push(linkToShip(analysis.patp, { search }));
+            if (analysis.patp === search) {
+              push(linkToShip(analysis.patp));
+            } else {
+              push(linkToShip(analysis.patp, { search }));
+            }
           }
         }
       }

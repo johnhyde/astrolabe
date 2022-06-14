@@ -10,7 +10,7 @@
   import EthAddressLink from './EthAddressLink.svelte';
   import CollapsibleContent from './CollapsibleContent.svelte';
   import ShipChain from './ShipChain.svelte';
-  import ShipListing from './ShipListing.svelte';
+  import ShipListings from './ShipListings.svelte';
 
   export let patp: string;
 
@@ -103,7 +103,7 @@
   $: {
     spawnedPoints = [];
     if (rawSpawnedPoints?.points) {
-      spawnedPoints = rawSpawnedPoints?.points.map(patp => normalizeId(patp));
+      spawnedPoints = rawSpawnedPoints?.points.map(patp => ({ patp: normalizeId(patp) }));
     }
   }
   $: {
@@ -232,16 +232,11 @@
               {:then}
                 {#if shipClass !== 'galaxy'}
                   <p>
-                    {#if pointInfo.sponsor && shipClass !== 'galaxy'}
-                      <!-- Sponsor:
-                      <ShipLink patp={pointInfo.sponsor}></ShipLink> -->
-
-                      {#if sponsorChain.length > 0}
-                        <p>
-                          {sponsorChain.length === 1 ? 'Sponsor:' : 'Sponsor Chain:'}
-                          <ShipChain shipChain={sponsorChain}></ShipChain>
-                        </p>
-                      {/if}
+                    {#if sponsorChain && sponsorChain.length > 0}
+                      <p>
+                        {sponsorChain.length === 1 ? 'Sponsor:' : 'Sponsor Chain:'}
+                        <ShipChain shipChain={sponsorChain}></ShipChain>
+                      </p>
                     {:else}
                       Unsponsored
                     {/if}
@@ -337,9 +332,10 @@
         Loading {spawnableClassPlural}...
       {:then}
         <!-- TODO: pagination -->
-        {#each spawnedPoints as patp, i}
-          <ShipListing ship={{ patp }} linkToShip />
-        {/each}
+        <ShipListings
+          ships={spawnedPoints}
+          linkToShips
+        />
       {/await}
     </div>
   {/if}

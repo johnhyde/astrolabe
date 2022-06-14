@@ -1,5 +1,5 @@
 import type { ConnectionStatus } from './connection';
-import type { Patp, Group, Contact } from '@urbit/api';
+import type { Patp, Group, Contact, Rolodex } from '@urbit/api';
 export interface Contacts {
   [contact: string]: Contact;
 };
@@ -12,7 +12,10 @@ export interface StoreState {
   // groups: {
   //   [group: string]: Group;
   // };
-  contacts: Contacts;
+  contacts: Rolodex;
+  contactSearchResults: Rolodex;
+  // contacts: Contacts;
+  // contactSearchResults: Contacts;
   // chats: [];
   connection: ConnectionStatus;
   subscription?: unknown;
