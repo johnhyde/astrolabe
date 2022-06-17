@@ -455,7 +455,11 @@ function convertSearchTextToRegex(str: string, { checkStart = false, checkEnd = 
   if (checkEnd) {
     str = str + '$';
   }
-  return new RegExp(str);
+  try {
+    return new RegExp(str);
+  } catch {
+    return /a^/; // matches nothing
+  }
 }
 
 function expandAbbreviatedId(patp: string): string {

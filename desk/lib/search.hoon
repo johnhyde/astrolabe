@@ -221,7 +221,8 @@
   :: =?  cand  =(cand ~)
   ::   `(lest @)`~[0]
   ?~  cand
-    ?&  (syl-equals i.search 0)
+    :: ?&  (syl-equals i.search 0)
+    ?&  (syl-matches i.search 0)
         $(search t.search)
     ==
   :: =/  nncand  ^-  (lest @) 

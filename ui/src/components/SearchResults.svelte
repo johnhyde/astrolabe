@@ -15,9 +15,17 @@
   let selectedShipIndex: number;
   let page: number = 0;
   let pageSize: number = 50;
+  let totalPages, firstItemOnPage;
   let searchStatus: ('init' | 'prog' | 'done' | 'fail') = 'init';
   let notification: string = null;
-  $: { searchedContacts.search(query) }
+
+  let timer;
+  $: {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      searchedContacts.search(query);
+    }, 1000);
+  }
   $: searchedPointsP = searchPoints(search);
   $: {
     searchStatus = 'prog';
@@ -56,8 +64,15 @@
       selectedShipIndex = null;
     }
   }
-  $: totalPages = Math.ceil(combinedSearchResults.length / pageSize);
-  $: firstItemOnPage = page * pageSize
+  $: {
+    totalPages = Math.ceil(combinedSearchResults.length / pageSize);
+    firstItemOnPage = page * pageSize;
+    if (firstItemOnPage >= combinedSearchResults.length) {
+      page = totalPages - 1;
+    } else if (firstItemOnPage < 0) {
+      page = 0;
+    }
+  }
   $: pageResults = combinedSearchResults.slice(firstItemOnPage, (page + 1) * pageSize);
   $: itemRangeText = pageResults.length == combinedSearchResults.length ? 'all' :
   `${firstItemOnPage + 1}-${firstItemOnPage + pageResults.length}`;
@@ -96,5 +111,14 @@
       ships={pageResults}
       linkToShips differentiateContacts
     />
+    {#if pageResults.length >= 5}
+      <SearchResultsNavButtons {page} {pageSize} {totalPages}
+      on:updatePage={({ detail }) => page = detail.page}
+      >
+      <p class="px-4 py-8 text-center">
+        Showing {itemRangeText} of {combinedSearchResults.length} results
+      </p>
+    </SearchResultsNavButtons>
+    {/if}
   </div>
 {/if}

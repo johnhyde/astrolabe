@@ -254,7 +254,7 @@
       (switch-words result)
     =.  result  (to-p result)
     (put:((on @ @) gte) agg result ~)
-  ~&  "returning {<~(wyt by agg.res)>} of {<count.res>} results"
+  :: ~&  "returning {<~(wyt by agg.res)>} of {<count.res>} results"
   res
 ++  search-opoints
   |=  [=search-text expand-search=?]
@@ -263,14 +263,16 @@
     ?:  expand-search
       (search-text-to-fulls search-text)
     ~[(search-text-to-full search-text)]
-  ~&  (turn search-fulls |=(=search-full search-syls.search-full))
+  :: ~&  (turn search-fulls |=(=search-full search-syls.search-full))
   =/  mr-searches  (maybe-reverse-searches search-fulls 2.820)
-  ~&  (turn mr-searches |=(=mr-search pain.mr-search))
+  :: ~&  (turn mr-searches |=(=mr-search pain.mr-search))
+  :: ~&  mr-searches
   ?~  mr-searches  ~|(%search-predicted-too-broad !!)
-  =/  results
+  =/  res
     %+  roll  `(list mr-search)`mr-searches
     run-mr-search
-  (turn ~(tap in agg.results) head)
+  ~&  "search for {<search-text>} returning {<~(wyt by agg.res)>} of {<count.res>} results"
+  (turn ~(tap in agg.res) head)
 ::
 ++  sponsor-chain
   |=  [=ship =unpoint]
