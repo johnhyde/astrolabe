@@ -1,5 +1,5 @@
 /-  *astrolabe
-/+  *astrolabe, naive, default-agent, dbug, agentio
+/+  *astrolabe, *search, naive, default-agent, dbug, agentio
 /$  udon-to-docu  %udon  %docu
 |%
 +$  versioned-state
@@ -57,9 +57,10 @@
       [%x %point @ %spawned ~]
     =/  =ship  `@p`(slav %p &3.path)
     ``astrolabe-point-set+!>((get-spawned-points:hc ship))
-      [%x %search @ ~]
+      [%x %search @ ?(~ [%narrow ~])]
     =/  =search-text  (trip &3.path)
-    ``astrolabe-point-set+!>((search-opoints:hc search-text))
+    =/  expand-search  =(t.t.t.path ~)
+    ``astrolabe-point-set+!>((search-opoints:hc search-text expand-search))
       [%x %doc ^]
     =/  doc-path=^path  t.t.path
     =/  doc  (read-doc:hc doc-path)
@@ -209,12 +210,11 @@
 ::
 ++  run-wildcard-search
   |*  [agg=mold search=search-full points=opoints =page-info]
-  |=  f=$-([agg @q] agg)
+  |=  [res=[count=@ =agg] f=$-([agg @q] agg)]
   ^-  [count=@ =agg]
   =/  s-syls  search-syls.search
-  ~&  s-syls
+  :: ~&  s-syls
   =/  s-opts  search-opts.search
-  =|  res=[count=@ =agg]
   =+  [llb=.~zod rrb=`@q`(sub (bex 32) 1)]
   :: =<  +
   |-
@@ -242,24 +242,35 @@
     $(points r.points, llb rlb, s-opts opts.right-view)
   res
 ::
+++  run-mr-search
+  |=  [search=mr-search res=[count=@ agg=opoints]]
+  ^-  _res
+  =/  points  ?:  reversed.search  ropoints  fopoints
+  =.  res
+    %+  (run-wildcard-search _agg.res search-full.search points [0 0])
+      res
+    |=  [agg=_agg.res result=@q]
+    =?  result  reversed.search
+      (switch-words result)
+    =.  result  (to-p result)
+    (put:((on @ @) gte) agg result ~)
+  ~&  "returning {<~(wyt by agg.res)>} of {<count.res>} results"
+  res
 ++  search-opoints
-  |=  =search-text
+  |=  [=search-text expand-search=?]
   ^-  (list ship)
-  =/  =search-full  (search-text-to-search-full search-text)
-  =^  spoints  search-full
-    (maybe-reverse-search search-full fopoints ropoints)
-  ?:  (gth pain.spoints 2.820)  ~|(%search-predicted-too-broad !!)
+  =/  search-fulls
+    ?:  expand-search
+      (search-text-to-fulls search-text)
+    ~[(search-text-to-full search-text)]
+  ~&  (turn search-fulls |=(=search-full search-syls.search-full))
+  =/  mr-searches  (maybe-reverse-searches search-fulls 2.820)
+  ~&  (turn mr-searches |=(=mr-search pain.mr-search))
+  ?~  mr-searches  ~|(%search-predicted-too-broad !!)
   =/  results
-    %- 
-      (run-wildcard-search (list @q) search-full points.spoints [0 0])
-    |=  [agg=(list @q) result=@q]
-    [result agg]
-  ~&  "returning {<(lent agg.results)>} of {<count.results>} results"
-  =/  ships  agg.results
-  =?  ships  reversed.spoints
-    (turn ships switch-words)
-  %-  flop
-  (turn ships to-p)
+    %+  roll  `(list mr-search)`mr-searches
+    run-mr-search
+  (turn ~(tap in agg.results) head)
 ::
 ++  sponsor-chain
   |=  [=ship =unpoint]

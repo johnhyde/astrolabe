@@ -1,8 +1,11 @@
 ;>
 # Astrolabe
 
-Currently Astrolabe lets you type in `@p`s or Azimuth point numbers
-to look up ships on the network. There's also Help Documentation if
+Currently, Astrolabe lets you type in `@p`s or Azimuth point numbers
+to look up ships on the network. You can search your contacts and
+spawned ships with partial or wildcard searches, e.g. `sampel-***net`.
+
+There's also Help Documentation if
 you want to learn more about how Urbit IDs work.
 
 ## Info

@@ -448,6 +448,7 @@ function padWithWild(search: string) {
 
 function convertSearchTextToRegex(str: string, { checkStart = false, checkEnd = false } = {}): RegExp {
   str = str.replace(/\*/g, '.');
+  if (str[0] === '~') checkStart = true;
   if (checkStart) {
     str = '^' + str;
   }

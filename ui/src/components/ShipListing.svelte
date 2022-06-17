@@ -26,9 +26,9 @@ on:click
 >
   <div class="flex flex-wrap p-4 items-center">
     <Sigil {patp} size={48} />
-    {#if ship.avatar}
+    <!-- {#if ship.avatar}
       <img src={ship.avatar} class="h-12 w-12 mr-4" />
-    {/if}
+    {/if} -->
     <p class="ml-4 break-words">
       {patp}<br/>{ship.nickname ? `(${ship.nickname})` : ''}
     </p>

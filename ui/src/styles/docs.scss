@@ -23,7 +23,9 @@
     @apply pl-5;
 
     li {
-      @apply py-1;
+      h1, h2, h3, h4 {
+        @apply py-0;
+      }
 
       // & * {
       //   @apply inline;

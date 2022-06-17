@@ -9,7 +9,7 @@
   }
 </script>
 
-<div class="doc">
+<div class="doc w-auto mx-auto">
   <h1 class="text-center">Table of Contents</h1>
   <DocLink path="urbit-id" on:navigate>
     <h2>What is an Urbit ID?</h2>

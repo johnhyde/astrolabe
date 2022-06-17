@@ -2,8 +2,10 @@
   
   import type { Patp, Rolodex } from '@urbit/api';
   import { searchPoints } from '../lib/api';
-  import store from '../stores/store';
+  import { searchedContacts } from '../stores/searchStores';
   import ShipListings from './ShipListings.svelte';
+  import SearchSettings from './SearchSettings.svelte';
+  import SearchResultsNavButtons from './SearchResultsNavButtons.svelte';
 
   export let query: RegExp;
   export let search: string;
@@ -11,26 +13,25 @@
   let combinedSearchResults = [];
   let searchedPoints: Patp[] = [];
   let selectedShipIndex: number;
-
-  $: searchedPointsP = searchPoints(search)
+  let page: number = 0;
+  let pageSize: number = 50;
+  let searchStatus: ('init' | 'prog' | 'done' | 'fail') = 'init';
+  let notification: string = null;
+  $: { searchedContacts.search(query) }
+  $: searchedPointsP = searchPoints(search);
   $: {
+    searchStatus = 'prog';
     searchedPointsP.then((points) => {
       searchedPoints = points;
+      searchStatus = 'done';
+    }).catch((err) => {
+      searchedPoints = [];
+      searchStatus = 'fail';
     });
   }
 
   $: {
-    // if (!patp) {
-      store.search(query)
-    // }
-    // if (searchQuery) {
-    //   store.search(searchQuery)
-    // } else {
-    //   store.reset();
-    // }
-  }
-  $: {
-    const contactSearchResults = JSON.parse(JSON.stringify($store.contactSearchResults));
+    const contactSearchResults: Rolodex = JSON.parse(JSON.stringify($searchedContacts));
     const contacts = [];
     const nonContacts = [];
     searchedPoints.forEach(patp => {
@@ -55,52 +56,45 @@
       selectedShipIndex = null;
     }
   }
-  $: selectedShip = combinedSearchResults[selectedShipIndex]
+  $: totalPages = Math.ceil(combinedSearchResults.length / pageSize);
+  $: firstItemOnPage = page * pageSize
+  $: pageResults = combinedSearchResults.slice(firstItemOnPage, (page + 1) * pageSize);
+  $: itemRangeText = pageResults.length == combinedSearchResults.length ? 'all' :
+  `${firstItemOnPage + 1}-${firstItemOnPage + pageResults.length}`;
 
-  function updateIndex(e) {
-    selectedShipIndex = e.detail.index;
+  $: {
+    if (searchStatus == 'prog') {
+      notification = 'Searching all spawned points...';
+    } else if (searchStatus == 'fail') {
+      notification = 'Your search is too broad, please be more specific.';
+    } else if (searchStatus == 'done' && combinedSearchResults.length === 0) {
+      notification = 'No spawned ships match your search.'
+    } else {
+      notification = null;
+    }
   }
 </script>
 
-<!-- should actually switch on whether field is empty -->
-<!-- searchQuery is undefined when query is invalid -->
-<!-- {#if searchQuery === undefined}
-  <p class="p-6 rounded-lg bg-white">
-    Hello, ~{window.ship}, would you like to search?
+<SearchSettings/>
+{#if notification}
+<div class="rounded-lg bg-white overflow-hidden">
+  <p class="py-4 px-6 text-center">
+    {notification}
   </p>
-{/if} -->
-<!-- {#if patp}
-  <ShipView {patp} />
-{:else if selectedShip}-->
-  <!-- {#if contactsList.length > 1}
-    <SearchResultNavButtons
-      index={selectedShipIndex}
-      totalResults={contactsList.length}
-      on:updateIndex={updateIndex}
-      />
-  {/if} -->
-<!--  <ShipView patp={selectedShip.patp} />
-{:else} -->
-<div class="max-w-md w-full rounded-lg bg-white overflow-hidden">
-  {#await searchedPointsP}
-    <p class="p-8 text-center">
-      Searching all spawned points...
-    </p>
-  {:catch}
-     <p class="p-8 text-center">
-      Your search is too broad, please be more specific.
-    </p>
-  {/await}
-  {#if combinedSearchResults.length === 0}
-    <p class="p-8 text-center">
-      No spawned ships match your search.
-    </p>
-  {:else}
+</div>
+{/if}
+{#if combinedSearchResults.length > 0}
+  <div class="max-w-md w-full rounded-lg bg-white overflow-hidden">
+    <SearchResultsNavButtons {page} {pageSize} {totalPages}
+      on:updatePage={({ detail }) => page = detail.page}
+    >
+      <p class="px-4 py-8 text-center">
+        Showing {itemRangeText} of {combinedSearchResults.length} results
+      </p>
+    </SearchResultsNavButtons>
     <ShipListings
-      ships={combinedSearchResults}
-      on:click={({ detail: i }) => selectedShipIndex = i}
+      ships={pageResults}
       linkToShips differentiateContacts
     />
-  {/if}
-</div>
-    <!-- {/if} -->
+  </div>
+{/if}

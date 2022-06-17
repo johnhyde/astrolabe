@@ -1,16 +1,13 @@
 import { writable } from 'svelte/store';
 
-import type { ContactUpdate, Patp, Group, Contact, Rolodex } from '@urbit/api';
+import type { Rolodex } from '@urbit/api';
 import { subscribeToContacts } from '../lib/api';
-import type { StoreState, Contacts } from '../types/store';
-import { filterObject } from '../lib/utils';
-import fakeContacts from '../fake_data/fake-contacts';
+import type { StoreState } from '../types/store';
+import {  setStoreKey } from '../lib/utils';
 
 const initStore: StoreState = {
-  // chats: [],
-  // groups: {},
   contacts: {},
-  contactSearchResults: {},
+  query: null,
   connection: 'disconnected',
   ship: window.ship,
 };
@@ -19,22 +16,7 @@ const store = writable(initStore);
 const { subscribe, update, set } = store;
 
 function search(idQuery: RegExp) {
-  update(($store: StoreState): StoreState => {
-    if (!idQuery) {
-      return {
-        ...$store,
-        contactSearchResults: $store.contacts,
-      };
-    }
-    // const filteredContacts = filterObject($store.contacts, (id, contact) => {
-    const filteredContacts = filterObject($store.contacts, (id) => {
-      return idQuery.test(id);
-    }) as Contacts;
-    return {
-      ...$store,
-      contactSearchResults: filteredContacts,
-    }
-  });
+  setStoreKey(store, 'query', idQuery);
 }
 
 function reset() {
@@ -50,9 +32,6 @@ function updateContacts(callback: (contacts: Rolodex) => Rolodex): void {
   });
 }
 
-// setTimeout(() => {
-  subscribeToContacts(updateContacts);
-// }, 1000);
+subscribeToContacts(updateContacts);
 
-
-export default { subscribe, search, reset };
+export default { subscribe, set, search, reset };

@@ -1,18 +1,23 @@
 <script lang="ts">
   import Router from 'svelte-spa-router';
-  import Home from './routes/Home.svelte';
   import HelpPage from './routes/HelpPage.svelte';
-  import ShipViewPage from './routes/ShipViewPage.svelte';
+  import Home from './routes/Home.svelte';
   import HelpModal from './components/HelpModal.svelte';
   import "./styles/styles.scss";
 
   const routes = {
-    // '/': Home,
     '/help/:path?': HelpPage,
-    // '/:patp?': ShipViewPage,
-    '/ship/:patp?': ShipViewPage,
-    '/search/:patp?': ShipViewPage,
-    '*': ShipViewPage,
+    // '/:patp?': Home,
+    '/ship/:patp?': Home,
+    '/search/:search?': Home,
+    '*': Home,
+  }
+  import pageName from './stores/pageName';
+
+  $: title = $pageName ? `Astrolabe - ${$pageName}` : 'Astrolabe';
+
+  $: {
+    document.title = title
   }
 </script>
 
@@ -20,3 +25,7 @@
   <HelpModal />
   <Router {routes} />
 </main>
+
+<svelte:head>
+  <title>{title}</title>
+</svelte:head>

@@ -13,11 +13,17 @@ export interface StoreState {
   //   [group: string]: Group;
   // };
   contacts: Rolodex;
-  contactSearchResults: Rolodex;
+  query: RegExp;
   // contacts: Contacts;
   // contactSearchResults: Contacts;
   // chats: [];
   connection: ConnectionStatus;
   subscription?: unknown;
   ship: Patp;
+}
+export type SearchedContactsState = Rolodex;
+
+export class SearchSettings {
+  includeMoons: boolean = true;
+  includeComets: boolean = false;
 }
