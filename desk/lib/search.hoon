@@ -146,35 +146,43 @@
   ^-  search-full
   :-  (reverse-list (pad-search-syls search-syls.search))
   (reverse-list search-opts.search)
+::
 ++  estimate-search-pain
-  |=  search=search-full
+  |=  [search=search-full reversed=?]
+  ^-  @
   =/  opts  search-opts.search
-  =|  acc=@
-  |-
-  ?~  opts  acc
-  =/  new-acc
-    (add (mul acc 2) (lent i.opts))
-  $(acc new-acc, opts t.opts)
-:: ++  estimate-search-pain
-::   |=  search=search-full
-::   =/  max-pain  (bex 32)
-::   =/  opts  search-opts.search
-::   =|  acc=@
-::   |-
-::   ?~  opts  acc
-::   =/  level-pain  (div (mul max-pain (lent i.opts)) 256)
-::   =/  new-acc
-::     (add (mul acc 2) (lent i.opts))
-::   $(acc new-acc, opts t.opts)
+  =/  layer-wyt=@rs  .255
+  =,  rs
+  =/  pain
+    %-  :(corl abs:si need toi)
+    |-
+    ^-  @rs
+    ?~  opts  .0
+    =/  layer-dropoff
+      ?:  &(reversed =(i.opts `search-syl-opts`~[.~zod]))
+        .0.99
+      .0.1694
+    =/  num-opts  (sun (lent i.opts))
+    =/  cen-opts  (div num-opts .255)
+    =/  num-res  (mul cen-opts layer-wyt)
+    =/  ops  (mul (sqt cen-opts) layer-wyt)
+    %^  fma  num-res
+      %=  $
+        opts  t.opts
+        layer-wyt  (mul layer-wyt layer-dropoff)
+      ==
+    ops
+  :: ~&  "pain for {<search-syls.search>}: {<pain>}"
+  pain
 ++  estimate-search-text-pain
   |=  =search-text
-  (estimate-search-pain (search-text-to-full search-text))
+  (estimate-search-pain (search-text-to-full search-text) |)
 ++  maybe-reverse-search
   |=  [search=search-full]
   ^-  mr-search
-  =/  search-pain  (estimate-search-pain search)
+  =/  search-pain  (estimate-search-pain search |)
   =/  rsearch  (reverse-search search)
-  =/  rsearch-pain  (estimate-search-pain rsearch)
+  =/  rsearch-pain  (estimate-search-pain rsearch &)
   ?:  (gth search-pain rsearch-pain)
     [[%.y rsearch-pain] rsearch]
   [[%.n search-pain] search]

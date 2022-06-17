@@ -10,28 +10,32 @@ const api: UrbitApi = new UrbitApi('', '', window.desk);
 api.ship = window.ship;
 // api.connect();
 
-function scry<T = any>(path: string): Promise<T> {
+export function scry<T = any>(path: string): Promise<T> {
   return api.scry<T>({ app: 'astrolabe', path });
 }
 
-function getPoint(patp: string): Promise<any> {
+export function getPoint(patp: string): Promise<any> {
   return scry<any>(`/point/${patp}`);
 }
 
-function getSpawnedPoints(patp: string): Promise<any> {
+export function getSpawnedPoints(patp: string): Promise<any> {
   return scry<any>(`/point/${patp}/spawned`);
 }
 
-async function searchPoints(search: string): Promise<Patp[]> {
+export function getPeers(): Promise<any> {
+  return scry<any>(`/peers`);
+}
+
+export async function searchPoints(search: string): Promise<Patp[]> {
   const { points } = await scry<any>(`/search/${search}`);
   return points.map(normalizeId);
 }
 
-function getDoc(path: string): Promise<string> {
+export function getDoc(path: string): Promise<string> {
   return scry<string>(`/doc/${path}`);
 }
 
-function initialContacts(json: ContactUpdate, contacts: Rolodex): Rolodex {
+export function initialContacts(json: ContactUpdate, contacts: Rolodex): Rolodex {
   const data = _get(json, 'initial', false);
   if (data) {
     contacts = data.rolodex;
@@ -39,7 +43,7 @@ function initialContacts(json: ContactUpdate, contacts: Rolodex): Rolodex {
   return contacts;
 };
 
-function  addContact(json: ContactUpdate, contacts: Rolodex): Rolodex {
+export function  addContact(json: ContactUpdate, contacts: Rolodex): Rolodex {
   const data = _get(json, 'add', false);
   if (data) {
     contacts[data.ship] = data.contact;
@@ -47,7 +51,7 @@ function  addContact(json: ContactUpdate, contacts: Rolodex): Rolodex {
   return contacts;
 };
 
-function removeContact(json: ContactUpdate, contacts: Rolodex): Rolodex {
+export function removeContact(json: ContactUpdate, contacts: Rolodex): Rolodex {
   const data = _get(json, 'remove', false);
   if (
     data &&
@@ -58,7 +62,7 @@ function removeContact(json: ContactUpdate, contacts: Rolodex): Rolodex {
   return contacts;
 };
 
-function handleContactUpdateEvent(updateContacts) {
+export function handleContactUpdateEvent(updateContacts) {
   return ({ 'contact-update': contactUpdate }) => {
     console.log(`received contact-update: ${Object.keys(contactUpdate)}`)
     const reducers = [initialContacts, addContact, removeContact];
@@ -67,7 +71,7 @@ function handleContactUpdateEvent(updateContacts) {
   };
 }
 
-function subscribeToContacts(e: (data: any) => void): Promise<any> {
+export function subscribeToContacts(e: (data: any) => void): Promise<any> {
   return api.subscribe({
     app: 'contact-store',
     path: '/all',
@@ -80,13 +84,3 @@ function subscribeToContacts(e: (data: any) => void): Promise<any> {
     }
   })
 }
-
-export {
-  api,
-  scry,
-  getPoint,
-  getSpawnedPoints,
-  searchPoints,
-  getDoc,
-  subscribeToContacts,
-};

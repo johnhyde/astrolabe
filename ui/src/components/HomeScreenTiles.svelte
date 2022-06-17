@@ -17,17 +17,17 @@
 
 <div class="pt-10 max-w-md w-full flex flex-wrap gap-5 justify-center">
   <div class="rounded-lg bg-white flex-grow max-w-xs">
-    <DocLink modal path="">
+    <DocLink modal path="astrolabe">
       <div class="p-5 text-xl text-center">
-        Help Docs
+        About Astrolabe
       </div>
     </DocLink>
   </div>
-  <!-- <div class="rounded-lg bg-white flex-grow max-w-xs">
+  <div class="rounded-lg bg-white flex-grow max-w-xs">
     <DocLink modal path="">
       <div class="p-5 text-xl text-center">
-        Help Docs
+        About Urbit IDs
       </div>
     </DocLink>
-  </div> -->
+  </div>
 </div>

@@ -8,7 +8,7 @@
   export let search = '';
   let debouncedSearch = search;
 
-  const placeholderText = "Search by @p or #.  '*' is wildcard";
+  const placeholderText = "Search by @p or #.  '*' matches any character";
 
   $: {
     analysis = new SearchAnalysis(debouncedSearch);

@@ -13,6 +13,7 @@ export interface StoreState {
   //   [group: string]: Group;
   // };
   contacts: Rolodex;
+  peers: Patp[];
   query: RegExp;
   // contacts: Contacts;
   // contactSearchResults: Contacts;

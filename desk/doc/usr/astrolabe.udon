@@ -1,6 +1,7 @@
 ;>
 # Astrolabe
 
+Astrolabe is your one-stop shop for exploring Urbit address space.
 Currently, Astrolabe lets you type in `@p`s or Azimuth point numbers
 to look up ships on the network. You can search your contacts and
 spawned ships with partial or wildcard searches, e.g. `sampel-***net`.
@@ -8,11 +9,38 @@ spawned ships with partial or wildcard searches, e.g. `sampel-***net`.
 There's also Help Documentation if
 you want to learn more about how Urbit IDs work.
 
+## How to Use Search
+
+When you type part of a `@p` into the search bar, all your contacts and peers will be
+searched for IDs matching that string. You can use an asterisk (`*`) to
+stand in for any character. If you wanted to search for both `~samnec` and `~sarbec`,
+you could type `~sa**ec`.
+Contacts are listed before other ships, with a gold border on the left.
+
+You can exclude moons or include comets you've met with the toggles in the gold
+settings box under the search bar.
+
+The records of all spawned ships will also be searched, but if the search is
+too general it will be narrowed in scope, or not run at all. For example,
+if you search for `***hec`, it will search for all stars under `~hec`,
+and all planets that match `~***hec-******`, but planets matching `~******-***hec`
+will be ignored to prevent the search from taking too long.
+
+## Upcoming Features
+
+In addition to improving the search feature over time, Astrolabe will one day feature:
+- a Star Chart, where you can visually see the layout of the network and explore freely.
+- Sigil Search, with which you can select the shapes of a sigil and search for ships
+  that match.
+- Integrations with Groups, `%pals`, `%gora`, and whatever else seems fun and/or useful.
+
 ## Info
 
 - Developer: ~midlev-mindyr
 - License: MIT
 - App link: [~dister-midlev-mindyr/astrolabe](web+urbitgraph://~dister-midlev-mindyr/astrolabe)
+- Discussion Group: [~poster-hoster-midlev-mindyr/astrolabe](web+urbitgraph://group/~poster-hoster-midlev-mindyr/astrolabe)
+- Grant/Proposal: [https://urbit.org/grants/astrolabe](https://urbit.org/grants/astrolabe)
 - Source repo: [https://github.com/johnhyde/astrolabe](https://github.com/johnhyde/astrolabe)
 - Bug reports: [https://github.com/johnhyde/astrolabe/issues](https://github.com/johnhyde/astrolabe/issues)
 

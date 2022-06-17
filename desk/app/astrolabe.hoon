@@ -61,6 +61,9 @@
     =/  =search-text  (trip &3.path)
     =/  expand-search  =(t.t.t.path ~)
     ``astrolabe-point-set+!>((search-opoints:hc search-text expand-search))
+      [%x %peers ~]
+    =/  peers  .^((map ship ?(%alien %known)) %ax (scrio:hc %$ /peers))
+    ``astrolabe-point-set+!>((turn ~(tap in peers) head))
       [%x %doc ^]
     =/  doc-path=^path  t.t.path
     =/  doc  (read-doc:hc doc-path)
@@ -222,7 +225,7 @@
   ?~  points
     :: ~&  "nothing here, going up"
     res
-  ?:  (gth count.res 1.000)  ~|(%search-too-broad !!)
+  :: ?:  (gth count.res 1.000)  ~|(%search-too-broad !!)
   =/  n=@q  `@`-.n.points
   =/  lrb=@q  ?:  (gth n 0)  (sub-d n 1)  .~zod
   =/  rlb=@q  (add-d n 1)
@@ -264,7 +267,7 @@
       (search-text-to-fulls search-text)
     ~[(search-text-to-full search-text)]
   :: ~&  (turn search-fulls |=(=search-full search-syls.search-full))
-  =/  mr-searches  (maybe-reverse-searches search-fulls 2.820)
+  =/  mr-searches  (maybe-reverse-searches search-fulls 1.000)
   :: ~&  (turn mr-searches |=(=mr-search pain.mr-search))
   :: ~&  mr-searches
   ?~  mr-searches  ~|(%search-predicted-too-broad !!)
