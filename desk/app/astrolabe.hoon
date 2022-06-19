@@ -275,8 +275,8 @@
     %+  roll  `(list mr-search)`mr-searches
     run-mr-search
   :: ~&  "search for {<search-text>}".
-  ::     "returning {<~(wyt by agg.res)>}".
-  ::     "of {<count.res>} results"
+  ::     " returning {<~(wyt by agg.res)>}".
+  ::     " of {<count.res>} results"
   (turn ~(tap in agg.res) head)
 ::
 ++  sponsor-chain
