@@ -98,7 +98,7 @@
         [cards this]
       ::
           %naive-state
-        ~&  >  %received-azimuth-state
+        :: ~&  >  %received-azimuth-state
         :: =+  !<([nas=^state:naive =indices:dice] q.cage.sign)
         =+  !<([nas=^state:naive indices=*] q.cage.sign)
         =^  cards  state
@@ -140,12 +140,12 @@
 ++  on-naive-diff
   |=  =diff:naive
   ^-  (quip card _state)
-  ~&  %+  weld  "received diff:naive: {<-.diff>}"
-  ?+  -.diff  ""
-    %nonce  " ship: {<ship.diff>}"
-    %tx  " from: {<ship.from.tx.raw-tx.diff>} - {<+<.tx.raw-tx.diff>}"
-    %point  " ship: {<ship.diff>} - {<+>-.diff>}"
-    ==
+  :: ~&  %+  weld  "received diff:naive: {<-.diff>}"
+  ::     ?+  -.diff  ""
+  ::       %nonce  " ship: {<ship.diff>}"
+  ::       %tx  " from: {<ship.from.tx.raw-tx.diff>} - {<+<.tx.raw-tx.diff>}"
+  ::       %point  " ship: {<ship.diff>} - {<+>-.diff>}"
+  ::     ==
   =?  state  ?=([%tx [* * * %spawn ship *] *] diff)
     %-  put-in-opoints
     ship.tx.raw-tx.diff
@@ -274,7 +274,9 @@
   =/  res
     %+  roll  `(list mr-search)`mr-searches
     run-mr-search
-  ~&  "search for {<search-text>} returning {<~(wyt by agg.res)>} of {<count.res>} results"
+  :: ~&  "search for {<search-text>}".
+  ::     "returning {<~(wyt by agg.res)>}".
+  ::     "of {<count.res>} results"
   (turn ~(tap in agg.res) head)
 ::
 ++  sponsor-chain
