@@ -11,11 +11,11 @@
   export let params: any = {};
   let analysis: SearchAnalysis = new SearchAnalysis();
   
-  const searchParams = new URLSearchParams($querystring);
+  $: querySearch = (new URLSearchParams($querystring)).get('search');
   function getSearch() {
-    return searchParams.get('search') || params.search || params.patp || '';
+    return querySearch || params.search || params.patp || '';
   }
-  $: urlSearch = searchParams.get('search') || params.search || params.patp || '';
+  $: urlSearch = querySearch || params.search || params.patp || '';
   let search: string = getSearch();
   $: urlChanged = (urlSearch || true) && Date.now();
   $: analysisPatpChanged = (analysis.patp || true) && Date.now();
