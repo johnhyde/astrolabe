@@ -11,12 +11,14 @@
   export let search: string;
   // export let patp: string;
   let combinedSearchResults = [];
+  let searchedPointsP: Promise<any>;
   let searchedPoints: Patp[] = [];
   let selectedShipIndex: number;
   let page: number = 0;
   let pageSize: number = 50;
   let totalPages, firstItemOnPage;
-  let searchStatus: ('init' | 'prog' | 'done' | 'fail') = 'init';
+  type status = ('init' | 'prog' | 'done' | 'fail');
+  let searchStatus: status = 'init';
   let notification: string = null;
 
   let timer;
@@ -26,17 +28,27 @@
       searchedContacts.search(query);
     }, 1000);
   }
-  $: searchedPointsP = searchPoints(search);
-  $: {
+  function doSearch() {
+    const searchSnap = search;
     searchStatus = 'prog';
+    console.log(`starting search for "${searchSnap}"`);
+    searchedPointsP = searchPoints(searchSnap);
     searchedPointsP.then((points) => {
-      searchedPoints = points;
-      searchStatus = 'done';
+      if (search === searchSnap) {
+        searchedPoints = points;
+        searchStatus = 'done';
+        console.log(`done searching for "${searchSnap}"`);
+      } else {
+        console.log(`throwing out results for outdated search "${searchSnap}" (currently on ${search})`);
+      }
     }).catch((err) => {
-      searchedPoints = [];
-      searchStatus = 'fail';
+      if (search === searchSnap) {
+        searchedPoints = [];
+        searchStatus = 'fail';
+      }
     });
   }
+  $: search, doSearch();
 
   $: {
     const contactSearchResults: Rolodex = JSON.parse(JSON.stringify($searchedContacts));
@@ -67,10 +79,12 @@
   $: {
     totalPages = Math.ceil(combinedSearchResults.length / pageSize);
     firstItemOnPage = page * pageSize;
-    if (firstItemOnPage >= combinedSearchResults.length) {
-      page = totalPages - 1;
-    } else if (firstItemOnPage < 0) {
-      page = 0;
+    if (combinedSearchResults.length > 0) {
+      if (firstItemOnPage >= combinedSearchResults.length) {
+        page = totalPages - 1;
+      } else if (firstItemOnPage < 0) {
+        page = 0;
+      }
     }
   }
   $: pageResults = combinedSearchResults.slice(firstItemOnPage, (page + 1) * pageSize);

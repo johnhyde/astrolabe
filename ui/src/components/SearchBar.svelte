@@ -6,21 +6,24 @@
   export let searchQuery: RegExp = /~der/;
   export let analysis: SearchAnalysis = new SearchAnalysis();
   export let search = '';
+  export let pauseAnalysis: boolean = false;
   let debouncedSearch = search;
 
   const placeholderText = "Search by @p or #.  '*' matches any character";
 
   $: {
-    analysis = new SearchAnalysis(debouncedSearch);
-    if (analysis.queryIsValid) {
-      searchQuery = analysis.query;
-    } else {
-      searchQuery = undefined;
-    }
-    if (analysis.patpIsValid) {
-      patp = analysis.patp;
-    } else {
-      patp = undefined;
+    if (!pauseAnalysis) {
+      analysis = new SearchAnalysis(debouncedSearch);
+      if (analysis.queryIsValid) {
+        searchQuery = analysis.query;
+      } else {
+        searchQuery = undefined;
+      }
+      if (analysis.patpIsValid) {
+        patp = analysis.patp;
+      } else {
+        patp = undefined;
+      }
     }
   }
 
