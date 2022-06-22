@@ -54,9 +54,10 @@
   ?+    path  (on-peek:def path)
       [%x %point @ ~]
     ``astrolabe-point+!>((get-point:hc &3.path))
-      [%x %point @ %spawned ~]
+      [%x %point @ %spawned ?(~ [spawned-filter ~])]
     =/  =ship  `@p`(slav %p &3.path)
-    ``astrolabe-point-set+!>((get-spawned-points:hc ship))
+    =/  arg  ?~(t.t.t.t.path %all i.t.t.t.t.path)
+    ``astrolabe-point-set+!>((get-spawned-points:hc ship arg))
       [%x %search @ ?(~ [%narrow ~])]
     =/  =search-text  (trip &3.path)
     =/  expand-search  =(t.t.t.path ~)
@@ -64,6 +65,8 @@
       [%x %peers ~]
     =/  peers  .^((map ship ?(%alien %known)) %ax (scrio:hc %$ /peers))
     ``astrolabe-point-set+!>((turn ~(tap in peers) head))
+      [%x %chart-data ~]
+    ``astrolabe-chart-data+!>(get-chart-data:hc)
       [%x %doc ^]
     =/  doc-path=^path  t.t.path
     =/  doc  (read-doc:hc doc-path)
@@ -180,12 +183,13 @@
   ==
 ::
 ++  run-spawned-points
-  |*  [agg=mold targ=ship]
-  |=  f=$-([agg ship] agg)
+  |*  [agg=mold targ=ship nas=^state:naive filter=spawned-filter]
+  |=  f=$-([agg [ship npoint]] agg)
   ^-  agg
-  =/  nas  get-nas
+  =|  =agg
+  ?.  ?=(?(%czar %king) (clan:title targ))
+    agg
   =+  points=points.nas
-  =|  agg=agg
   |-
   ^-  _agg
   ?~  points
@@ -196,69 +200,28 @@
     $(points r.points)
   =?  agg  =(targ (end (add 2 (xeb (met 3 targ))) n))
     $(points r.points)
-  =?  agg  =(targ (^sein:title n))
-    (f agg n)
+  =/  should-agg
+    ?&  =(targ (^sein:title n))
+        ?|  =(filter %all)
+            .=  =(filter %locked)  (is-npoint-locked +.n.points)
+        ==
+    ==
+  =?  agg  should-agg
+    (f agg n.points)
   $(points l.points)
 ++  get-spawned-points
-  |=  targ=ship
-  %-  (run-spawned-points (list ship) targ)
-  |=  [agg=(list ship) spawn=ship]
+  |=  [targ=ship filter=spawned-filter]
+  =/  nas  get-nas
+  %-  (run-spawned-points (list ship) targ nas filter)
+  |=  [agg=(list ship) [spawn=ship *]]
   [spawn agg]
 ::
 ++  spa-count
   |=  targ=ship
-  %-  (run-spawned-points @ud targ)
-  |=  [agg=@ud spawn=ship]
+  %-  (run-spawned-points @ud targ get-nas %all)
+  |=  [agg=@ud [spawn=ship *]]
   +(agg)
 ::
-++  run-wildcard-search
-  |*  [agg=mold search=search-full points=opoints =page-info]
-  |=  [res=[count=@ =agg] f=$-([agg @q] agg)]
-  ^-  [count=@ =agg]
-  =/  s-syls  search-syls.search
-  :: ~&  s-syls
-  =/  s-opts  search-opts.search
-  =+  [llb=.~zod rrb=`@q`(sub (bex 32) 1)]
-  :: =<  +
-  |-
-  ^-  _res
-  ?~  points
-    :: ~&  "nothing here, going up"
-    res
-  :: ?:  (gth count.res 1.000)  ~|(%search-too-broad !!)
-  =/  n=@q  `@`-.n.points
-  =/  lrb=@q  ?:  (gth n 0)  (sub-d n 1)  .~zod
-  =/  rlb=@q  (add-d n 1)
-  =/  left-view  (range-contains-search llb lrb s-opts)
-  :: ~&  "arrived at {<n>}"
-  :: ~&  "left side: {<?:(contains.left-view 'Y' 'N')>} {<llb>} - {<lrb>}"
-  =/  right-view  (range-contains-search rlb rrb s-opts)
-  =?  res  contains.left-view
-    $(points l.points, rrb lrb, s-opts opts.left-view)
-  =?  res  (matches-search s-syls n)
-    =/  fits  (fits-on-page count.res page-info) 
-    =.  count.res  +(count.res)
-    =?  agg.res  fits  (f agg.res n)
-    res
-  :: ~&  "right side: {<?:(contains.right-view 'Y' 'N')>} {<rlb>} - {<rrb>}"
-  =?  res  contains.right-view
-    $(points r.points, llb rlb, s-opts opts.right-view)
-  res
-::
-++  run-mr-search
-  |=  [search=mr-search res=[count=@ agg=opoints]]
-  ^-  _res
-  =/  points  ?:  reversed.search  ropoints  fopoints
-  =.  res
-    %+  (run-wildcard-search _agg.res search-full.search points [0 0])
-      res
-    |=  [agg=_agg.res result=@q]
-    =?  result  reversed.search
-      (switch-words result)
-    =.  result  (to-p result)
-    (put:((on @ @) gte) agg result ~)
-  :: ~&  "returning {<~(wyt by agg.res)>} of {<count.res>} results"
-  res
 ++  search-opoints
   |=  [=search-text expand-search=?]
   ^-  (list ship)
@@ -273,7 +236,7 @@
   ?~  mr-searches  ~|(%search-predicted-too-broad !!)
   =/  res
     %+  roll  `(list mr-search)`mr-searches
-    run-mr-search
+    (run-mr-search fopoints ropoints)
   :: ~&  "search for {<search-text>}".
   ::     " returning {<~(wyt by agg.res)>}".
   ::     " of {<count.res>} results"
@@ -301,6 +264,38 @@
   =/  parent-point  (get-unpoint parent)
   $(ship parent, unpoint parent-point)
 ::
+++  get-chart-data
+  ^-  chart-data
+  =/  nas  get-nas
+  :: =/  galaxies  (gulf 0 15)  :: todo remove
+  %+  turn  galaxies
+  |=  =ship
+  =/  point  (need (get:orm:naive points.nas ship))
+  (get-point-chart-data nas ship point)
+::
+++  get-point-chart-data
+  |=  [nas=^state:naive =ship =npoint]
+  ^-  point-chart-data
+  =,  sponsor.net.npoint
+  =/  desc-has
+    ?.  has  %none
+    ?:  =(who (^sein:title ship))
+      %same
+    %diff
+  :-  :*  ship
+          dominion.npoint
+          [desc-has who]
+      ==
+  (get-spawned-chart-data nas ship)
+::
+++  get-spawned-chart-data
+  |=  [nas=^state:naive =ship]
+  ^-  chart-data
+  :: [*point-meta ~]~
+  %-  (run-spawned-points chart-data ship nas %all)
+  |=  [agg=chart-data [spawn=^ship spawn-point=npoint]]
+  :_  agg
+  (get-point-chart-data nas spawn spawn-point)
 ++  read-doc
   |=  =path
   =/  doc-path=^path  :(weld /doc/usr path /udon)

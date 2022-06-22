@@ -1,4 +1,5 @@
 /-  sur=astrolabe
+/+  azimuth
 =<  [sur .]
 =,  sur
 |%
@@ -51,6 +52,11 @@
   ?:  =(c d)
     $(a (rsh 3 a), b (rsh 3 b), i +(i))
   (lth c d)
+::
+++  is-npoint-locked
+  |=  p=npoint
+  .=  linear-star-release:contracts:azimuth
+  address.owner.own.p
 ::
 ++  nu                                              ::  parse number as hex
   |=  jon=json
@@ -137,6 +143,36 @@
       ~
     ?:  =('.' i.b)  $(b t.b)
     [i.b $(b t.b)]
+  ++  point-meta
+    |=  m=^point-meta
+    ^-  (list [@tas json])
+    =/  main-pairs
+      :~
+          p+(ship ship.m)
+          :: spa-count+(numb spa-count.m)
+          [%d s+dom.m]
+      ==
+    ?:  =(has.spo.m %same)  main-pairs
+    :_  main-pairs
+    :-  %s
+    ?:  =(has.spo.m %none)  ~
+    (ship who.spo.m)
+  ::
+  ++  point-chart-data
+    |=  d=^point-chart-data
+    ^-  json
+    =/  point-meta-pairs  (point-meta -.d)
+    %-  pairs
+    ?~  spa.d  point-meta-pairs
+    %+  snoc  point-meta-pairs
+    c+(chart-data spa.d)
+    :: spa+a+~ 
+  ::
+  ++  chart-data
+    |=  d=^chart-data
+    ^-  json
+    :-  %a
+    (turn d point-chart-data)
   --
 ::
 ++  dejs

@@ -12,6 +12,7 @@
 ++  prefixes  ^~  (trip-syls sis:po)
 ++  suffixes  ^~  (trip-syls dex:po)
 ++  full-opts  ^~  (gulf .~zod .~fes)
+++  galaxies  ^~  `(list @p)``(list @)`full-opts
 ++  sanitize-search-text
   |=  =search-text
   ^-  tape
@@ -276,5 +277,55 @@
     ?:  sub-contains  %.y
     $(cand-0 t.cand-0)
   search
+::
+++  run-wildcard-search
+  |*  [agg=mold search=search-full points=opoints =page-info]
+  |=  [res=[count=@ =agg] f=$-([agg @q] agg)]
+  ^-  [count=@ =agg]
+  =/  s-syls  search-syls.search
+  :: ~&  s-syls
+  =/  s-opts  search-opts.search
+  =+  [llb=.~zod rrb=`@q`(sub (bex 32) 1)]
+  :: =<  +
+  |-
+  ^-  _res
+  ?~  points
+    :: ~&  "nothing here, going up"
+    res
+  :: ?:  (gth count.res 1.000)  ~|(%search-too-broad !!)
+  =/  n=@q  `@`-.n.points
+  =/  lrb=@q  ?:  (gth n 0)  (sub-d n 1)  .~zod
+  =/  rlb=@q  (add-d n 1)
+  =/  left-view  (range-contains-search llb lrb s-opts)
+  :: ~&  "arrived at {<n>}"
+  :: ~&  "left side: {<?:(contains.left-view 'Y' 'N')>} {<llb>} - {<lrb>}"
+  =/  right-view  (range-contains-search rlb rrb s-opts)
+  =?  res  contains.left-view
+    $(points l.points, rrb lrb, s-opts opts.left-view)
+  =?  res  (matches-search s-syls n)
+    =/  fits  (fits-on-page count.res page-info) 
+    =.  count.res  +(count.res)
+    =?  agg.res  fits  (f agg.res n)
+    res
+  :: ~&  "right side: {<?:(contains.right-view 'Y' 'N')>} {<rlb>} - {<rrb>}"
+  =?  res  contains.right-view
+    $(points r.points, llb rlb, s-opts opts.right-view)
+  res
+::
+++  run-mr-search
+  |=  [fopoints=opoints ropoints=opoints]
+  |=  [search=mr-search res=[count=@ agg=opoints]]
+  ^-  _res
+  =/  points  ?:  reversed.search  ropoints  fopoints
+  =.  res
+    %+  (run-wildcard-search _agg.res search-full.search points [0 0])
+      res
+    |=  [agg=_agg.res result=@q]
+    =?  result  reversed.search
+      (switch-words result)
+    =.  result  (to-p result)
+    (put:((on @ @) gte) agg result ~)
+  :: ~&  "returning {<~(wyt by agg.res)>} of {<count.res>} results"
+  res
 ::
 --
