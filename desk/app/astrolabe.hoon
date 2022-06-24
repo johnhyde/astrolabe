@@ -267,7 +267,7 @@
 ++  get-chart-data
   ^-  chart-data
   =/  nas  get-nas
-  :: =/  galaxies  (gulf 0 15)  :: todo remove
+  :: =/  galaxies  (gulf 0 30)  :: todo remove
   %+  turn  galaxies
   |=  =ship
   =/  point  (need (get:orm:naive points.nas ship))
@@ -292,7 +292,7 @@
   |=  [nas=^state:naive =ship]
   ^-  chart-data
   :: [*point-meta ~]~
-  %-  (run-spawned-points chart-data ship nas %all)
+  %-  (run-spawned-points chart-data ship nas %unlocked)
   |=  [agg=chart-data [spawn=^ship spawn-point=npoint]]
   :_  agg
   (get-point-chart-data nas spawn spawn-point)

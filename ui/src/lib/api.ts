@@ -31,6 +31,10 @@ export async function searchPoints(search: string): Promise<Patp[]> {
   return points.map(normalizeId);
 }
 
+export function getChartData(): Promise<any> {
+  return scry<any>(`/chart-data`);
+}
+
 export function getDoc(path: string): Promise<string> {
   return scry<string>(`/doc/${path}`);
 }

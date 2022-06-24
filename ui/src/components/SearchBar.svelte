@@ -36,7 +36,7 @@
 	}
 </script>
 
-<div class="relative grow max-w-md rounded-full w-full">
+<div class="relative max-w-md rounded-full w-full">
   <input type="text" class="p-4 py-2 w-full rounded-full"
     spellcheck="false"
     placeholder={placeholderText}

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import { link } from 'svelte-spa-router'
   import DocLink from './docs/DocLink.svelte';
  
   const dispatch = createEventDispatcher();
@@ -30,4 +31,12 @@
       </div>
     </DocLink>
   </div>
+  <a class="rounded-lg bg-navy border border-gold flex-grow max-w-s" use:link href="/chart">
+    <p class="p-5 text-xl text-center text-white">
+      <br/>
+      Star Chart
+      <br/>
+      <br/>
+    </p>
+  </a>
 </div>

@@ -424,6 +424,51 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
+.container {
+  width: 100%;
+}
+@media (min-width: 360px) {
+
+  .container {
+    max-width: 360px;
+  }
+}
+@media (min-width: 475px) {
+
+  .container {
+    max-width: 475px;
+  }
+}
+@media (min-width: 640px) {
+
+  .container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+
+  .container {
+    max-width: 1536px;
+  }
+}
 .pointer-events-none {
   pointer-events: none;
 }
@@ -592,6 +637,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-12 {
   height: 3rem;
 }
+.h-3 {
+  height: 0.75rem;
+}
 .h-\[100vh\] {
   height: 100vh;
 }
@@ -607,6 +655,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-4 {
   height: 1rem;
 }
+.h-24 {
+  height: 6rem;
+}
+.min-h-full {
+  min-height: 100%;
+}
+.min-h-0 {
+  min-height: 0px;
+}
 .w-full {
   width: 100%;
 }
@@ -615,6 +672,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-12 {
   width: 3rem;
+}
+.w-3 {
+  width: 0.75rem;
 }
 .w-\[100vw\] {
   width: 100vw;
@@ -627,6 +687,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-4 {
   width: 1rem;
+}
+.w-6 {
+  width: 1.5rem;
 }
 .min-w-0 {
   min-width: 0px;
@@ -710,6 +773,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .gap-1 {
   gap: 0.25rem;
+}
+.gap-4 {
+  gap: 1rem;
+}
+.gap-2 {
+  gap: 0.5rem;
 }
 .gap-x-2 {
   -moz-column-gap: 0.5rem;
@@ -818,13 +887,16 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-l {
   border-left-width: 1px;
 }
-.border-navy {
-  --tw-border-opacity: 1;
-  border-color: rgb(31 36 60 / var(--tw-border-opacity));
+.border-r {
+  border-right-width: 1px;
 }
 .border-gold {
   --tw-border-opacity: 1;
   border-color: rgb(252 211 77 / var(--tw-border-opacity));
+}
+.border-navy {
+  --tw-border-opacity: 1;
+  border-color: rgb(31 36 60 / var(--tw-border-opacity));
 }
 .border-gray-300 {
   --tw-border-opacity: 1;
@@ -857,6 +929,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+.bg-l1-blue {
+  --tw-bg-opacity: 1;
+  background-color: rgb(23 146 199 / var(--tw-bg-opacity));
+}
+.bg-l2-green {
+  --tw-bg-opacity: 1;
+  background-color: rgb(23 199 106 / var(--tw-bg-opacity));
 }
 .bg-orange-gold {
   --tw-bg-opacity: 1;
@@ -991,6 +1071,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-left: 2rem;
   padding-right: 2rem;
 }
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
 .px-0\.5 {
   padding-left: 0.125rem;
   padding-right: 0.125rem;
@@ -1002,10 +1086,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
-}
-.py-1 {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
 }
 .px-1 {
   padding-left: 0.25rem;
@@ -1095,6 +1175,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .leading-3 {
   line-height: .75rem;
 }
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
 .text-gray-700 {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
@@ -1122,10 +1206,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-green-700 {
   --tw-text-opacity: 1;
   color: rgb(21 128 61 / var(--tw-text-opacity));
-}
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .text-gray-400 {
   --tw-text-opacity: 1;
@@ -1179,6 +1259,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   .\32xs\:mx-8 {
     margin-left: 2rem;
     margin-right: 2rem;
+  }
+
+  .\32xs\:p-8 {
+    padding: 2rem;
   }
 
   .\32xs\:py-8 {

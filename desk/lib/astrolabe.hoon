@@ -146,12 +146,15 @@
   ++  point-meta
     |=  m=^point-meta
     ^-  (list [@tas json])
-    =/  main-pairs
+    =/  main-pairs=(list [@tas json])
       :~
           p+(ship ship.m)
           :: spa-count+(numb spa-count.m)
-          [%d s+dom.m]
+          :: [%d s+dom.m]
       ==
+    =?  main-pairs  !=(dom.m %l1)
+      :_  main-pairs
+      d+s+dom.m
     ?:  =(has.spo.m %same)  main-pairs
     :_  main-pairs
     :-  %s

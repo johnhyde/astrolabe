@@ -11,6 +11,9 @@ module.exports = {
       colors: {
         navy: '#1f243c',
         gold: '#fcd34d',
+        'orange-gold': '#f7d392',
+        'l1-blue': '#1792c7',
+        'l2-green': '#17c76a',
         'gold-s1': '#e3be45',
         'gold-s2': '#caa93e',
         'gold-s3': '#b09436',
@@ -29,7 +32,6 @@ module.exports = {
         // 'gold-t7': '4c3f17',
         'gold-t8': '#fef6db',
         // 'gold-t9': '191508',
-        'orange-gold': '#f7d392',
       }
     },
     screens: {

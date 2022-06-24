@@ -7,6 +7,7 @@
   import SearchBar from "../components/SearchBar.svelte";
   import SearchResults from "../components/SearchResults.svelte";
   import ShipView from '../components/ShipView.svelte';
+  import StarChart from '../components/StarChart.svelte';
   import ValidationProblems from '../components/ValidationProblems.svelte';
   import HomeScreenTiles from '../components/HomeScreenTiles.svelte';
   export let params: any = {};
@@ -70,8 +71,8 @@
     }
   }
   // $: urlChangedSinceAnalysisPatp = (urlChanged - analysisPatpChanged) > 1000;
-  function doStuff() {
-    if (search !== urlSearch) {
+  function autoNav() {
+    if (params.mode !== 'chart' && search !== urlSearch) {
       if (urlChangedSinceAnalysisPatp) {
         search = urlSearch;
       } else if (analysis.search === search) {
@@ -84,18 +85,20 @@
       }
     }
   }
-  $: urlSearch, analysis, doStuff();
+  $: urlSearch, analysis, autoNav();
   $: {
-    if (analysis.search === search) {
-      let properMode = null;
+    let properMode = params.mode;
+    if (properMode === 'chart') {
+      // nice
+    } else if (analysis.search === search) {
       if (analysis.patpIsValid) {
         properMode = 'ship';
       } else if (analysis.search.length > 0) {
         properMode = 'search';
       }
-      if (params.mode !== properMode) {
-        navToMode(properMode, false);
-      }
+    }
+    if (params.mode !== properMode) {
+      navToMode(properMode, false);
     }
   }
 
@@ -108,6 +111,8 @@
         case 'search':
           $pageName = 'Search';
           break;
+        case 'chart':
+          $pageName = 'Star Chart';
         default:
           $pageName = null;
       }
@@ -117,19 +122,19 @@
 
 </script>
 
-<div class="m-4 flex flex-col items-center space-y-8 2xs:m-8">
+<div class="p-4 min-h-full flex flex-col items-center space-y-8 2xs:p-8">
   <SearchBar bind:analysis bind:search />
   <!-- <p class="bg-white">navigating</p> -->
-  {#if analysis.patpIsValid}
-    <!-- {#if analysis.search === urlSearch}   -->
-      <ShipView patp={analysis.patp} />
-    <!-- {/if} -->
-    {:else if (analysis.queryIsValid)}
-      <SearchResults query={analysis.query} search={analysis.search} />
-    {:else if (analysis.search.length > 0)}
-      <ValidationProblems problems={analysis.queryProblems} />
-    {:else}
-      <HomeScreenTiles />
-    {/if}
+  {#if params.mode == "chart"}
+    <StarChart patp={analysis.patpIsValid ? analysis.patp : null} />
+  {:else if analysis.patpIsValid}
+    <ShipView patp={analysis.patp} />
+  {:else if (analysis.queryIsValid)}
+    <SearchResults query={analysis.query} search={analysis.search} />
+  {:else if (analysis.search.length > 0)}
+    <ValidationProblems problems={analysis.queryProblems} />
+  {:else}
+    <HomeScreenTiles />
+  {/if}
   <!-- {/if} -->
 </div>
