@@ -26,10 +26,26 @@ if you search for `***hec`, it will search for all stars under `~hec`,
 and all planets that match `~***hec-******`, but planets matching `~******-***hec`
 will be ignored to prevent the search from taking too long.
 
+## The Star Chart
+
+Click and drag to move your view, use the mouse wheel to zoom in and out. Click on a dot
+to see the full Ship View. Enter full `@p`s in the search bar to find a specific point.
+
+Please note that stars [locked in the Linear Release Contract](/~/scry/docs/usr/astrolabe/star.html)
+are not shown in the Star Chart, as they are not yet a part of the network (though they've technically
+been spawned).
+
+The Sponsors/Parents toggle lets you switch between two different views of the network.
+The default Sponsors view shows each planet under its sponsoring star, and each
+star under its sponsoring galaxy. Planets and Stars without sponsors are not
+present in this view.
+The Parent view simply shows each point under the point that spawned it. All spawned points
+are shown in this view, with the exception of locked stars.
+In both views, all galaxies are shown for completeness.
+
 ## Upcoming Features
 
 In addition to improving the search feature over time, Astrolabe will one day feature:
-- a Star Chart, where you can visually see the layout of the network and explore freely.
 - Sigil Search, with which you can select the shapes of a sigil and search for ships
   that match.
 - Integrations with Groups, `%pals`, `%gora`, and whatever else seems fun and/or useful.

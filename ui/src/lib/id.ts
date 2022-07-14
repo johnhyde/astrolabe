@@ -498,6 +498,8 @@ function analyzeSearch(search: string): SearchAnalysis {
 }
 
 export {
+  prefixes,
+  suffixes,
   SearchAnalysis,
   normalizeId,
   normalizeIdAndDesig,

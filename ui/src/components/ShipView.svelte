@@ -7,10 +7,12 @@
   import GoldBadge from './GoldBadge.svelte';
   import TooltipAndDocLink from "./TooltipAndDocLink.svelte";
   import ShipLink from './ShipLink.svelte';
+  import ChartLink from './ChartLink.svelte';
   import EthAddressLink from './EthAddressLink.svelte';
   import CollapsibleContent from './CollapsibleContent.svelte';
   import ShipChain from './ShipChain.svelte';
   import ShipListings from './ShipListings.svelte';
+  import LoadingSpinner from './LoadingSpinner.svelte';
 
   export let patp: string;
 
@@ -109,6 +111,7 @@
   $: {
     pointInfo = {};
     let spawnStatus: any,
+      spawnedUnlocked: boolean = false,
       layer: any,
       life: number,
       rift: number,
@@ -138,8 +141,10 @@
             spawnStatus = spawnStatusOptions.locked; 
           } else if (keysSet) {
             spawnStatus = spawnStatusOptions.spawned;
+            spawnedUnlocked = true;
           } else {
             spawnStatus = spawnStatusOptions.spawnedNoKeys;
+            spawnedUnlocked = true;
           }
           // const { sponsor } = npoint.net;
           // if (sponsor.has) {
@@ -164,6 +169,7 @@
       ...pointInfo,
       layer,
       spawnStatus,
+      spawnedUnlocked,
       keysSet,
       life,
       rift,
@@ -216,6 +222,11 @@
           <ShipLink patp={parentChain.at(-1)}></ShipLink>
         {/if}
       </div>
+      {#if pointInfo?.spawnedUnlocked}
+        <div class="w-full text-center my-3">
+          <ChartLink {patp}>View in Star Chart ↗</ChartLink>
+        </div>
+      {/if}
       <div class="mt-4 w-full break-words">
         {#if parentChain.length > 0}
           <p>
@@ -228,7 +239,7 @@
             <b slot="title">Azimuth Details</b>
             <div slot="content">
               {#await rawPointInfoPromise}
-                Loading Azimuth info...
+                <LoadingSpinner spinnerClass="text-black" />
               {:then}
                 {#if shipClass !== 'galaxy'}
                   <p>

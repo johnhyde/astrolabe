@@ -1,5 +1,5 @@
 /-  sur=astrolabe
-/+  azimuth
+/+  azimuth, naive, mip
 =<  [sur .]
 =,  sur
 |%
@@ -25,8 +25,20 @@
   ^-  ?
   (rev-f lte a b)
 ::
-+$  opoints  (tree [@ @]) :: ordered points [ship ~]
++$  opoints  (tree [@ @])  :: ordered points [ship ~]
 ++  ors  ((on @q @) rpor)
+++  or-meta  ((on @p tape) por:naive)
+++  bi-meta
+  =|  a=(map * (map)) 
+  |@
+  ++  put
+    |*  [b=* c=* d=*]
+    %+  ~(put by a)  b
+    %+  put:or-meta
+      (~(gut by a) b ~)
+    [c d]
+  --
+::
 +$  page-info  [size=_100 page=_0]
 ++  fits-on-page
   |=  [i=@ =page-info]
@@ -37,26 +49,49 @@
   =/  page-end  (add page-start size)
   &((gte i page-start) (lth i page-end))
 ::
-++  palor                                           ::  @p alphabetical order
-  ~/  %por
-  |=  [a=@p b=@p]
-  ^-  ?
-  ?:  =(a b)  &
-  =|  i=@
-  |-
-  ?:  =(i 2)
-    ::  second two bytes
-    (lte a b)
-  ::  first two bytes
-  =+  [c=(end 3 a) d=(end 3 b)]
-  ?:  =(c d)
-    $(a (rsh 3 a), b (rsh 3 b), i +(i))
-  (lth c d)
-::
 ++  is-npoint-locked
   |=  p=npoint
   .=  linear-star-release:contracts:azimuth
   address.owner.own.p
+::
+++  smel
+  |%
+  ++  ship
+    |=  =^ship
+    ^-  tape
+    (slag 1 (scow %p ship))
+  ++  dom
+    |=  =dominion:naive
+    ?-  dominion
+      %l1  ""
+      %l2  "t"
+      %spawn  "s"
+    ==
+  ++  spo
+    |=  [self=^ship has=? spo=^ship]
+    ?.  has  "~"
+    =/  parent  (^sein:title self)
+    ?:  =(spo parent)
+      ""
+    :(weld ":" (ship spo) "!" (ship parent))
+  ++  pmeta
+    |=  [self=^ship point=npoint]
+    ^-  tape
+    =/  self-str  (ship self)
+    =/  extras  (weld (dom dominion.point) (spo self sponsor.net.point))
+    ?~  extras  self-str
+    :(weld self-str ":" extras)
+  ++  spa
+    |=  children=(list tape)
+    =/  chil-str=tape  (zing children)
+    :: =/  chil-str=tape  (reel children |=([a=tape b=tape] (weld a b)))
+    ?~  chil-str  ";"
+    :(weld "[" chil-str "]")
+  ++  pdata
+    |=  [pmeta=tape children=(list tape)]
+    ^-  tape
+    (weld pmeta (spa children))
+  --
 ::
 ++  nu                                              ::  parse number as hex
   |=  jon=json
@@ -143,39 +178,6 @@
       ~
     ?:  =('.' i.b)  $(b t.b)
     [i.b $(b t.b)]
-  ++  point-meta
-    |=  m=^point-meta
-    ^-  (list [@tas json])
-    =/  main-pairs=(list [@tas json])
-      :~
-          p+(ship ship.m)
-          :: spa-count+(numb spa-count.m)
-          :: [%d s+dom.m]
-      ==
-    =?  main-pairs  !=(dom.m %l1)
-      :_  main-pairs
-      d+s+dom.m
-    ?:  =(has.spo.m %same)  main-pairs
-    :_  main-pairs
-    :-  %s
-    ?:  =(has.spo.m %none)  ~
-    (ship who.spo.m)
-  ::
-  ++  point-chart-data
-    |=  d=^point-chart-data
-    ^-  json
-    =/  point-meta-pairs  (point-meta -.d)
-    %-  pairs
-    ?~  spa.d  point-meta-pairs
-    %+  snoc  point-meta-pairs
-    c+(chart-data spa.d)
-    :: spa+a+~ 
-  ::
-  ++  chart-data
-    |=  d=^chart-data
-    ^-  json
-    :-  %a
-    (turn d point-chart-data)
   --
 ::
 ++  dejs

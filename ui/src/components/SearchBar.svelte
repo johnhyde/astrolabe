@@ -9,7 +9,7 @@
   export let pauseAnalysis: boolean = false;
   let debouncedSearch = search;
 
-  const placeholderText = "Search by @p or #.  '*' matches any character";
+  export let placeholderText = "Search by @p or #.  '*' matches any character";
 
   $: {
     if (!pauseAnalysis) {

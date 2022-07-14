@@ -14,6 +14,7 @@ module.exports = {
         'orange-gold': '#f7d392',
         'l1-blue': '#1792c7',
         'l2-green': '#17c76a',
+        'you': '#b01',
         'gold-s1': '#e3be45',
         'gold-s2': '#caa93e',
         'gold-s3': '#b09436',

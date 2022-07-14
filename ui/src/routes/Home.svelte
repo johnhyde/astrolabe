@@ -3,7 +3,7 @@
   import { link, push, replace, location, querystring } from 'svelte-spa-router'
   import pageName from '../stores/pageName';
   import { SearchAnalysis } from '../lib/id';
-  import { linkToShip } from '../lib/link';
+  import { linkToShip, linkToChart } from '../lib/link';
   import SearchBar from "../components/SearchBar.svelte";
   import SearchResults from "../components/SearchResults.svelte";
   import ShipView from '../components/ShipView.svelte';
@@ -57,6 +57,11 @@
       nav(`/search/${search}`, addToHistory);
     }
   }
+  function navToChart(addToHistory = true) {
+    params.mode = 'chart';
+    params.arg = search;
+    nav(linkToChart(search), addToHistory);
+  }
 
   function navToMode(mode, addToHistory = false) {
     switch (mode) {
@@ -72,15 +77,19 @@
   }
   // $: urlChangedSinceAnalysisPatp = (urlChanged - analysisPatpChanged) > 1000;
   function autoNav() {
-    if (params.mode !== 'chart' && search !== urlSearch) {
+    if (search !== urlSearch) {
       if (urlChangedSinceAnalysisPatp) {
         search = urlSearch;
       } else if (analysis.search === search) {
         navigating = true;
-        if (analysis.patpIsValid) {
-          navToShipView(true);
+        if (params.mode === 'chart') {
+          navToChart(analysis.patpIsValid);
         } else {
-          navToSearch(params.mode === 'ship');
+          if (analysis.patpIsValid) {
+            navToShipView(true);
+          } else {
+            navToSearch(params.mode === 'ship');
+          }
         }
       }
     }
@@ -102,8 +111,10 @@
     }
   }
 
+  let placeholderText;
   $: {
     if (analysis.search === urlSearch) {
+      placeholderText = undefined;
       switch (params.mode) {
         case 'ship':
           $pageName = params.arg;
@@ -113,6 +124,8 @@
           break;
         case 'chart':
           $pageName = 'Star Chart';
+          placeholderText = 'Search by @p or #.';
+          break;
         default:
           $pageName = null;
       }
@@ -122,8 +135,8 @@
 
 </script>
 
-<div class="p-4 min-h-full flex flex-col items-center space-y-8 2xs:p-8">
-  <SearchBar bind:analysis bind:search />
+<div class="p-4 space-y-4 min-h-full flex flex-col items-center 2xs:p-8 2xs:space-y-8">
+  <SearchBar bind:analysis bind:search {placeholderText} />
   <!-- <p class="bg-white">navigating</p> -->
   {#if params.mode == "chart"}
     <StarChart patp={analysis.patpIsValid ? analysis.patp : null} />

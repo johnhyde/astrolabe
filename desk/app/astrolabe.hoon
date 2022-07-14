@@ -1,26 +1,35 @@
 /-  *astrolabe
-/+  *astrolabe, *search, naive, default-agent, dbug, agentio
+/+  *astrolabe, *search, *mip, naive, default-agent, dbug, agentio
 /$  udon-to-docu  %udon  %docu
 |%
 +$  versioned-state
   $%  state-0
       state-1
+      state-2
   ==
 +$  state-0
   $:  %0
       spa=spawned
   ==
++$  fropoints-1
+  $:  fopoints=opoints :: forward ordered points
+      ropoints=opoints :: reversed ordered points, e.g. .~palnet-sampel
+  ==
 +$  state-1
   $:  %1
-      fopoints=opoints :: forward ordered points
-      ropoints=opoints :: reversed ordered points, e.g. .~palnet-sampel
+      fropoints-1
+  ==
++$  state-2
+  $:  %2
+      spam=spawn-mip
+      fropoints-1
   ==
 ::
 +$  spawned  (jug ship ship)
 +$  card  card:agent:gall
 --
 %-  agent:dbug
-=|  state-1
+=|  state-2
 =*  state  -
 ^-  agent:gall
 =<
@@ -39,11 +48,11 @@
   |=  old-state=vase
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
-  =^  cards-0  old
-    ?.  ?=(%0 -.old)  `old
+  =^  cards-01  old
+    ?.  ?=(?(%0 %1) -.old)  `old
     (on-naive-state:hc get-nas:hc)
-  ?>  ?=(%1 -.old)
-  [cards-0 this(state old)]
+  ?>  ?=(%2 -.old)
+  [cards-01 this(state old)]
 ++  on-poke  on-poke:def
 ++  on-watch  on-watch:def
 ++  on-leave  on-leave:def
@@ -66,7 +75,7 @@
     =/  peers  .^((map ship ?(%alien %known)) %ax (scrio:hc %$ /peers))
     ``astrolabe-point-set+!>((turn ~(tap in peers) head))
       [%x %chart-data ~]
-    ``astrolabe-chart-data+!>(get-chart-data:hc)
+    ``json+!>(get-chart-data:hc)
       [%x %doc ^]
     =/  doc-path=^path  t.t.path
     =/  doc  (read-doc:hc doc-path)
@@ -120,7 +129,7 @@
 ++  scrio  ~(scry agentio bowl)
 ++  az-events-card  [%pass /azimuth-events %agent [our.bowl %azimuth] %watch /event]
 ++  get-nas  .^(^state:naive %gx (scrio %azimuth /nas/noun))
-++  put-in-opoints
+++  put-in-fropoints
   |=  =ship
   ^-  _state
   =.  fopoints
@@ -128,6 +137,28 @@
   =.  ropoints
     (put:ors ropoints (switch-words (to-q ship)) ~)
   state
+::
+++  put-in-spawn-mip
+  |=  [child=ship nas=^state:naive]
+  ^-  _state
+  =/  =npoint  (get-npoint-from-nas child nas)
+  =.  spam
+    =/  parent  (^sein:title child)
+    ?:  =(parent child)  spam
+    ?:  (is-npoint-locked npoint)  spam
+    =/  pdata  (pdata:smel (pmeta:smel child npoint) ~)
+    =*  spo  sponsor.net.npoint
+    =?  spam  &(has.spo !=(parent who.spo))
+      %^    ~(put bi-meta spam)
+          who.spo
+        child
+      pdata
+    %^    ~(put bi-meta spam)
+        parent
+      child
+    pdata
+  state
+::
 ++  on-naive-state
   |=  nas=^state:naive
   ^-  (quip card _state)
@@ -137,7 +168,8 @@
   ^-  _state
   ?~  points  state
   =/  =ship  -.n.points
-  =.  state  (put-in-opoints ship)
+  =.  state  (put-in-fropoints ship)
+  =.  state  (put-in-spawn-mip ship nas)
   $(points l.points, state $(points r.points))
 ::
 ++  on-naive-diff
@@ -150,11 +182,15 @@
   ::       %point  " ship: {<ship.diff>} - {<+>-.diff>}"
   ::     ==
   =?  state  ?=([%tx [* * * %spawn ship *] *] diff)
-    %-  put-in-opoints
+    %-  put-in-fropoints
     ship.tx.raw-tx.diff
   =?  state  ?=([%point @ %owner *] diff)
-    %-  put-in-opoints
+    %-  put-in-fropoints
     ship.diff
+  =?  state  ?=([%point @ *] diff)
+    %+  put-in-spawn-mip
+      ship.diff
+    get-nas
   `state
 ::
 ++  is-spawn-tx
@@ -181,6 +217,10 @@
       (sponsor-chain ship unpoint)
       (probable-dominion ship unpoint)
   ==
+++  get-npoint-from-nas
+  |=  [=ship nas=^state:naive]
+  ^-  npoint
+  (need (get:orm:naive points.nas ship))
 ::
 ++  run-spawned-points
   |*  [agg=mold targ=ship nas=^state:naive filter=spawned-filter]
@@ -265,37 +305,24 @@
   $(ship parent, unpoint parent-point)
 ::
 ++  get-chart-data
-  ^-  chart-data
+  ^-  json
   =/  nas  get-nas
-  :: =/  galaxies  (gulf 0 30)  :: todo remove
-  %+  turn  galaxies
-  |=  =ship
-  =/  point  (need (get:orm:naive points.nas ship))
-  (get-point-chart-data nas ship point)
+  =/  main-data
+    ^-  tape
+    %-  ~(rep by spam)
+    |=  [[=ship kids=(map ship tape)] agg=tape]
+    ^-  tape
+    %+  weld  agg
+    %+  pdata:smel  (ship:smel ship)
+    (flop ~(val by kids))
+  =/  gal-data
+    %+  pdata:smel  "base"
+    %+  turn  galaxies
+    |=  gal=ship
+    =/  npoint  (get-npoint-from-nas gal nas)
+    (pdata:smel (pmeta:smel gal npoint) ~)
+  s+(crip :(weld "[" gal-data main-data "]"))
 ::
-++  get-point-chart-data
-  |=  [nas=^state:naive =ship =npoint]
-  ^-  point-chart-data
-  =,  sponsor.net.npoint
-  =/  desc-has
-    ?.  has  %none
-    ?:  =(who (^sein:title ship))
-      %same
-    %diff
-  :-  :*  ship
-          dominion.npoint
-          [desc-has who]
-      ==
-  (get-spawned-chart-data nas ship)
-::
-++  get-spawned-chart-data
-  |=  [nas=^state:naive =ship]
-  ^-  chart-data
-  :: [*point-meta ~]~
-  %-  (run-spawned-points chart-data ship nas %unlocked)
-  |=  [agg=chart-data [spawn=^ship spawn-point=npoint]]
-  :_  agg
-  (get-point-chart-data nas spawn spawn-point)
 ++  read-doc
   |=  =path
   =/  doc-path=^path  :(weld /doc/usr path /udon)

@@ -12,3 +12,10 @@ Stars can also choose to de-sponsor planets which abuse the network.
 
 Stars are NFTs, but they can be exchanged 1:1 for WSTR at [star.market](https://star.market/),
 and you can trade fractional amounts of WSTR for ETH [on Uniswap V3](https://info.uniswap.org/#/pools/0x7f4a0822a6e3c085df795a8d78acbcd36f210ebf).
+
+## Locked stars and the Linear Release Contract
+
+To prevent galaxies from spawning too many stars all at once, many galaxies' stars were locked
+in an Ethereum contract, to be slowly released (at a linear rate) over time.
+Stars which are locked in this way will show the contract address as their owner,
+and any stars held by this contract are considered locked, even if they are ready to be released.

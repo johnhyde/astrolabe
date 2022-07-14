@@ -4,6 +4,8 @@
 
   import docLinks from "../../actions/docLinks";
   import docs from "../../stores/docs";
+
+  import LoadingSpinner from "../LoadingSpinner.svelte";
  
   export let path:string;
  
@@ -22,7 +24,7 @@
 
 <div class="doc">
   {#await docs.getDoc(path)}
-  <h3>Loading page...</h3>
+     <LoadingSpinner spinnerClass="text-black" />
   {:then docHtml}
     <div use:docLinks={navigate}>
       {@html convertLinks(docHtml)}

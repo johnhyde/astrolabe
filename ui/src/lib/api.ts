@@ -31,9 +31,11 @@ export async function searchPoints(search: string): Promise<Patp[]> {
   return points.map(normalizeId);
 }
 
-export function getChartData(): Promise<any> {
-  return scry<any>(`/chart-data`);
+export function getChartData(old = false): Promise<any> {
+  return scry<any>('/chart-data' + (old ? '-old' : ''));
 }
+
+window['gcd'] = getChartData;
 
 export function getDoc(path: string): Promise<string> {
   return scry<string>(`/doc/${path}`);
