@@ -1,11 +1,16 @@
 <script lang="ts">
   import { clan } from 'urbit-ob';
-  import { sigil, stringRenderer } from '@tlon/sigil-js';
+  import { sigil as sigil1, stringRenderer as sr1 } from '@tlon/sigil-js';
+  import { sigil as sigil2, stringRenderer as sr2 } from '@johnhyde/sigil-js';
   import moonPng from '../assets/moon.png';
   import cometSvg from '../assets/comet.svg';
 
   export let patp: string;
   export let size: number;
+  export let useNew: boolean = false;
+  export let fgColor: string = 'white';
+  export let bgColor: string = 'black';
+  export let altBgColor: string = undefined;
   let svgString: any;
   let imgSrc: any;
 
@@ -13,13 +18,22 @@
   $: displaySigil = ['galaxy', 'star', 'planet'].includes(shipClass);
   $: {
     if (displaySigil) {
+      let sigil = sigil1;
+      let sr = sr1;
+      if (useNew) {
+        sigil = sigil2;
+        sr = sr2;
+      }
       const svgAST = sigil({
         patp: patp,
         size,
-        colors: ['black', 'white'],
+        colors: [bgColor, fgColor],
       });
       svgAST.attributes.preserveAspectRatio = 'xMidYMin slice';
-      svgString = stringRenderer(svgAST);
+      svgString = sr(svgAST);
+      if (altBgColor) {
+        svgString = svgString.replace(/rect fill="[^"]+"/, `rect fill="${altBgColor}"`);
+      }
     } else if (shipClass === 'moon') {
       imgSrc = moonPng;
     } else {

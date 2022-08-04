@@ -1,15 +1,15 @@
 <script lang="ts">
   import Router from 'svelte-spa-router';
   import { link, push, replace, location, querystring } from 'svelte-spa-router'
-  import pageName from '../stores/pageName';
-  import { SearchAnalysis } from '../lib/id';
-  import { linkToShip, linkToChart } from '../lib/link';
-  import SearchBar from "../components/SearchBar.svelte";
-  import SearchResults from "../components/SearchResults.svelte";
-  import ShipView from '../components/ShipView.svelte';
-  import StarChart from '../components/StarChart.svelte';
-  import ValidationProblems from '../components/ValidationProblems.svelte';
-  import HomeScreenTiles from '../components/HomeScreenTiles.svelte';
+  import pageName from 'stores/pageName';
+  import { SearchAnalysis } from 'lib/id';
+  import { linkToShip, linkToChart } from 'lib/link';
+  import SearchBar from "@/search/SearchBar.svelte";
+  import SearchResults from "@/search/SearchResults.svelte";
+  import ShipView from '@/ShipView.svelte';
+  import StarChart from '@/StarChart.svelte';
+  import ValidationProblems from '@/ValidationProblems.svelte';
+  import HomeScreenTiles from '@/HomeScreenTiles.svelte';
   export let params: any = {};
   let analysis: SearchAnalysis = new SearchAnalysis();
   let navigating = false;

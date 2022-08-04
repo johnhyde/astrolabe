@@ -1,9 +1,9 @@
 <script lang="ts">
   
   import type { Patp, Rolodex } from '@urbit/api';
-  import { searchPoints } from '../lib/api';
-  import { searchedContacts } from '../stores/searchStores';
-  import ShipListings from './ShipListings.svelte';
+  import { searchPoints } from 'lib/api';
+  import { searchedContacts } from 'stores/searchStores';
+  import ShipListings from '@/ShipListings.svelte';
   import SearchSettings from './SearchSettings.svelte';
   import SearchResultsNavButtons from './SearchResultsNavButtons.svelte';
 

@@ -1,5 +1,5 @@
 import tippy from 'tippy.js';
-// import DocLink from '../components/docs/DocLink.svelte'; // TODO try to add a link in the tooltip somehow or something, like:
+// import DocLink from '@/docs/DocLink.svelte'; // TODO try to add a link in the tooltip somehow or something, like:
 // const app = new DocLink({
 //   target: document.getElementBySelector('.tippy')
 // })

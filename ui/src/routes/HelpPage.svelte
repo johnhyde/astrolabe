@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { push } from 'svelte-spa-router';
-  import docs from '../stores/docs';
-  import Doc from '../components/docs/Doc.svelte';
+  import docs from 'stores/docs';
+  import Doc from '@/docs/Doc.svelte';
   export let params: any = {};
   $: path = params.path || '';
 

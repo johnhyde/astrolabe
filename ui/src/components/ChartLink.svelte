@@ -1,6 +1,6 @@
 <script lang="ts">
   import { link } from 'svelte-spa-router'
-  import { linkToChart } from '../lib/link';
+  import { linkToChart } from 'lib/link';
 
   export let patp = null;
 </script>

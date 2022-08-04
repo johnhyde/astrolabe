@@ -1,6 +1,6 @@
 <script lang="ts">
-  import CopyToClipboard from "svelte-copy-to-clipboard";
-  import tooltip from "../actions/tooltip";
+  import CopyToClipboard from 'svelte-copy-to-clipboard';
+  import tooltip from 'actions/tooltip';
 
   let overrideText = null;
 

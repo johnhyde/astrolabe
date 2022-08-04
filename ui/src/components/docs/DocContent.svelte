@@ -2,10 +2,10 @@
  
   import { createEventDispatcher } from 'svelte';
 
-  import docLinks from "../../actions/docLinks";
-  import docs from "../../stores/docs";
+  import docLinks from "actions/docLinks";
+  import docs from "stores/docs";
 
-  import LoadingSpinner from "../LoadingSpinner.svelte";
+  import LoadingSpinner from "@/LoadingSpinner.svelte";
  
   export let path:string;
  

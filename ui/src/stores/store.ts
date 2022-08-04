@@ -1,10 +1,10 @@
 import { writable } from 'svelte/store';
 
 import type { Rolodex } from '@urbit/api';
-import { subscribeToContacts, getPeers } from '../lib/api';
-import type { StoreState } from '../types/store';
-import {  normalizeId } from '../lib/id';
-import {  setStoreKey } from '../lib/utils';
+import { subscribeToContacts, getPeers } from 'lib/api';
+import type { StoreState } from 'types/store';
+import {  normalizeId } from 'lib/id';
+import {  setStoreKey } from 'lib/utils';
 
 const initStore: StoreState = {
   contacts: {},

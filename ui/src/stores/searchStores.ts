@@ -2,9 +2,9 @@ import { writable, derived } from 'svelte/store';
 
 import type { Contact, Rolodex } from '@urbit/api';
 import store from './store';
-import type { StoreState, SearchedContactsState } from '../types/store';
-import { SearchSettings } from '../types/store';
-import { filterObject } from '../lib/utils';
+import type { StoreState, SearchedContactsState } from 'types/store';
+import { SearchSettings } from 'types/store';
+import { filterObject } from 'lib/utils';
 
 const searchSettings = writable(new SearchSettings());
 

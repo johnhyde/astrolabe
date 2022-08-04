@@ -2,8 +2,8 @@
 
   import Sigil from "./Sigil.svelte";
   import { push } from 'svelte-spa-router'
-  import { normalizeId } from '../lib/id';
-  import { linkToShip as generateLinkToShip } from '../lib/link';
+  import { normalizeId } from 'lib/id';
+  import { linkToShip as generateLinkToShip } from 'lib/link';
   export let ship: any;
   export let linkToShip: boolean = false;
   export let differentiateContacts = false;

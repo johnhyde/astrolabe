@@ -1,8 +1,8 @@
 <script lang="ts">
   import { clan, sein, patp2dec } from 'urbit-ob';
   
-  import { cite, normalizeId } from '../lib/id';
-  import { getPoint, getSpawnedPoints } from '../lib/api';
+  import { cite, normalizeId } from 'lib/id';
+  import { getPoint, getSpawnedPoints } from 'lib/api';
   import Sigil from "./Sigil.svelte";
   import GoldBadge from './GoldBadge.svelte';
   import TooltipAndDocLink from "./TooltipAndDocLink.svelte";

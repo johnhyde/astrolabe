@@ -1,6 +1,6 @@
 <script lang="ts">
-  import docs from '../stores/docs';
-  import Doc from './docs/Doc.svelte';
+  import docs from 'stores/docs';
+  import Doc from './Doc.svelte';
 
   function close() {
     docs.hide()

@@ -1,6 +1,6 @@
 <script lang="ts">
 
-  import { SearchAnalysis } from '../lib/id';
+  import { SearchAnalysis } from 'lib/id';
 
   export let patp: string = undefined;
   export let searchQuery: RegExp = /~der/;
@@ -43,5 +43,7 @@
     bind:value={search}
     autofocus
     />
-  <button class="absolute right-0 w-10 h-10 rounded-full bg-black transition-opacity opacity-10 hover:opacity-40"></button>
+  <button
+    class="absolute right-0 w-10 h-10 rounded-full bg-black transition-opacity opacity-10 hover:opacity-40"
+  />
 </div>
