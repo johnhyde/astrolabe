@@ -181,7 +181,7 @@
 <div class="p-8 max-w-md w-full rounded-lg bg-white flex flex-col md:max-w-2xl">
   <div class="flex flex-col items-center space-y-4 md:flex-row md:items-start md:space-x-8 md:space-y-0">
     <div class="w-full max-w-[256px] md:min-w-[256px] flex-shrink-0">
-      <Sigil patp={patp} size={256} />
+      <Sigil patp={patp} size={256} useNew />
     </div>
     <div class="grow w-full min-w-0">
       <h2 class="text-2xl text-center">

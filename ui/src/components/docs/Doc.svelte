@@ -26,7 +26,7 @@
     {:else}
       <div class="w-7 h-7" />
     {/if}
-    <div class="flex-grow text-center text-xl">
+    <div class="grow text-center text-xl">
       Help
     </div>
     <CloseButton on:click={close} />

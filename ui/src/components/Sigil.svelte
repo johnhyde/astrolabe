@@ -2,6 +2,7 @@
   import { clan } from 'urbit-ob';
   import { sigil as sigil1, stringRenderer as sr1 } from '@tlon/sigil-js';
   import { sigil as sigil2, stringRenderer as sr2 } from '@johnhyde/sigil-js';
+  import { sigilScalingFunction } from 'lib/sigil';
   import moonPng from '../assets/moon.png';
   import cometSvg from '../assets/comet.svg';
 
@@ -20,15 +21,24 @@
     if (displaySigil) {
       let sigil = sigil1;
       let sr = sr1;
+      let svgAST;
       if (useNew) {
         sigil = sigil2;
         sr = sr2;
+        svgAST = sigil({
+          patp: patp,
+          size,
+          colors: [bgColor, fgColor],
+          autoScaleStrokes: true,
+          strokeScalingFunctionV2: sigilScalingFunction,
+        });
+      } else {
+        svgAST = sigil({
+          patp: patp,
+          size,
+          colors: [bgColor, fgColor],
+        });
       }
-      const svgAST = sigil({
-        patp: patp,
-        size,
-        colors: [bgColor, fgColor],
-      });
       svgAST.attributes.preserveAspectRatio = 'xMidYMin slice';
       svgString = sr(svgAST);
       if (altBgColor) {
@@ -42,7 +52,7 @@
   }
 </script>
 
-<div class="flex-grow" style:max-width="{size}px">
+<div class="grow" style:max-width="{size}px">
   {#if displaySigil}
     {@html svgString}
   {:else}
