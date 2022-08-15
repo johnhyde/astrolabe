@@ -17,7 +17,7 @@
   {:else if partType === 'line'}
     <Symbol components={['lvf', 'lvfl', 'lvfr', 'lhf', 'lhft', 'lhfb', 'lff', 'lbf']} {size} inverted />
   {:else if partType === 'arc'}
-    <Symbol components={['abl202', 'abl402', 'abl602', 'abl802' ]} {size} inverted />
+    <Symbol components={['abl202', 'abl402', 'abl602', 'abl802', 'ar124', 'ar224', 'ar424' ]} {size} inverted />
   {:else if partType === 'ring'}
     <Symbol components={['rm1', 'rm2', 'rm3']} {size} inverted />
   {:else if partType === 'circle'}

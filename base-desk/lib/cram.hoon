@@ -31,7 +31,6 @@
     =-  (weld - $(p.gen t.p.gen))
     ?^  -.i.p.gen  $(gen [%xray i.p.gen])
     ~|  [%shut-tuna -.i.p.gen]
-    ~|  [%shut-slamon -.p.i.p.gen]
     ?+  -.i.p.gen  !!
       %manx  ?>(?=(%xray -.p.i.p.gen) $(gen p.i.p.gen))
       %marl  ?>(?=(%mcts -.p.i.p.gen) $(gen p.i.p.gen))

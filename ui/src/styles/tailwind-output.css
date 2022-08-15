@@ -780,9 +780,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .min-h-0 {
   min-height: 0px;
 }
-.min-h-\[20rem\] {
-  min-height: 20rem;
-}
 .w-full {
   width: 100%;
 }
@@ -834,14 +831,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-72 {
   width: 18rem;
 }
-.w-\[50\%\] {
-  width: 50%;
-}
-.w-\[18rem\] {
-  width: 18rem;
-}
 .w-16 {
   width: 4rem;
+}
+.w-\[50\%\] {
+  width: 50%;
 }
 .w-\[48px\] {
   width: 48px;
@@ -1620,10 +1614,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .xs\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .xs\:grid-rows-none {
-    grid-template-rows: none;
   }
 
   .xs\:flex-row {
