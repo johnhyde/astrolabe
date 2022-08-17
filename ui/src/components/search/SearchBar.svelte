@@ -32,6 +32,19 @@
     }
   }
 
+  $: {
+    if (showSigilInput && sigilQuery.isDefinitive) {
+      const querySyls = sigilQuery.query.flat();
+      search = '~' + querySyls[0];
+      if (querySyls.length > 1) {
+        search += querySyls[1];
+        if (querySyls.length > 2) {
+          search += '-' + querySyls[2] + '-' + querySyls[3];
+        }
+      }
+    }
+  }
+
   let timer;
   $: {
 		clearTimeout(timer);

@@ -53,6 +53,14 @@ export class SigilQuery {
     return this.activeSymbols.every(symbol => !symbol.isPlausible);
   }
 
+  get query(): string[][] {
+    return this.activeSymbols.map(symbol => symbol.plausibleSyllables);
+  }
+
+  get isDefinitive() {
+    return this.query.every(syls => syls.length === 1);
+  }
+
   get string(): string {
     return this.symbols.map((symbol) => symbol.components.join()).join(' | ')
   }
