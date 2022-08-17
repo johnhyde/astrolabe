@@ -27,4 +27,6 @@ export type SearchedContactsState = Rolodex;
 export class SearchSettings {
   includeMoons: boolean = true;
   includeComets: boolean = false;
+
+  allowFictionalSigils: boolean = false;
 }

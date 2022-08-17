@@ -3,8 +3,8 @@
   import { sigil as sigil1, stringRenderer as sr1 } from '@tlon/sigil-js';
   import { sigil as sigil2, stringRenderer as sr2 } from '@johnhyde/sigil-js';
   import { sigilScalingFunction } from 'lib/sigil';
-  import moonPng from '../assets/moon.png';
-  import cometSvg from '../assets/comet.svg';
+  import moonPng from 'assets/moon.png';
+  import cometSvg from 'assets/comet.svg';
 
   export let patp: string;
   export let size: number;

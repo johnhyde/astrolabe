@@ -10,6 +10,7 @@
   export let bgColor: string = 'white';
   export let altBgColor: string = undefined;
   export let hoverColor: string = 'blue';
+  export let opacity: number = 1;
   export let inverted: boolean = false;
   export let interactive: boolean = false;
   export let strokeWidthFactor: number = 1;
@@ -62,11 +63,15 @@
         stroke: var(--hoverColor);
       }
     }
+
+    circle:not([dataisgeon="true"]):not([fill="none"]):hover {
+      fill: var(--hoverColor);
+    }
   }
 </style>
 
 <div class="aspect-square" class:interactive style:max-width="{size}px"
-  style="--hoverColor: {hoverColor};"
+  style="--hoverColor: {hoverColor}; opacity: {opacity};"
   on:click
   use:symbolPartClick={{ onPartClick, enabled: interactive, svgString }}
 >

@@ -1,29 +1,30 @@
 <script lang="ts">
-  import Symbol from './Symbol.svelte';
+  import SymbolInputModeSelectorButton from './SymbolInputModeSelectorButton.svelte';
 
-  import type { PartType, SymbolQuery } from 'types/sigil';
+  import { searchSettings } from 'stores/searchStores';
+  import type { SymbolQuery } from 'lib/sigil';
   import { GEONS } from 'types/sigil';
+  import { arePartsPlausible } from 'lib/sigil';
 
   export let symbolQuery: SymbolQuery;
   export let popMode: Function;
-
-  let size = 48;
 
   function setGeon(geon) {
     symbolQuery.geon = geon;
     popMode();
   }
+
+  $: componentsSansGeon = symbolQuery.components.filter(c => c[0] !== 'g');
 </script>
 
-<!-- <div on:click={() => inputMode = undefined}>
-  done
-</div>
-<div on:click={() => setGeon(undefined)}>
-  clear
-</div> -->
 {#each GEONS as geon}
-  <div style:width="{size}px" on:click={() => setGeon(geon)}>
-    <Symbol components={[geon]} {size} />
-  </div>
+  {@const plausible = $searchSettings.allowFictionalSigils ||
+    arePartsPlausible(componentsSansGeon, symbolQuery.symbolType, [geon])
+  }
+  <SymbolInputModeSelectorButton components={[geon]}
+    focused={geon === symbolQuery.geon}
+    enabled={plausible}
+    on:click={() => setGeon(geon)}
+  />
 {/each}
 

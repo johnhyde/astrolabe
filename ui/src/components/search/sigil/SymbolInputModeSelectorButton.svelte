@@ -1,41 +1,33 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import Symbol from './Symbol.svelte';
 
-  import type { PartType, SymbolQuery } from 'types/sigil';
-  import { PART_TYPES } from 'types/sigil';
-
-  // export let partType: PartType;
   export let components: string[] = [];
   export let focused: boolean = false;
-
+  export let enabled: boolean = true;
+  export let padding: number = undefined;
+  
+  const dispatch = createEventDispatcher();
   let size = 48;
-  $: focusedClasses = focused ? 'border border-gold-s1 border-2' : '';
-  $: includesGeon = components.find(c => c[0] === 'g') === undefined;
-</script>
 
-<div class="border-2 w-[48px] {focusedClasses}" on:click>
-  <Symbol {components} {size} inverted={includesGeon} />
-  <!-- {#if partType === 'geon'}
-    <Symbol components={['ghb']} {size} />
-  {:else if partType === 'line'}
-    <Symbol components={['lvf', 'lvfl', 'lvfr', 'lhf', 'lhft', 'lhfb', 'lff', 'lbf']} {size} inverted />
-  {:else if partType === 'arc'}
-    <Symbol components={['abl202', 'abl402', 'abl602', 'abl802', 'ar124', 'ar224', 'ar424' ]} {size} inverted />
-  {:else if partType === 'ring'}
-    <Symbol components={['rm1', 'rm2', 'rm3']} {size} inverted />
-  {:else if partType === 'circle'}
-    <Symbol components={[
-      // 'ctr1mb', 'cbr1mb', 'cbl1mb', 'ctl1mb',
-      'cbr3mb', 'ctl3mb',
-      'cmmb',
-      'ct2mb', 'cl2mb', 'cb2mb', 'cr2mb',
-    ]} {size} inverted />
-  {:else if partType === 'donut'}
-    <Symbol components={['dbl', /*'dl',*/ 'dm', 'dtl', 'dtr']} {size} inverted />
-  {:else if partType === 'bezier'}
-    <Symbol components={['b1l1', 'b1l2', 'b1l3']} {size} inverted />
-  {:else}
-    not {partType}
-  {/if} -->
+  $: focusedClasses = focused ? 'border-2 border-gold-s1 p-[3px]' : 'border border-gray-500 p-[4px]';
+  $: enabledClasses = enabled ? '' : 'opacity-50';
+  $: includesGeon = components.find(c => c[0] === 'g') !== undefined;
+  $: defaultPadding = includesGeon ? 0 : 0;
+  $: actualPadding = padding !== undefined ? padding : defaultPadding;
+
+  function onClick(e) {
+    if (enabled) dispatch('click', e);
+  }
+</script>
+<div
+class="bg-white rounded-md w-[48px] {focusedClasses} {enabledClasses}"
+on:click={onClick}
+>
+<div class:cursor-pointer={enabled}
+  style:padding="{actualPadding}px"
+>
+  <Symbol {components} {size} inverted={!includesGeon} />
+</div>
 </div>
 
