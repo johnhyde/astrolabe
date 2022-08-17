@@ -1,14 +1,21 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import { sigilFromSymbols, stringRenderer as sr, symbolFromDef } from '@johnhyde/sigil-js';
   import { sigilScalingFunction } from 'lib/sigil';
+  import symbolPartClick from 'actions/symbolPartClick';
 
   export let components: string[];
   export let size: number;
   export let fgColor: string = 'black';
   export let bgColor: string = 'white';
   export let altBgColor: string = undefined;
+  export let hoverColor: string = 'blue';
   export let inverted: boolean = false;
+  export let interactive: boolean = false;
+  export let strokeWidthFactor: number = 1;
   let svgString: any;
+
+  const dispatch = createEventDispatcher();
 
   $: {
     const symbol = symbolFromDef(components);
@@ -25,7 +32,9 @@
         colors,
         margin: false,
         autoScaleStrokes: true,
-        strokeScalingFunctionV2: sigilScalingFunction,
+        strokeScalingFunctionV2: (s) => {
+          return strokeWidthFactor * sigilScalingFunction(s);
+        },
       },
     );
     svgAST.attributes.preserveAspectRatio = 'xMidYMin slice';
@@ -34,8 +43,32 @@
       svgString = svgString.replace(/rect fill="[^"]+"/, `rect fill="${tempAltBgColor}"`);
     }
   }
+
+  function onPartClick(partId: string) {
+    dispatch('partClick', partId);
+  }
 </script>
 
-<div class="aspect-square" style:max-width="{size}px" on:click>
+<style lang="scss" global>
+  .interactive {
+    svg {
+      pointer-events: none;
+    }
+
+    path, circle, line {
+      pointer-events: auto;
+
+      &:not([dataisgeon="true"]):hover {
+        stroke: var(--hoverColor);
+      }
+    }
+  }
+</style>
+
+<div class="aspect-square" class:interactive style:max-width="{size}px"
+  style="--hoverColor: {hoverColor};"
+  on:click
+  use:symbolPartClick={{ onPartClick, enabled: interactive, svgString }}
+>
   {@html svgString}
 </div>

@@ -5,22 +5,22 @@
   import { GEONS } from 'types/sigil';
 
   export let symbolQuery: SymbolQuery;
-  export let inputMode: PartType;
+  export let popMode: Function;
 
   let size = 48;
 
   function setGeon(geon) {
     symbolQuery.geon = geon;
-    inputMode = undefined;
+    popMode();
   }
 </script>
 
-<div on:click={() => inputMode = undefined}>
+<!-- <div on:click={() => inputMode = undefined}>
   done
 </div>
 <div on:click={() => setGeon(undefined)}>
   clear
-</div>
+</div> -->
 {#each GEONS as geon}
   <div style:width="{size}px" on:click={() => setGeon(geon)}>
     <Symbol components={[geon]} {size} />

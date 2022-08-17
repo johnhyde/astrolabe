@@ -1,7 +1,7 @@
 |_  dat=@
 ++  grow
   |%
-  ++  mime  [/application/'manifest+json' (as-octs:mimes:html dat)]
+  ++  mime  [/image/x-icon (as-octs:mimes:html dat)]
   --
 ++  grab
   |%

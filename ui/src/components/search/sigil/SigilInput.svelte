@@ -4,12 +4,12 @@
   import ClanSelect from './ClanSelect.svelte';
 
   import type { PartType } from 'types/sigil';
-  import { SigilQuery } from 'lib/sigil';
+  import type { SigilQuery } from 'lib/sigil';
 
   export let sigilQuery: SigilQuery;
   // export let clan: ('galaxy' | 'star' | 'planet') = 'planet';
   let focusedSymbolIndex: number = 0;
-  let inputMode: PartType = undefined;
+  let inputComponents: string[] = [];
 
   // let symbols: SymbolQuery = [];
 
@@ -20,11 +20,6 @@
     const numActiveSymbols = sigilQuery.activeSymbols.length;
     if (focusedSymbolIndex >= numActiveSymbols) {
       focusedSymbolIndex = numActiveSymbols - 1;
-    }
-  }
-  $: {
-    if (!focusedSymbol.geon) {
-      inputMode = 'geon';
     }
   }
   // function updateSigilQuery() {
@@ -42,15 +37,21 @@
           <SymbolInput
             bind:symbolQuery={symbol}
             focused={index === focusedSymbolIndex}
+            {inputComponents}
             on:click={() => focusedSymbolIndex = index}
           />
         {/each}
       </div>
     </div>
-    <div class="bg-green-100 grow rounded-b-2xl xs:rounded-bl-none">
-      {inputMode}
-      <SymbolInputModeSelector bind:symbolQuery={focusedSymbol} bind:inputMode />
-    </div>
+    {#if focusedSymbol}
+      <div class="bg-green-100 grow rounded-b-2xl xs:rounded-bl-none">
+        <SymbolInputModeSelector
+          bind:symbolQuery={focusedSymbol}
+          bind:inputComponents
+          unfocusSymbol={() => focusedSymbolIndex = undefined}
+        />
+      </div>
+    {/if}
   </div>
-  {sigilQuery.string}
+  <!-- {sigilQuery.string} -->
 </div>

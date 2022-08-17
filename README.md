@@ -45,24 +45,28 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
 4. Build UI and upload `glob-ames` 
 5. Publish the desk from dojo: `:treaty|publish %astrolabe`
 
-### Deploying with `glob-ames` glob
+## Deploying with `glob-ames` glob
+Initial Setup:
 1. Put the line `glob-ames+[~dister-midlev-mindyr 0v0]` in `desk.docket-0` if it's not there, where `~dister-midlevi-mindyr` is the `@p` of the distribution ship.
+
+Every Time:
 4. Build the UI with `npm run build` in the `ui` directory which will bundle all the code and assets into the `dist/` folder.
 5. Upload the `dist/` folder as a glob to your distribution ship. Example url: https://distribution.urbit-ship.com/docket/upload
 
-### Deploying with `glob-http` glob
-
-To deploy, run `npm run build` in the `ui` directory which will bundle all the code and assets into the `dist/` folder. This can then be made into a glob by doing the following:
-
+## Deploying with `glob-http` glob
+Initial Setup:
 1. Spin up a globber ship (comet or fakezod) (or just reuse your dev ship for this).
 2. Mount an `%globber` desk. In Dojo:
     1. `|merge %globber our %base` to create a new desk.
     2. `|mount %globber` to mount it.
     3. Set `GLOBBER_DESK` in `.env.local` if the path to your globber desk is different.
+
+Every Time:
 4. From the `ui` directory, run `npm run release` to build the ui and copy it to your globber desk
 5. From the globber ship: `|commit %globber` (create basic mark files (see `png.hoon`) for any files without mark files)
 6. Now run `=dir /=garden=` to switch to the garden desk directory
 7. `-make-glob %globber /astrolabe` which will take the folder where you just added files and create a glob which can be thought of as a sort of bundle. It will be output to `~/zod/.urb/put`.
+8. `=dir` to return to base desk.
 8. From the `ui` directory, run `npm run get-glob` to place the latest glob in the `globs` folder.
 9. Copy the string printed by the last step, and paste it into `desk.docket-0`.
 8. Upload the glob in `/globs/` to any publicly available HTTP endpoint that can serve files. This allows the glob to distributed over HTTP.

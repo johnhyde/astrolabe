@@ -11,7 +11,7 @@
     "build": "npm run tailwind:build && npm run build:vite",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "_install:glob": "../bin/install.sh $GLOBBER_DESK -g",
+    "_install:glob": "../bin/install.sh -g $GLOBBER_DESK",
     "_install:desk": "../bin/install.sh $ASTROLABE_DESK",
     "_install:desk:watch": "../bin/install.sh -w $ASTROLABE_DESK",
     "install:glob": "dotenv -c local npm run _install:glob",

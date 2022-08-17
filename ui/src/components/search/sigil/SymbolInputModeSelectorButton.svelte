@@ -4,15 +4,18 @@
   import type { PartType, SymbolQuery } from 'types/sigil';
   import { PART_TYPES } from 'types/sigil';
 
-  export let partType: PartType;
+  // export let partType: PartType;
+  export let components: string[] = [];
   export let focused: boolean = false;
 
   let size = 48;
   $: focusedClasses = focused ? 'border border-gold-s1 border-2' : '';
+  $: includesGeon = components.find(c => c[0] === 'g') === undefined;
 </script>
 
 <div class="border-2 w-[48px] {focusedClasses}" on:click>
-  {#if partType === 'geon'}
+  <Symbol {components} {size} inverted={includesGeon} />
+  <!-- {#if partType === 'geon'}
     <Symbol components={['ghb']} {size} />
   {:else if partType === 'line'}
     <Symbol components={['lvf', 'lvfl', 'lvfr', 'lhf', 'lhft', 'lhfb', 'lff', 'lbf']} {size} inverted />
@@ -33,6 +36,6 @@
     <Symbol components={['b1l1', 'b1l2', 'b1l3']} {size} inverted />
   {:else}
     not {partType}
-  {/if}
+  {/if} -->
 </div>
 

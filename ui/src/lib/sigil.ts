@@ -25,7 +25,7 @@ export class SigilQuery {
         // symbol.components = ['gci', 'abr622']
       } else {
         symbol.symbolType = 'suffix';
-        symbol.components = ['gsq', 'abl202']
+        symbol.components = ['gsq', 'ablf2']
       }
     });
     this.symbols = this.symbols;
