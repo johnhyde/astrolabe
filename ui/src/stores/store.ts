@@ -8,9 +8,10 @@ import {  setStoreKey } from 'lib/utils';
 
 const initStore: StoreState = {
   contacts: {},
-  peers: {},
+  peers: [],
   patpQuery: null,
   sigilQuery: null,
+  searchMode: 'patp',
   connection: 'disconnected',
   ship: window.ship,
 };
