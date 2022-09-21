@@ -9,7 +9,8 @@ import {  setStoreKey } from 'lib/utils';
 const initStore: StoreState = {
   contacts: {},
   peers: {},
-  query: null,
+  patpQuery: null,
+  sigilQuery: null,
   connection: 'disconnected',
   ship: window.ship,
 };
@@ -17,8 +18,14 @@ const initStore: StoreState = {
 const store = writable(initStore);
 const { subscribe, update, set } = store;
 
-function search(idQuery: RegExp) {
-  setStoreKey(store, 'query', idQuery);
+function searchPatp(patpQuery: RegExp) {
+  setStoreKey(store, 'patpQuery', patpQuery);
+  setStoreKey(store, 'searchMode', 'patp');
+}
+
+function searchSigil(syls: string[][]) {
+  setStoreKey(store, 'sigilQuery', syls);
+  setStoreKey(store, 'searchMode', 'sigil');
 }
 
 function reset() {
@@ -40,4 +47,4 @@ getPeers().then(({ points }) => {
   setStoreKey(store, 'peers', points.map(normalizeId));
 });
 
-export default { subscribe, set, search, reset };
+export default { subscribe, set, searchPatp, searchSigil, reset };

@@ -69,6 +69,9 @@
     ``astrolabe-point-set+!>((get-spawned-points:hc ship arg))
       [%x %search @ ?(~ [%narrow ~])]
     =/  =search-text  (trip &3.path)
+    ?~  search-text  ~|(%search-predicted-too-broad !!)
+    ~&  "search text"
+    ~&  search-text
     =/  expand-search  =(t.t.t.path ~)
     ``astrolabe-point-set+!>((search-opoints:hc search-text expand-search))
       [%x %peers ~]

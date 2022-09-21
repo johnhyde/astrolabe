@@ -16,16 +16,17 @@
   export let unfocusSymbol: Function;
 
   let modes: string[] = [];
+  // let subMode: string = undefined;
   let modeDef: ModeDef = undefined;
   let subModeDefs: ModeDefs = MODE_DEFS;
 
   let buttonClasses = 'border border-gray-500 rounded-md aspect-square w-[48px]';
 
-  $: {
-    if (!symbolQuery.geon) {
-      modes = ['geon'];
-    }
-  }
+  // $: {
+  //   if (!symbolQuery.geon) {
+  //     modes = ['geon'];
+  //   }
+  // }
 
   function pushMode(mode: string) {
     if (modeDef?.modes) {
@@ -75,6 +76,29 @@
     }
   }
 
+  $: plausibleModes = Object.entries(subModeDefs).map(([modeName, def]) => {
+    const deepParts = getDeepParts(def);
+    const plausible = $searchSettings.allowFictionalSigils || symbolQuery.arePartsPlausible(deepParts);
+    if (!plausible && modeName !== 'geon') return null;
+    const parts = filterPartsByGeon(def.displayParts || def.parts, symbolQuery.geon);
+    return { parts, modeName };
+  }).filter(mode => mode !== null);
+
+  $: {
+    const currentMode = modes.slice(-1)[0];
+    if (currentMode != 'geon') {
+      if (plausibleModes.length === 0) {
+        popMode();
+      } else if (plausibleModes.length >= 1) {
+        const leafMode = modeDef && !(modeDef.modes);
+        const plausibleModeNames = plausibleModes.map(({ modeName }) => modeName);
+        if ((modes.length == 1 && modeDef.modes) || (leafMode && !plausibleModeNames.includes(currentMode))) {
+          pushMode(plausibleModes[0].modeName);
+        }
+      }
+    }
+  }
+
   function clear() {
     if (modes.length) {
       symbolQuery = symbolQuery.clearPartType(modes[0] as PartType);
@@ -90,26 +114,19 @@
   }
 </style>
 
-<div class="mx-auto flex items-center justify-center xs:flex-col">
+<div class="mx-auto flex justify-center xs:items-center xs:flex-col">
   <div class="grid grid-cols-custom gap-1 self-start justify-center mr-1 xs:mr-0 xs:mb-1 xs:self-stretch">
     <img src={upArrow} alt="done" class={buttonClasses} on:click={popMode}/>
     <img src={xIcon} alt="done" class={buttonClasses} on:click={clear}/>
   </div>
-    <div class="max-w-[15rem] grid grid-cols-custom gap-1 justify-center xs:max-w-[8rem]">
+    <div class="max-w-[15rem] h-full grid grid-cols-custom gap-1 justify-center xs:max-w-[8rem]">
     {#if modes[0] === 'geon'}
       <GeonSelector bind:symbolQuery {popMode} />
     {:else}
-      {#each Object.entries(subModeDefs) as [modeName, def]}
-        {@const parts = filterPartsByGeon(def.displayParts || def.parts, symbolQuery.geon)}
-        {@const deepParts = getDeepParts(def)}
-        {@const plausible = $searchSettings.allowFictionalSigils || symbolQuery.arePartsPlausible(deepParts)}
-        {#if plausible || modeName === 'geon'}
-          <SymbolInputModeSelectorButton components={parts} focused={modes.slice(-1)[0] === modeName}
-            on:click={() => pushMode(modeName)}
-          />
-        <!-- {:else}
-          {deepParts.join()} -->
-        {/if}
+      {#each plausibleModes as { modeName, parts }}
+        <SymbolInputModeSelectorButton components={parts} focused={modes.slice(-1)[0] === modeName}
+          on:click={() => pushMode(modeName)}
+        />
       {/each}
     {/if}
   </div>

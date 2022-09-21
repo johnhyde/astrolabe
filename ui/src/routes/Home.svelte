@@ -3,6 +3,7 @@
   import { link, push, replace, location, querystring } from 'svelte-spa-router'
   import pageName from 'stores/pageName';
   import { SearchAnalysis } from 'lib/id';
+  import { SigilQuery } from 'lib/sigil';
   import { linkToShip, linkToChart } from 'lib/link';
   import SearchBar from "@/search/SearchBar.svelte";
   import SearchResults from "@/search/SearchResults.svelte";
@@ -12,6 +13,9 @@
   import HomeScreenTiles from '@/HomeScreenTiles.svelte';
   export let params: any = {};
   let analysis: SearchAnalysis = new SearchAnalysis();
+  let sigilQuery: SigilQuery = new SigilQuery('planet');
+  let showSigilInput: boolean = false;
+  $: searchMode = showSigilInput ? 'sigil' : 'patp';
   let navigating = false;
   
   let search: string = (new URLSearchParams($querystring)).get('search') || params.arg || '';
@@ -136,14 +140,15 @@
 </script>
 
 <div class="p-4 space-y-4 min-h-full flex flex-col items-center 2xs:p-8 2xs:space-y-8">
-  <SearchBar bind:analysis bind:search {placeholderText} />
+  <SearchBar bind:analysis bind:sigilQuery bind:search bind:showSigilInput {placeholderText} />
   <!-- <p class="bg-white">navigating</p> -->
   {#if params.mode == "chart"}
     <StarChart patp={analysis.patpIsValid ? analysis.patp : null} />
   {:else if analysis.patpIsValid}
     <ShipView patp={analysis.patp} />
-  {:else if (analysis.queryIsValid)}
-    <SearchResults query={analysis.query} search={analysis.search} />
+  {:else if (searchMode === 'patp' && analysis.queryIsValid) || (searchMode == 'sigil' && sigilQuery.isNotEmpty)}
+    <SearchResults regexQuery={analysis.query} sigilQuery={sigilQuery} search={analysis.search}
+      {searchMode} />
   {:else if (analysis.search.length > 0)}
     <ValidationProblems problems={analysis.queryProblems} />
   {:else}

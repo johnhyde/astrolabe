@@ -14,7 +14,9 @@ export interface StoreState {
   // };
   contacts: Rolodex;
   peers: Patp[];
-  query: RegExp;
+  patpQuery: RegExp;
+  sigilQuery: string[][];
+  searchMode: ('patp' | 'sigil');
   // contacts: Contacts;
   // contactSearchResults: Contacts;
   // chats: [];

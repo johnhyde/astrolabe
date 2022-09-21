@@ -435,8 +435,12 @@ function cite(ship: string) {
   return `~${patp}`;
 }
 
-function splitIdIntoWords(str: string): string[] {
-  return str.split(/(?:--|[-_^])/);
+export function splitIdIntoWords(str: string): string[] {
+  return desig(str).split(/(?:--|[-_^])/);
+}
+
+export function splitIdIntoSyls(str: string): string[] {
+  return splitIdIntoWords(str).map(word => [word.slice(0,3), word.slice(3,6)]).flat();
 }
 
 function padWithWild(search: string) {

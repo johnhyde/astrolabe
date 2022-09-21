@@ -68,21 +68,21 @@ import { sigil } from '@tlon/sigil-js';
       {/if}
     </div>
   </div>
-    {#each sigilQuery.activeSymbols as symbol}
-      {@const plausibleSyllables = symbol.plausibleSyllables}
-      {@const plausibleParts = symbol.plausibleParts}
-      <p>
-        {#if plausibleSyllables.length < 20 && plausibleSyllables.length > 0}
-          {plausibleSyllables.join(', ')}:
-          {#if plausibleParts.length < 20 && plausibleParts.length > 0}
-            {plausibleParts.join(', ')}
-          {:else}
-            {plausibleParts.length}
-          {/if}
+  <!-- {#each sigilQuery.activeSymbols as symbol}
+    {@const plausibleSyllables = symbol.plausibleSyllables}
+    {@const plausibleParts = symbol.plausibleParts}
+    <p>
+      {#if plausibleSyllables.length < 20 && plausibleSyllables.length > 0}
+        {plausibleSyllables.join(', ')}:
+        {#if plausibleParts.length < 20 && plausibleParts.length > 0}
+          {plausibleParts.join(', ')}
         {:else}
-          {plausibleSyllables.length}
+          {plausibleParts.length}
         {/if}
-      </p>
-    {/each}
+      {:else}
+        {plausibleSyllables.length}
+      {/if}
+    </p>
+  {/each} -->
   <!-- {sigilQuery.string} -->
 </div>

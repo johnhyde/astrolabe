@@ -6,6 +6,7 @@
   import type { PartType } from 'types/sigil';
   import type { SymbolQuery } from 'lib/sigil';
   import { filterPartsByGeon } from 'lib/sigil';
+  import * as colors from 'lib/colors';
 
   export let symbolQuery: SymbolQuery;
   // export let inputMode: PartType;
@@ -13,6 +14,8 @@
   export let index: number = 0;
   export let clan: string = 'galaxy';
   export let inputComponents: string[] = [];
+  export let fgColor = 'black';
+  export let bgColor = 'white';
   let size = 128;
 
   let translateClass;
@@ -72,11 +75,14 @@
   style:max-width="{size}px"
   on:click|stopPropagation
 >
+<!-- fgColor={!plausible ? 'red' : (symbolQuery.isPerfectMatch ? colors.GOLDS1 : 'black')} -->
   {#if symbolQuery.components.length > 0}
     <Symbol components={symbolQuery.components} {size}
       inverted={!symbolQuery.geon}
       interactive={focused}
-      fgColor={plausible ? 'black' : 'orange'}
+      fgColor={!plausible ? 'red' : (symbolQuery.isPerfectMatch ? 'black' : '#333')}
+      bgColor="white"
+      altBgColor="transparent"
       hoverColor="red"
       on:partClick={onPartDelete}
     />
@@ -89,8 +95,8 @@
     <div class="absolute inset-0 pointer-events-none">
       <Symbol components={filteredInputComponents} {size}
         strokeWidthFactor={inputContainsStrokes ? 2.5 : 1}
-        fgColor={symbolQuery.geon ? "white" : "black"}
-        bgColor={!symbolQuery.geon ? "white" : "black"}
+        fgColor={symbolQuery.geon ? bgColor : fgColor}
+        bgColor={!symbolQuery.geon ? bgColor : fgColor}
         altBgColor="transparent"
         opacity={0.5}
         inverted

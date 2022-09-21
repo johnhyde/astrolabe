@@ -10,11 +10,11 @@
   export let analysis: SearchAnalysis = new SearchAnalysis();
   export let search = '';
   export let sigilQuery: SigilQuery = new SigilQuery('planet');
+  export let showSigilInput: boolean = false;
   export let pauseAnalysis: boolean = false;
   export let placeholderText = "Search by @p or #.  '*' matches any character";
   
   let debouncedSearch = search;
-  let showSigilInput: boolean = false;
 
   $: {
     if (!pauseAnalysis) {
@@ -34,12 +34,12 @@
 
   $: {
     if (showSigilInput && sigilQuery.isDefinitive) {
-      const querySyls = sigilQuery.query.flat();
+      const querySyls = sigilQuery.querySyls.flat();
       search = '~' + querySyls[0];
       if (querySyls.length > 1) {
         search += querySyls[1];
         if (querySyls.length > 2) {
-          search += '-' + querySyls[2] + '-' + querySyls[3];
+          search += '-' + querySyls[2] + querySyls[3];
         }
       }
     }

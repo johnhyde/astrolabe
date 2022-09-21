@@ -2,13 +2,16 @@
   
   import type { Patp, Rolodex } from '@urbit/api';
   import { searchPoints } from 'lib/api';
+  import type { SigilQuery } from 'lib/sigil';
   import { searchedContacts } from 'stores/searchStores';
   import ShipListings from '@/ShipListings.svelte';
   import SearchSettings from './SearchSettings.svelte';
   import SearchResultsNavButtons from './SearchResultsNavButtons.svelte';
 
-  export let query: RegExp;
+  export let regexQuery: RegExp;
+  export let sigilQuery: SigilQuery;
   export let search: string;
+  export let searchMode: ('patp' | 'sigil') = 'patp';
   // export let patp: string;
   let combinedSearchResults = [];
   let searchedPointsP: Promise<any>;
@@ -25,14 +28,27 @@
   $: {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      searchedContacts.search(query);
+      if (searchMode == 'patp') {
+        searchedContacts.searchPatp(regexQuery);
+      } else if (searchMode == 'sigil') {
+        searchedContacts.searchSigil(sigilQuery.querySyls);
+      }
     }, 1000);
   }
+  // let otherTimer;
+  // $: {
+  //   clearTimeout(otherTimer);
+  //   if (searchMode === 'sigil') {
+  //     otherTimer = setTimeout(() => {
+  //       searchedContacts.search(regexQuery, searchMode);
+  //     }, 1000);
+  //   }
+  // }
   function doSearch() {
     const searchSnap = search;
     searchStatus = 'prog';
     console.log(`starting search for "${searchSnap}"`);
-    searchedPointsP = searchPoints(searchSnap);
+    searchedPointsP = searchPoints(searchSnap, searchMode);
     searchedPointsP.then((points) => {
       if (search === searchSnap) {
         searchedPoints = points;
@@ -48,7 +64,7 @@
       }
     });
   }
-  $: search, doSearch();
+  $: [search, sigilQuery], doSearch();
 
   $: {
     const contactSearchResults: Rolodex = JSON.parse(JSON.stringify($searchedContacts));

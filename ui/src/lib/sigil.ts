@@ -53,16 +53,20 @@ export class SigilQuery {
     return this.activeSymbols.every(symbol => !symbol.isPlausible);
   }
 
-  get query(): string[][] {
+  get querySyls(): string[][] {
     return this.activeSymbols.map(symbol => symbol.plausibleSyllables);
   }
 
   get isDefinitive() {
-    return this.query.every(syls => syls.length === 1);
+    return this.querySyls.every(syls => syls.length === 1);
+  }
+
+  get isNotEmpty() {
+    return this.activeSymbols.some(symbol => symbol.components.length > 0);
   }
 
   get string(): string {
-    return this.symbols.map((symbol) => symbol.components.join()).join(' | ')
+    return this.symbols.map((symbol) => symbol.components.join(',')).join('|')
   }
 
   setSymbol(symbol: SymbolQuery, activeSymbolIndex: number) {
@@ -70,6 +74,22 @@ export class SigilQuery {
       throw new Error(`Symbol index ${activeSymbolIndex} out of range for clan: ${this.clan}`);
     this.activeSymbols[activeSymbolIndex] = symbol;
   }
+}
+
+const equivalentParts = {
+  lfhb: 'lfhbm',
+  lfhbm: 'lfhb',
+  atlf2: 'atlf2l',
+  atlf2l: 'atlf2',
+  atlf4: 'atlf4l',
+  atlf4l: 'atlf4',
+  atlf6: 'atlf6l',
+  atlf6l: 'atlf6',
+}
+
+function addEquivalentParts(parts: string[]): string[] {
+  const moreParts = parts.map(partId => equivalentParts[partId]).filter(part => part);
+  return [...parts, ...moreParts];
 }
 
 export function getPlausibleSyllables(parts: string[], symbolType: SymbolType): string[] {
@@ -81,7 +101,14 @@ export function getPlausibleSyllables(parts: string[], symbolType: SymbolType): 
   } else {
     plausibleSyllables = [...prefixes, ...suffixes];
   }
-  const possibilitiesByPart = parts.map((partId) => partParents[partId]);
+  const possibilitiesByPart = parts.map((partId) => {
+    let parents = partParents[partId];
+    const otherPart = equivalentParts[partId];
+    if (otherPart) {
+      parents = [...parents, ...partParents[otherPart]];
+    }
+    return parents;
+  });
   plausibleSyllables = intersection(plausibleSyllables, ...possibilitiesByPart);
   return plausibleSyllables;
 }
@@ -89,6 +116,7 @@ export function getPlausibleSyllables(parts: string[], symbolType: SymbolType): 
 export function getPlausibleNewParts(parts: string[], symbolType: SymbolType): string[] {
   const syllables: string[] = getPlausibleSyllables(parts, symbolType);
   let plausibleParts = uniq(syllables.map((syllable) => symbolDefs[syllable]).flat());
+  plausibleParts = addEquivalentParts(plausibleParts);
   return without(plausibleParts, ...parts);
 }
 
@@ -183,6 +211,13 @@ export class SymbolQuery {
 
   get plausibleParts() {
     return getPlausibleNewParts(this.components, this.symbolType);
+  }
+
+  get isPerfectMatch() {
+    const syls = this.plausibleSyllables;
+    if (syls.length === 1) return true;
+    const compLength = this.components.length;
+    return syls.map(syl => symbolDefs[syl].length).some(length => length === compLength);
   }
 
   filterPlausibleParts(parts: string[]): string[] {
