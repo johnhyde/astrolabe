@@ -16,7 +16,7 @@ import { sigil } from '@tlon/sigil-js';
 
   // let symbols: SymbolQuery = [];
 
-  $: gridClasses = (sigilQuery.clan === 'galaxy' ? 'max-w-[10rem] grid items-center' : 'grid grid-cols-2 items-center');
+  $: gridClasses = (sigilQuery.clan === 'galaxy' ? 'max-w-[10rem] grid items-center' : 'max-w-[18rem] grid grid-cols-2 items-center');
 
   function unfocusSymbol() {
     focusedSymbolIndex = undefined;
@@ -42,7 +42,7 @@ import { sigil } from '@tlon/sigil-js';
   <ClanSelect bind:clan={sigilQuery.clan} />
   <div class="flex flex-col xs:flex-row">
     <div class="grow-[2] w-full xs:m-0 xs:max-w-[18rem]" on:click={unfocusSymbol}>
-      <div class="max-w-[18rem] min-h-[14rem] mx-auto p-4 {gridClasses} xs:rounded-bl-2xl">
+      <div class="min-h-[14rem] mx-auto p-4 {gridClasses} xs:rounded-bl-2xl">
         {#each sigilQuery.activeSymbols as symbol, index}
           <SymbolInput
             bind:symbolQuery={symbol}

@@ -9,7 +9,7 @@
   export let fgColor: string = 'black';
   export let bgColor: string = 'white';
   export let altBgColor: string = undefined;
-  export let hoverColor: string = 'blue';
+  export let hoverColor: string = '#8f8';
   export let opacity: number = 1;
   export let inverted: boolean = false;
   export let interactive: boolean = false;

@@ -10,7 +10,7 @@
 
   export let regexQuery: RegExp;
   export let sigilQuery: SigilQuery;
-  export let search: string;
+  export let patpSearch: string;
   export let searchMode: ('patp' | 'sigil') = 'patp';
   // export let patp: string;
   let combinedSearchResults = [];
@@ -40,7 +40,7 @@
   //   clearTimeout(otherTimer);
   //   if (searchMode === 'sigil') {
   //     otherTimer = setTimeout(() => {
-  //       searchedContacts.search(regexQuery, searchMode);
+  //       searchedContacts.patpSearch(regexQuery, searchMode);
   //     }, 1000);
   //   }
   // }
@@ -64,7 +64,8 @@
       }
     });
   }
-  $: [search, sigilQuery], doSearch();
+  $: search = (searchMode === 'sigil') ? sigilQuery.string : patpSearch;
+  $: [search], doSearch();
 
   $: {
     const contactSearchResults: Rolodex = JSON.parse(JSON.stringify($searchedContacts));

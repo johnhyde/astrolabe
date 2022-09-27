@@ -33,9 +33,10 @@ export class SigilQuery {
     this.symbols.forEach((symbol, i) => {
       if (i % 2 === 0) {
         symbol.symbolType = 'prefix';
+        // symbol.components = ['gci', 'lhf'];
       } else {
         symbol.symbolType = 'suffix';
-        // symbol.components = ['gsq', 'ablf2']
+        // symbol.components = ['gsq', 'atrf4'];
       }
     });
     this.symbols = this.symbols;
@@ -50,11 +51,15 @@ export class SigilQuery {
   }
 
   get isPlausible() {
-    return this.activeSymbols.every(symbol => !symbol.isPlausible);
+    return this.activeSymbols.every(symbol => symbol.isPlausible);
   }
 
   get querySyls(): string[][] {
     return this.activeSymbols.map(symbol => symbol.plausibleSyllables);
+  }
+
+  get queryInts(): number[][] {
+    return this.activeSymbols.map(symbol => symbol.plausibleInts);
   }
 
   get isDefinitive() {
@@ -65,8 +70,14 @@ export class SigilQuery {
     return this.activeSymbols.some(symbol => symbol.components.length > 0);
   }
 
+  get isWorthSearching() {
+    if (!this.isNotEmpty) return false; // 🙃
+    if (!this.isPlausible) return false;
+    return 100000 > this.querySyls.reduce((acc, syls) => acc * (syls.length || 256), 1);
+  }
+
   get string(): string {
-    return this.symbols.map((symbol) => symbol.components.join(',')).join('|')
+    return this.queryInts.map((int) => int.length == 256 ? 'any' : int.join('.')).join('_');
   }
 
   setSymbol(symbol: SymbolQuery, activeSymbolIndex: number) {
@@ -92,15 +103,18 @@ function addEquivalentParts(parts: string[]): string[] {
   return [...parts, ...moreParts];
 }
 
-export function getPlausibleSyllables(parts: string[], symbolType: SymbolType): string[] {
-  let plausibleSyllables: string[];
+function getSyllablesBySymbolType(symbolType: SymbolType): string[] {
   if (symbolType === 'prefix') {
-    plausibleSyllables = prefixes;
+    return prefixes;
   } else if (symbolType === 'suffix') {
-    plausibleSyllables = suffixes;
+    return suffixes;
   } else {
-    plausibleSyllables = [...prefixes, ...suffixes];
+    return [...prefixes, ...suffixes];
   }
+}
+
+export function getPlausibleSyllables(parts: string[], symbolType: SymbolType): string[] {
+  let plausibleSyllables = getSyllablesBySymbolType(symbolType);
   const possibilitiesByPart = parts.map((partId) => {
     let parents = partParents[partId];
     const otherPart = equivalentParts[partId];
@@ -111,6 +125,11 @@ export function getPlausibleSyllables(parts: string[], symbolType: SymbolType): 
   });
   plausibleSyllables = intersection(plausibleSyllables, ...possibilitiesByPart);
   return plausibleSyllables;
+}
+
+function convertSyllableToInt(syl: string, symbolType: SymbolType): number {
+  let syls = getSyllablesBySymbolType(symbolType);
+  return syls.findIndex(s => s === syl) % 256;
 }
 
 export function getPlausibleNewParts(parts: string[], symbolType: SymbolType): string[] {
@@ -203,6 +222,10 @@ export class SymbolQuery {
 
   get plausibleSyllables() {
     return getPlausibleSyllables(this.components, this.symbolType);
+  }
+
+  get plausibleInts() {
+    return this.plausibleSyllables.map(syl => convertSyllableToInt(syl, this.symbolType));
   }
 
   get isPlausible() {

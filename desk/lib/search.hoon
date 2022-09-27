@@ -12,7 +12,7 @@
 ++  prefixes  ^~  (trip-syls sis:po)
 ++  suffixes  ^~  (trip-syls dex:po)
 ++  full-opts  ^~  (gulf .~zod .~fes)
-++  galaxies  ^~  `(list @p)``(list @)`full-opts
+++  galaxies  ^~  `(list @p)`full-opts
 ++  sanitize-search-text
   |=  =search-text
   ^-  tape
@@ -129,6 +129,25 @@
   ?:  =(~[~ ~ ~ ~] search-opts.full)
     ~
   (some full)
+::
+++  sigil-search-text-to-full
+  |=  text=tape
+  ^-  search-full
+  :-  ~
+  ^-  search-opts
+  %-  flop
+  %+  turn
+    (split "_" text)
+  |=  ints-tape=tape
+  ^-  search-syl-opts
+  ?:  =(ints-tape "any")
+    full-opts
+  %+  turn
+    (split "." ints-tape)
+  |=  =tape
+  ~&  tape
+  `@q`(slav %ud (crip tape))
+::
 ++  reverse-list     :: that is, put first 2 in back "abcd" -> "cdab"
   |*  lst=(list)
   ^-  _lst
@@ -221,7 +240,10 @@
   |=  [=syl cand=@]
   ::  todo check cand < 256
   (tape-matches tape.syl (trip (tosd cand pfsf.syl)))
-++  matches-search
+++  syl-opts-match
+  |=  [opts=search-syl-opts cand=@]
+  !=(~ (find ~[cand] opts))
+++  matches-search-syls
   |=  [search=search-syls cand-atom=@]
   =/  cand  (rip 3 cand-atom)
   |-
@@ -239,6 +261,28 @@
   ?&  (syl-matches i.search i.cand)
       $(search t.search, cand t.cand)
   ==
+::
+++  matches-search-opts
+  |=  [search=search-opts cand-atom=@]
+  =/  cand  (rip 3 cand-atom)
+  |-
+  ^-  ?
+  ?~  search  =(cand ~)
+  ?~  cand
+    ?&  (syl-opts-match i.search 0)
+        $(search t.search)
+    ==
+  :: =/  nncand  ^-  (lest @) 
+  ::   ?~  cand  ~[0]  cand
+  ?&  (syl-opts-match i.search i.cand)
+      $(search t.search, cand t.cand)
+  ==
+::
+++  matches-search
+  |=  [search=search-full cand-atom=@]
+  ?~  search-syls.search
+    (matches-search-opts search-opts.search cand-atom)
+  (matches-search-syls search-syls.search cand-atom)
 ::
 ++  opts-in-range
   |=  [lb=@ rb=@ opts=(list @)]
@@ -282,8 +326,6 @@
   |*  [agg=mold search=search-full points=opoints =page-info]
   |=  [res=[count=@ =agg] f=$-([agg @q] agg)]
   ^-  [count=@ =agg]
-  =/  s-syls  search-syls.search
-  :: ~&  s-syls
   =/  s-opts  search-opts.search
   =+  [llb=.~zod rrb=`@q`(sub (bex 32) 1)]
   :: =<  +
@@ -302,7 +344,7 @@
   =/  right-view  (range-contains-search rlb rrb s-opts)
   =?  res  contains.left-view
     $(points l.points, rrb lrb, s-opts opts.left-view)
-  =?  res  (matches-search s-syls n)
+  =?  res  (matches-search search n)
     =/  fits  (fits-on-page count.res page-info) 
     =.  count.res  +(count.res)
     =?  agg.res  fits  (f agg.res n)

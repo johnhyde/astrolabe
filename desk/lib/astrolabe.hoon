@@ -54,6 +54,15 @@
   .=  linear-star-release:contracts:azimuth
   address.owner.own.p
 ::
+++  split
+  |*  [nedl=(list) hstk=(list)]
+  |-  ^-  (list _hstk)
+  =/  brk  (find nedl hstk)
+  ?~  brk  ~[hstk]
+  =/  next  (add u.brk (lent nedl))
+  :-  (scag u.brk hstk)
+  $(hstk (slag next hstk))
+::
 ++  smel
   |%
   ++  ship

@@ -67,13 +67,15 @@
     =/  =ship  `@p`(slav %p &3.path)
     =/  arg  ?~(t.t.t.t.path %all i.t.t.t.t.path)
     ``astrolabe-point-set+!>((get-spawned-points:hc ship arg))
-      [%x %search @ ?(~ [%narrow ~])]
-    =/  =search-text  (trip &3.path)
+      [%x %search %patp @ ?(~ [%narrow ~])]
+    =/  =search-text  (trip &4.path)
     ?~  search-text  ~|(%search-predicted-too-broad !!)
-    ~&  "search text"
-    ~&  search-text
     =/  expand-search  =(t.t.t.path ~)
-    ``astrolabe-point-set+!>((search-opoints:hc search-text expand-search))
+    ``astrolabe-point-set+!>((search-opoints-patp:hc search-text expand-search))
+      [%x %search %sigil @ ~]
+    =/  =search-text  (trip &4.path)
+    ?~  search-text  ~|(%search-predicted-too-broad !!)
+    ``astrolabe-point-set+!>((search-opoints-sigil:hc search-text))
       [%x %peers ~]
     =/  peers  .^((map ship ?(%alien %known)) %ax (scrio:hc %$ /peers))
     ``astrolabe-point-set+!>((turn ~(tap in peers) head))
@@ -265,14 +267,25 @@
   |=  [agg=@ud [spawn=ship *]]
   +(agg)
 ::
-++  search-opoints
+++  search-opoints-patp
   |=  [=search-text expand-search=?]
   ^-  (list ship)
   =/  search-fulls
     ?:  expand-search
       (search-text-to-fulls search-text)
     ~[(search-text-to-full search-text)]
-  :: ~&  (turn search-fulls |=(=search-full search-syls.search-full))
+  (search-opoints search-fulls)
+::
+++  search-opoints-sigil
+  |=  [=search-text]
+  ^-  (list ship)
+  =/  search-fulls
+    ~[(sigil-search-text-to-full search-text)]
+  (search-opoints search-fulls)
+::
+++  search-opoints
+  |=  [search-fulls=(list search-full)]
+  ^-  (list ship)
   =/  mr-searches  (maybe-reverse-searches search-fulls 1.000)
   :: ~&  (turn mr-searches |=(=mr-search pain.mr-search))
   :: ~&  mr-searches

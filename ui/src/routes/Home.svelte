@@ -146,9 +146,9 @@
     <StarChart patp={analysis.patpIsValid ? analysis.patp : null} />
   {:else if analysis.patpIsValid}
     <ShipView patp={analysis.patp} />
-  {:else if (searchMode === 'patp' && analysis.queryIsValid) || (searchMode == 'sigil' && sigilQuery.isNotEmpty)}
-    <SearchResults regexQuery={analysis.query} sigilQuery={sigilQuery} search={analysis.search}
-      {searchMode} />
+  {:else if (searchMode === 'patp' && analysis.queryIsValid) || (searchMode == 'sigil' && sigilQuery.isWorthSearching)}
+    <SearchResults regexQuery={analysis.query} sigilQuery={sigilQuery}
+      patpSearch={analysis.search} {searchMode} />
   {:else if (analysis.search.length > 0)}
     <ValidationProblems problems={analysis.queryProblems} />
   {:else}
