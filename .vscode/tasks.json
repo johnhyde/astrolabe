@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "commit",
+			"path": "ui",
+			"problemMatcher": [],
+			"label": "npm: commit - ui",
+			"detail": "dotenv -c local npm run _commit"
+		}
+	]
+}

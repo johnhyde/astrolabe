@@ -62,15 +62,10 @@ Initial Setup:
     3. Set `GLOBBER_DESK` in `.env.local` if the path to your globber desk is different.
 
 Every Time:
-4. From the `ui` directory, run `npm run release` to build the ui and copy it to your globber desk
-5. From the globber ship: `|commit %globber` (create basic mark files (see `png.hoon`) for any files without mark files)
-6. Now run `=dir /=garden=` to switch to the garden desk directory
-7. `-make-glob %globber /astrolabe` which will take the folder where you just added files and create a glob which can be thought of as a sort of bundle. It will be output to `~/zod/.urb/put`.
-8. `=dir` to return to base desk.
-8. From the `ui` directory, run `npm run get-glob` to place the latest glob in the `globs` folder.
-9. Copy the string printed by the last step, and paste it into `desk.docket-0`.
-8. Upload the glob in `/globs/` to any publicly available HTTP endpoint that can serve files. This allows the glob to distributed over HTTP.
-10. Once you've uploaded the glob, paste the url into `desk/desk.docket-0`. Both the full URL and the hash should be updated to match the glob we just created, on the line that looks like this:
+3. From the `ui` directory, run `npm run release` to build the ui, make the glob, and copy it to the `globs` folder. The command will also print out the glob hash/id.
+4. Copy the string printed by the last step, and paste it into `desk.docket-0`.
+5. Upload the glob in `/globs/` to any publicly available HTTP endpoint that can serve files. This allows the glob to be distributed over HTTP.
+6. Once you've uploaded the glob, paste the url into `desk/desk.docket-0`. Both the full URL and the hash should be updated to match the glob we just created, on the line that looks like this:
     ```hoon
         glob-http+['https://bootstrap.urbit.org/glob-0v5.fdf99.nph65.qecq3.ncpjn.q13mb.glob' 0v5.fdf99.nph65.qecq3.ncpjn.q13mb]
     ```

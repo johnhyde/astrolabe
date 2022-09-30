@@ -20,19 +20,20 @@
 
   let translateClass;
   $: {
-    if (focusedSymbolIndex === undefined) {
-      translateClass = 'translate-x-0 translate-y-0';
-    } else if (clan === 'star') {
-      translateClass = index ? 'origin-right' : 'origin-left';
-    } else if (clan === 'planet') {
-      let cornerIndex = index;
-      if (!focused) cornerIndex = focusedSymbolIndex;
-      switch (cornerIndex) {
-        case 0: translateClass = 'translate-x-1/4 translate-y-1/4'; break;
-        case 1: translateClass = '-translate-x-1/4 translate-y-1/4'; break;
-        case 2: translateClass = 'translate-x-1/4 -translate-y-1/4'; break;
-        case 3:
-        default: translateClass = '-translate-x-1/4 -translate-y-1/4';
+    translateClass = 'translate-x-0 translate-y-0';
+    if (focusedSymbolIndex !== undefined) {
+      if (clan === 'star') {
+        translateClass = index ? 'origin-right' : 'origin-left';
+      } else if (clan === 'planet') {
+        let cornerIndex = index;
+        if (!focused) cornerIndex = focusedSymbolIndex;
+        switch (cornerIndex) {
+          case 0: translateClass = 'translate-x-1/4 translate-y-1/4'; break;
+          case 1: translateClass = '-translate-x-1/4 translate-y-1/4'; break;
+          case 2: translateClass = 'translate-x-1/4 -translate-y-1/4'; break;
+          case 3:
+          default: translateClass = '-translate-x-1/4 -translate-y-1/4';
+        }
       }
     }
   }
@@ -80,6 +81,7 @@
     <Symbol components={symbolQuery.components} {size}
       inverted={!symbolQuery.geon}
       interactive={focused}
+      strokeWidthFactor={focused ? 2 : 1}
       fgColor={!plausible ? 'red' : (symbolQuery.isPerfectMatch ? 'black' : '#333')}
       bgColor="white"
       altBgColor="transparent"

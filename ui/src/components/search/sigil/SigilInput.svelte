@@ -1,5 +1,6 @@
 <script lang="ts">
   import SymbolInputModeSelector from './SymbolInputModeSelector.svelte';
+  import SymbolInputNavButtons from './SymbolInputNavButtons.svelte';
   import SymbolInput from './SymbolInput.svelte';
   import ClanSelect from './ClanSelect.svelte';
   import ToggleButton from '@/buttons/ToggleButton.svelte';
@@ -33,6 +34,10 @@ import { sigil } from '@tlon/sigil-js';
     toggleStoreKey(searchSettings, 'allowFictionalSigils');
   }
 
+  function clear() {
+    sigilQuery = sigilQuery.clearSymbols();
+  }
+
   $: {
     sigilQuery.allowFictional = $searchSettings.allowFictionalSigils;
   }
@@ -55,16 +60,19 @@ import { sigil } from '@tlon/sigil-js';
         {/each}
       </div>
     </div>
-    <div class="p-2 border-t grow rounded-b-2xl xs:border-l xs:border-t-0 xs:rounded-bl-none">
+    <div class="px-4 py-2 border-t grow rounded-b-2xl xs:border-l xs:border-t-0 xs:rounded-bl-none">
       {#if focusedSymbol}
         <SymbolInputModeSelector
           bind:symbolQuery={focusedSymbol}
           bind:inputComponents
           unfocusSymbol={unfocusSymbol}
         />
-      {:else}
-        Allow Sigils which don't exist:
-        <ToggleButton on:click={toggleAllowFictional} on={$searchSettings.allowFictionalSigils} />
+        {:else}
+        <SymbolInputNavButtons onClear={sigilQuery.isNotEmpty ? clear : null} />
+        <p class="mt-2">
+          Allow Sigils which don't exist:
+          <ToggleButton on:click={toggleAllowFictional} on={$searchSettings.allowFictionalSigils} />
+        </p>
       {/if}
     </div>
   </div>

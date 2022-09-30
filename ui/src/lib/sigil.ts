@@ -42,6 +42,12 @@ export class SigilQuery {
     this.symbols = this.symbols;
   }
 
+  clearSymbols() {
+    this.symbols = [];
+    this.padSymbols();
+    return this;
+  }
+
   get activeSymbols() {
     if (this.clan === 'galaxy')
       return [this.symbols[1]];
@@ -52,6 +58,10 @@ export class SigilQuery {
 
   get isPlausible() {
     return this.activeSymbols.every(symbol => symbol.isPlausible);
+  }
+
+  get queryParts(): string[][] {
+    return this.activeSymbols.map(symbol => symbol.components);
   }
 
   get querySyls(): string[][] {
@@ -73,11 +83,55 @@ export class SigilQuery {
   get isWorthSearching() {
     if (!this.isNotEmpty) return false; // 🙃
     if (!this.isPlausible) return false;
-    return 100000 > this.querySyls.reduce((acc, syls) => acc * (syls.length || 256), 1);
+    return true;
   }
 
   get string(): string {
     return this.queryInts.map((int) => int.length == 256 ? 'any' : int.join('.')).join('_');
+  }
+  
+  get urlString(): string {
+    return this.queryParts.map(parts => parts.join('.')).join('_');
+  }
+
+  set urlString(str: string) {
+    if (!str) return;
+    const queryParts = str.split('_').map(sym => sym.split('.').filter(part => part !== ''));
+    switch (queryParts.length) {
+      case 1:
+        this.clan = 'galaxy';
+        break;
+      case 2:
+        this.clan = 'star';
+        break;
+      case 4:
+        this.clan = 'planet';
+        break;
+      default:
+        return;
+    }
+    try {
+      this.symbols = queryParts.map((parts) => {
+        return new SymbolQuery(this, parts);
+      });
+    } catch (e) {
+      console.error("Couldn't load in sigil query text", e);
+      this.symbols = [];
+    }
+    this.padSymbols();
+  }
+
+  get patp(): string {
+    if (!this.isDefinitive) return '';
+    const querySyls = this.querySyls.flat();
+    let patp = '~' + querySyls[0];
+    if (querySyls.length > 1) {
+      patp += querySyls[1];
+      if (querySyls.length > 2) {
+        patp += '-' + querySyls[2] + querySyls[3];
+      }
+    }
+    return patp;
   }
 
   setSymbol(symbol: SymbolQuery, activeSymbolIndex: number) {
@@ -192,6 +246,11 @@ export function filterPartsByGeon(parts: string[], geon: Geon): string[] {
   return parts;
 }
 
+export function filterFakeParts(parts: string[], symbolType: SymbolType): string[] {
+  let plausibleSyllables = getSyllablesBySymbolType(symbolType);
+  return parts.filter(part => !plausibleSyllables.includes(part));
+}
+
 export class SymbolQuery {
   sigilQuery?: SigilQuery;
   symbolType: SymbolType;
@@ -254,6 +313,7 @@ export class SymbolQuery {
   cleanupParts() {
     this.components = uniq(this.components);
     this.components = filterPartsByGeon(this.components, this.geon);
+    this.components = filterFakeParts(this.components, this.symbolType);
     // if (!this.allowFictional) {
     //   this.components = this.plausibleParts;
     // }

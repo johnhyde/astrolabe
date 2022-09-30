@@ -445,8 +445,8 @@ export function splitIdIntoSyls(str: string): string[] {
 
 function padWithWild(search: string) {
   let words = search.split(/[_^]/);
-  words[0] = '*'.repeat(6 - words[0].length) + words[0];
-  words[1] += '*'.repeat(6 - words[1].length);
+  words[0] = '*'.repeat(Math.max(0, 6 - words[0].length)) + words[0];
+  words[1] += '*'.repeat(Math.max(0, 6 - words[1].length));
   return words.join(search.match(/([_^])/)[1]);
 }
 

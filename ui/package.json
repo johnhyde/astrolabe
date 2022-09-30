@@ -19,7 +19,9 @@
     "install:desk:watch": "dotenv -c local npm run _install:desk:watch",
     "release": "npm run build && npm run install:glob",
     "_get-glob": "../bin/get_glob.sh $GLOBBER_DESK",
-    "get-glob": "dotenv -c local npm run _get-glob"
+    "get-glob": "dotenv -c local npm run _get-glob",
+    "_commit": "../bin/commit.sh $ASTROLABE_DESK",
+    "commit": "dotenv -c local npm run _commit"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",

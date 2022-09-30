@@ -1652,6 +1652,18 @@ Ensure the default browser behavior of the `hidden` attribute.
 .opacity-10 {
   opacity: 0.1;
 }
+.opacity-20 {
+  opacity: 0.2;
+}
+.opacity-30 {
+  opacity: 0.3;
+}
+.opacity-40 {
+  opacity: 0.4;
+}
+.opacity-5 {
+  opacity: 0.05;
+}
 .outline {
   outline-style: solid;
 }
@@ -1697,8 +1709,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
-.hover\:opacity-40:hover {
-  opacity: 0.4;
+.hover\:opacity-80:hover {
+  opacity: 0.8;
 }
 @media (min-width: 360px) {
 

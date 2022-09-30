@@ -1,4 +1,6 @@
 <script lang="ts">
+  import SymbolInputNavButtons from './SymbolInputNavButtons.svelte';
+
   import GeonSelector from './GeonSelector.svelte';
   import SymbolInputModeSelectorButton from './SymbolInputModeSelectorButton.svelte';
 
@@ -8,25 +10,21 @@
   import { MODE_DEFS } from 'types/sigil';
   import { filterPartsByGeon, getDeepParts } from 'lib/sigil';
 
-  import upArrow from 'assets/up-arrow.svg';
-  import xIcon from 'assets/x.svg';
-
-  export let symbolQuery: SymbolQuery;
+  export let symbolQuery: SymbolQuery = null;
   export let inputComponents: string[] = [];
-  export let unfocusSymbol: Function;
+  export let unfocusSymbol: Function = () => {};
 
   let modes: string[] = [];
-  // let subMode: string = undefined;
   let modeDef: ModeDef = undefined;
   let subModeDefs: ModeDefs = MODE_DEFS;
 
-  let buttonClasses = 'border border-gray-500 rounded-md aspect-square w-[48px]';
+  function showGeonSelector() {
+    if (!symbolQuery.components.length && modes.length == 0) {
+      modes = ['geon'];
+    }
+  }
 
-  // $: {
-  //   if (!symbolQuery.geon) {
-  //     modes = ['geon'];
-  //   }
-  // }
+  $: symbolQuery.components, showGeonSelector();
 
   function pushMode(mode: string) {
     if (modeDef?.modes) {
@@ -115,11 +113,8 @@
 </style>
 
 <div class="mx-auto flex justify-center xs:items-center xs:flex-col">
-  <div class="grid grid-cols-custom gap-1 self-start justify-center mr-1 xs:mr-0 xs:mb-1 xs:self-stretch">
-    <img src={upArrow} alt="done" class={buttonClasses} on:click={popMode}/>
-    <img src={xIcon} alt="done" class={buttonClasses} on:click={clear}/>
-  </div>
-    <div class="max-w-[15rem] h-full grid grid-cols-custom gap-1 justify-center xs:max-w-[8rem]">
+  <SymbolInputNavButtons onDone={popMode} onClear={clear} />
+  <div class="max-w-[15rem] h-full grid grid-cols-custom gap-1 justify-center xs:max-w-[8rem]">
     {#if modes[0] === 'geon'}
       <GeonSelector bind:symbolQuery {popMode} />
     {:else}

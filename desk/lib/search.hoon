@@ -145,7 +145,7 @@
   %+  turn
     (split "." ints-tape)
   |=  =tape
-  ~&  tape
+  :: ~&  tape
   `@q`(slav %ud (crip tape))
 ::
 ++  reverse-list     :: that is, put first 2 in back "abcd" -> "cdab"
