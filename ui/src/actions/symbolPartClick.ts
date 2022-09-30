@@ -1,6 +1,3 @@
-const docLinkRegex = /\/~\/scry\/docs\/usr\/astrolabe\/([-~._\w\d]+).html/;
-
-
 function listenOnSvgElements(node, onPathChange) {
   const parts = node.querySelectorAll('path, circle, line');
   for (let part of parts) {
@@ -14,13 +11,6 @@ function listenOnSvgElements(node, onPathChange) {
     }
   }
 }
-
-// function docLinks(node, onPathChange: Function) {
-//   convertDocLinks(node, onPathChange)
-//   return {
-//     update: (onPathChange) => convertDocLinks(node, onPathChange),
-//   };
-// };
 
 export default function svgClick(node: HTMLElement, { onPartClick, enabled = true, svgString }) {
   if (enabled) listenOnSvgElements(node, onPartClick);

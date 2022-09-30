@@ -1,8 +1,5 @@
 #!/bin/bash
-#
-# Taken from: https://github.com/timlucmiptev/btc-agents/blob/master/install.sh
-# by ~timluc-miptev
-#
+
 usage() { printf "Usage: $0 URBIT_GLOBBER_DESK_DIRECTORY" 1>&2; exit 1; }
 
 cdir=$(dirname $0)

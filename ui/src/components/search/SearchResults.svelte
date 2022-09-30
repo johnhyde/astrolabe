@@ -12,7 +12,7 @@
   export let sigilQuery: SigilQuery;
   export let patpSearch: string;
   export let searchMode: ('patp' | 'sigil') = 'patp';
-  // export let patp: string;
+
   let combinedSearchResults = [];
   let searchedPointsP: Promise<any>;
   let searchedPoints: Patp[] = [];
@@ -35,15 +35,7 @@
       }
     }, 1000);
   }
-  // let otherTimer;
-  // $: {
-  //   clearTimeout(otherTimer);
-  //   if (searchMode === 'sigil') {
-  //     otherTimer = setTimeout(() => {
-  //       searchedContacts.patpSearch(regexQuery, searchMode);
-  //     }, 1000);
-  //   }
-  // }
+
   function doSearch() {
     const searchSnap = search;
     searchStatus = 'prog';

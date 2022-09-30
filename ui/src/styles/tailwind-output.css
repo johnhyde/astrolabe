@@ -1721,6 +1721,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .hover\:opacity-80:hover {
   opacity: 0.8;
 }
+.hover\:opacity-40:hover {
+  opacity: 0.4;
+}
 @media (min-width: 360px) {
 
   .\32xs\:-bottom-3\.5 {

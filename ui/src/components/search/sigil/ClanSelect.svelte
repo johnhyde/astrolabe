@@ -4,11 +4,6 @@
   import { capitalize } from 'lib/utils';
   import { CLANS, Clan } from 'types/sigil';
 
-  // const CLANS = ['galaxy', 'star', 'planet'] as const;
-  // const ClanTuple = typeof CLANS; 
-  // type Clan = typeof ClanTuple[number];
-
-  export let sigilSearch = {};
   export let clan: Clan = 'planet';
 
   let dropdownOpen = false;

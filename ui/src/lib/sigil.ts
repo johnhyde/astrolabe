@@ -110,13 +110,18 @@ export class SigilQuery {
       default:
         return;
     }
+    let symbols;
     try {
-      this.symbols = queryParts.map((parts) => {
-        return new SymbolQuery(this, parts);
+      symbols = queryParts.map((parts) => {
+        let symbol = new SymbolQuery(this, parts);
+        if (symbol.components.length !== parts.length) {
+          throw new Error(`Invalid component ids: ${without(parts, symbol.components)}`);
+        }
       });
     } catch (e) {
       console.error("Couldn't load in sigil query text", e);
-      this.symbols = [];
+      this.clan = 'planet';
+      symbols = [];
     }
     this.padSymbols();
   }
@@ -248,7 +253,7 @@ export function filterPartsByGeon(parts: string[], geon: Geon): string[] {
 
 export function filterFakeParts(parts: string[], symbolType: SymbolType): string[] {
   let plausibleSyllables = getSyllablesBySymbolType(symbolType);
-  return parts.filter(part => !plausibleSyllables.includes(part));
+  return parts.filter(part => plausibleSyllables.includes(part));
 }
 
 export class SymbolQuery {

@@ -2,7 +2,6 @@ import { writable } from 'svelte/store';
 
 import { getDoc } from 'lib/api';
 const docs = {};
-// import type { AppState, Contacts } from 'types/store';
 
 const initStore: any = {
   show: false,

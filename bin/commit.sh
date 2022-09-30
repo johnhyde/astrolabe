@@ -21,5 +21,4 @@ lensa() {
     "http://localhost:$port" | xargs printf %s | sed 's/\\n/\n/g'
 }
 
-
 lensa 'hood' "+hood/commit %$DESK"

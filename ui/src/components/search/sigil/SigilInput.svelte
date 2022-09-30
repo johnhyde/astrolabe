@@ -8,14 +8,10 @@
   import type { SigilQuery } from 'lib/sigil';
   import { searchSettings } from 'stores/searchStores';
   import { toggleStoreKey } from 'lib/utils';
-import { sigil } from '@tlon/sigil-js';
 
   export let sigilQuery: SigilQuery;
-  // export let clan: ('galaxy' | 'star' | 'planet') = 'planet';
   let focusedSymbolIndex: number = undefined;
   let inputComponents: string[] = [];
-
-  // let symbols: SymbolQuery = [];
 
   $: gridClasses = (sigilQuery.clan === 'galaxy' ? 'max-w-[10rem] grid items-center' : 'max-w-[18rem] grid grid-cols-2 items-center');
 
@@ -43,7 +39,7 @@ import { sigil } from '@tlon/sigil-js';
   }
 </script>
 
-<div class="">
+<div>
   <ClanSelect bind:clan={sigilQuery.clan} />
   <div class="flex flex-col xs:flex-row">
     <div class="grow-[2] w-full xs:m-0 xs:max-w-[18rem]" on:click={unfocusSymbol}>

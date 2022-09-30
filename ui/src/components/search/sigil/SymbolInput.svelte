@@ -3,13 +3,10 @@
   import without from 'lodash/without';
 
   import { searchSettings } from 'stores/searchStores';
-  import type { PartType } from 'types/sigil';
   import type { SymbolQuery } from 'lib/sigil';
   import { filterPartsByGeon } from 'lib/sigil';
-  import * as colors from 'lib/colors';
 
   export let symbolQuery: SymbolQuery;
-  // export let inputMode: PartType;
   export let focusedSymbolIndex: number;
   export let index: number = 0;
   export let clan: string = 'galaxy';
@@ -44,7 +41,6 @@
     focused ? `${scaleClass} z-10`  
     : (focusedSymbolIndex !== undefined ? 'scale-50' : '' )
   );
-  // $: focusedClasses = focused ? `border border-gold-s1 border-2` : '';
 
   function onPartDelete({ detail: partId }) {
     symbolQuery = symbolQuery.removePart(partId);
@@ -76,7 +72,6 @@
   style:max-width="{size}px"
   on:click|stopPropagation
 >
-<!-- fgColor={!plausible ? 'red' : (symbolQuery.isPerfectMatch ? colors.GOLDS1 : 'black')} -->
   {#if symbolQuery.components.length > 0}
     <Symbol components={symbolQuery.components} {size}
       inverted={!symbolQuery.geon}
