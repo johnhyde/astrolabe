@@ -855,11 +855,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-16 {
   width: 4rem;
 }
-.w-\[48px\] {
-  width: 48px;
-}
 .w-40 {
   width: 10rem;
+}
+.w-\[48px\] {
+  width: 48px;
 }
 .min-w-0 {
   min-width: 0px;
@@ -1720,9 +1720,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .hover\:opacity-80:hover {
   opacity: 0.8;
-}
-.hover\:opacity-40:hover {
-  opacity: 0.4;
 }
 @media (min-width: 360px) {
 

@@ -247,13 +247,12 @@ export function filterPartsByGeon(parts: string[], geon: Geon): string[] {
   }
   if (['gq4', 'gfs'].includes(geon)) {
     parts = without(parts, 'cbr2mb', 'cbr2lf', 'abrf2', 'abrb2', 'arb2');
-  }
+  } 
   return parts;
 }
 
-export function filterFakeParts(parts: string[], symbolType: SymbolType): string[] {
-  let plausibleSyllables = getSyllablesBySymbolType(symbolType);
-  return parts.filter(part => plausibleSyllables.includes(part));
+export function filterFakeParts(parts: string[]): string[] {
+  return parts.filter(part => partParents[part]);
 }
 
 export class SymbolQuery {
@@ -318,7 +317,7 @@ export class SymbolQuery {
   cleanupParts() {
     this.components = uniq(this.components);
     this.components = filterPartsByGeon(this.components, this.geon);
-    this.components = filterFakeParts(this.components, this.symbolType);
+    this.components = filterFakeParts(this.components);
     // if (!this.allowFictional) {
     //   this.components = this.plausibleParts;
     // }
