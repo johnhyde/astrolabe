@@ -550,6 +550,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .right-3 {
   right: 0.75rem;
 }
+.left-1 {
+  left: 0.25rem;
+}
+.left-2 {
+  left: 0.5rem;
+}
 .z-20 {
   z-index: 20;
 }
@@ -851,6 +857,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-\[48px\] {
   width: 48px;
+}
+.w-40 {
+  width: 10rem;
 }
 .min-w-0 {
   min-width: 0px;

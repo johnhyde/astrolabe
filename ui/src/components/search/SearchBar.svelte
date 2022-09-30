@@ -2,6 +2,7 @@
   import SigilInput from './sigil/SigilInput.svelte';
   import Symbol from './sigil/Symbol.svelte';
 
+  import docs from 'stores/docs';
   import { SearchAnalysis } from 'lib/id';
   import { SigilQuery } from 'lib/sigil';
 
@@ -79,6 +80,12 @@
     debouncedSearch = bouncySearch;
     search = debouncedSearch;
   }
+
+  function showSigilDoc() {
+    docs.show('sigil');
+  }
+
+  const buttonClasses = 'rounded-full bg-black text-white text-sm transition-opacity opacity-50 hover:opacity-80';
 </script>
 
 <div class="relative max-w-md w-full">
@@ -87,8 +94,14 @@
       <SigilInput bind:sigilQuery></SigilInput>
     </div>
     <button
+      on:click={showSigilDoc}
+      class="absolute top-2 left-2 w-6 h-6 {buttonClasses}"
+    >
+      ?
+    </button>
+    <button
       on:click={closeSigilInput}
-      class="absolute top-2 right-2 w-20 h-6 rounded-full bg-black text-white text-sm transition-opacity opacity-50 hover:opacity-80"
+      class="absolute top-2 right-2 w-20 h-6 {buttonClasses}"
     >
       patp or #
     </button>
@@ -102,7 +115,7 @@
     />
     <button
       on:click={openSigilInput}
-      class="absolute top-1 right-1 w-8 h-8 transition-opacity opacity-50 hover:opacity-80"
+      class="absolute top-1 right-1 w-8 h-8 {buttonClasses}"
     >
       <Symbol components={'gci.lvf.lhf.lbhb.atrf4.al3.cbl2lf.cbl2mb'.split('.')} size={32}
         altBgColor="transparent"
