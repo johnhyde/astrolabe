@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import docs from '../../stores/docs';
+  import docs from 'stores/docs';
 
   export let path:string;
   export let modal:boolean = false;

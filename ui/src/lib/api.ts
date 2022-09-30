@@ -26,8 +26,8 @@ export function getPeers(): Promise<any> {
   return scry<any>(`/peers`);
 }
 
-export async function searchPoints(search: string): Promise<Patp[]> {
-  const { points } = await scry<any>(`/search/${search}`);
+export async function searchPoints(search: string, mode: ('patp' | 'sigil')): Promise<Patp[]> {
+  const { points } = await scry<any>(`/search/${mode}/${search}`);
   return points.map(normalizeId);
 }
 

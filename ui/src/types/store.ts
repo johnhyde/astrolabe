@@ -14,7 +14,9 @@ export interface StoreState {
   // };
   contacts: Rolodex;
   peers: Patp[];
-  query: RegExp;
+  patpQuery: RegExp;
+  sigilQuery: string[][];
+  searchMode: ('patp' | 'sigil');
   // contacts: Contacts;
   // contactSearchResults: Contacts;
   // chats: [];
@@ -27,4 +29,6 @@ export type SearchedContactsState = Rolodex;
 export class SearchSettings {
   includeMoons: boolean = true;
   includeComets: boolean = false;
+
+  allowFictionalSigils: boolean = false;
 }

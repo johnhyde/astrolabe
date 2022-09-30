@@ -17,21 +17,21 @@
 </script>
 
 <div class="pt-10 max-w-md w-full flex flex-wrap gap-5 justify-center">
-  <div class="rounded-lg bg-white flex-grow max-w-xs">
+  <div class="rounded-lg bg-white grow max-w-xs">
     <DocLink modal path="astrolabe">
       <div class="p-5 text-xl text-center">
         About Astrolabe
       </div>
     </DocLink>
   </div>
-  <div class="rounded-lg bg-white flex-grow max-w-xs">
+  <div class="rounded-lg bg-white grow max-w-xs">
     <DocLink modal path="">
       <div class="p-5 text-xl text-center">
         About Urbit IDs
       </div>
     </DocLink>
   </div>
-  <a class="rounded-lg bg-navy border border-gold flex-grow max-w-s" use:link href="/chart">
+  <a class="rounded-lg bg-navy border border-gold grow max-w-s" use:link href="/chart">
     <p class="p-5 text-xl text-center text-white">
       <br/>
       Star Chart

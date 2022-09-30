@@ -435,14 +435,18 @@ function cite(ship: string) {
   return `~${patp}`;
 }
 
-function splitIdIntoWords(str: string): string[] {
-  return str.split(/(?:--|[-_^])/);
+export function splitIdIntoWords(str: string): string[] {
+  return desig(str).split(/(?:--|[-_^])/);
+}
+
+export function splitIdIntoSyls(str: string): string[] {
+  return splitIdIntoWords(str).map(word => [word.slice(0,3), word.slice(3,6)]).flat();
 }
 
 function padWithWild(search: string) {
   let words = search.split(/[_^]/);
-  words[0] = '*'.repeat(6 - words[0].length) + words[0];
-  words[1] += '*'.repeat(6 - words[1].length);
+  words[0] = '*'.repeat(Math.max(0, 6 - words[0].length)) + words[0];
+  words[1] += '*'.repeat(Math.max(0, 6 - words[1].length));
   return words.join(search.match(/([_^])/)[1]);
 }
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import ShipListing from './ShipListing.svelte';
+  import ShipListing from '@/ShipListing.svelte';
   const dispatch = createEventDispatcher();
 
   export let ships = [];

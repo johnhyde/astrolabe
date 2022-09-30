@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { tick } from "svelte";
-  import tooltip from "../actions/tooltip";
+  import tooltip from 'actions/tooltip';
   export let text: string = '';
   let className: string = '';
   export { className as class };

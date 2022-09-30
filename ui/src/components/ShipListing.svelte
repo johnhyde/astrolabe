@@ -2,8 +2,8 @@
 
   import Sigil from "./Sigil.svelte";
   import { push } from 'svelte-spa-router'
-  import { normalizeId } from '../lib/id';
-  import { linkToShip as generateLinkToShip } from '../lib/link';
+  import { normalizeId } from 'lib/id';
+  import { linkToShip as generateLinkToShip } from 'lib/link';
   export let ship: any;
   export let linkToShip: boolean = false;
   export let differentiateContacts = false;
@@ -25,7 +25,7 @@ on:click={handleClick}
 on:click
 >
   <div class="flex flex-wrap p-4 items-center">
-    <Sigil {patp} size={48} />
+    <Sigil {patp} size={48} useNew />
     <!-- {#if ship.avatar}
       <img src={ship.avatar} class="h-12 w-12 mr-4" />
     {/if} -->

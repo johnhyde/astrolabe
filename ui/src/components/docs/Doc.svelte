@@ -2,8 +2,8 @@
   import { createEventDispatcher } from 'svelte';
   import DocContent from './DocContent.svelte';
   import DocHome from './DocHome.svelte';
-  import Hamburger from '../buttons/Hamburger.svelte';
-  import CloseButton from '../buttons/CloseButton.svelte';
+  import Hamburger from '@/buttons/Hamburger.svelte';
+  import CloseButton from '@/buttons/CloseButton.svelte';
   
   export let path: string;
 
@@ -26,7 +26,7 @@
     {:else}
       <div class="w-7 h-7" />
     {/if}
-    <div class="flex-grow text-center text-xl">
+    <div class="grow text-center text-xl">
       Help
     </div>
     <CloseButton on:click={close} />

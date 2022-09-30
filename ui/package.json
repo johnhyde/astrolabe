@@ -1,17 +1,27 @@
 {
   "name": "urbit-astrolabe",
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.3.0",
   "scripts": {
-    "dev:only": "vite --port 4000 --host",
-    "build:only": "vite build",
+    "dev:vite": "vite --port 4000 --host",
+    "build:vite": "vite build",
     "tailwind:watch": "cross-env TAILWIND_MODE=watch cross-env NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/tailwind-output.css -w",
     "tailwind:build": "cross-env TAILWIND_MODE=build cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/tailwind-output.css",
-    "dev": "concurrently \"npm run dev:only\" \"npm run tailwind:watch\"",
-    "build": "npm run tailwind:build && npm run build:only",
+    "dev": "concurrently \"npm run dev:vite\" \"npm run tailwind:watch\"",
+    "build": "npm run tailwind:build && npm run build:vite",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "release": "npm run build && ../install.sh "
+    "_install:glob": "../bin/install.sh -g $GLOBBER_DESK",
+    "_install:desk": "../bin/install.sh $ASTROLABE_DESK",
+    "_install:desk:watch": "../bin/install.sh -w $ASTROLABE_DESK",
+    "install:glob": "dotenv -c local npm run _install:glob",
+    "install:desk": "dotenv -c local npm run _install:desk",
+    "install:desk:watch": "dotenv -c local npm run _install:desk:watch",
+    "release": "npm run build && npm run install:glob",
+    "_get-glob": "../bin/get_glob.sh $GLOBBER_DESK",
+    "get-glob": "dotenv -c local npm run _get-glob",
+    "_commit": "../bin/commit.sh $ASTROLABE_DESK",
+    "commit": "dotenv -c local npm run _commit"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
@@ -20,6 +30,7 @@
     "autoprefixer": "^10.4.2",
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
+    "dotenv-cli": "^6.0.0",
     "postcss-cli": "^9.1.0",
     "sass": "^1.50.0",
     "svelte": "^3.48.0",
@@ -32,6 +43,7 @@
     "vite": "^2.7.2"
   },
   "dependencies": {
+    "@johnhyde/sigil-js": "github:johnhyde/sigil-js",
     "@tlon/phonemes-js": "^1.0.0",
     "@tlon/sigil-js": "^1.4.5",
     "@urbit/api": "^2.1.0",

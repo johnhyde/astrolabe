@@ -8,10 +8,10 @@
   
   import { clan } from 'urbit-ob';
   import DocLink from './docs/DocLink.svelte';
-  import { cite, normalizeId } from '../lib/id';
-  import { parseChartData, populateGraph } from '../lib/graph';
-  import { getChartData } from '../lib/api';
-  import { linkToShip } from '../lib/link';
+  import { cite, normalizeId } from 'lib/id';
+  import { parseChartData, populateGraph } from 'lib/graph';
+  import { getChartData } from 'lib/api';
+  import { linkToShip } from 'lib/link';
 
   import InlineSelect from './buttons/InlineSelect.svelte';
 

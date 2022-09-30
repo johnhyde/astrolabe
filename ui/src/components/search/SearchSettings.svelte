@@ -1,8 +1,8 @@
 <script lang="ts">
-  import ToggleButton from './buttons/ToggleButton.svelte';
+  import ToggleButton from '../buttons/ToggleButton.svelte';
 
-  import { searchSettings } from '../stores/searchStores';
-  import { toggleStoreKey } from '../lib/utils';
+  import { searchSettings } from 'stores/searchStores';
+  import { toggleStoreKey } from 'lib/utils';
 
   function toggleMoons() {
     toggleStoreKey(searchSettings, 'includeMoons');

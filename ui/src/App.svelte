@@ -1,8 +1,9 @@
 <script lang="ts">
   import Router from 'svelte-spa-router';
+  import SigilPage from './routes/SigilPage.svelte';
   import HelpPage from './routes/HelpPage.svelte';
   import Home from './routes/Home.svelte';
-  import HelpModal from './components/HelpModal.svelte';
+  import HelpModal from '@/docs/HelpModal.svelte';
   import "./styles/styles.scss";
 
   // const routes = {
@@ -14,6 +15,7 @@
   // }
 
   const routes = {
+    '/sigil': SigilPage,
     '/help/:path?': HelpPage,
     // '/:patp?': Home,
     // '/ship/:patp?': Home,
