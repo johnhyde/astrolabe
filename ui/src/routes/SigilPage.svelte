@@ -1,6 +1,7 @@
 <script lang="ts">
   import { prefixes, suffixes } from 'lib/id';
   import Sigil from "@/Sigil.svelte";
+  import Legil from "@/Legil.svelte";
   
   let index: number = undefined;
   let altBgColor = 'red';
@@ -37,6 +38,7 @@
         <div class="flex">
           <Sigil patp={phoneme} size={64} {altBgColor} />
           <Sigil patp={phoneme} size={64} {altBgColor} useNew />
+          <Legil patp={phoneme} size={64} {altBgColor} />
         </div>
       </div>
       {/each}
@@ -53,6 +55,7 @@
     <div class="flex w-full">
       <Sigil patp={phonemes[index]} size={400} {altBgColor} />
       <Sigil patp={phonemes[index]} size={400} {altBgColor} useNew />
+      <Legil patp={phonemes[index]} size={400} {altBgColor} />
     </div>
   {/if}
 </div>

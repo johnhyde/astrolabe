@@ -43,6 +43,7 @@
     "vite": "^2.7.2"
   },
   "dependencies": {
+    "@johnhyde/legil-js": "file:../../legil-js",
     "@johnhyde/sigil-js": "github:johnhyde/sigil-js",
     "@tlon/phonemes-js": "^1.0.0",
     "@tlon/sigil-js": "^1.4.5",
