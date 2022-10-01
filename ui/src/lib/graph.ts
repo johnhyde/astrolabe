@@ -314,35 +314,39 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
           g.setNodeAttribute(sPatp, 'color', colors.YOUR_STAR);
           g.setNodeAttribute(gPatp, 'color', colors.YOUR_GAL);
         }
-        g.addNode(pPatp, {
-          label: pPatp,
-          size: planetSize,
-          color: itsYou ? colors.YOU : (planet.dominion == 'l2' ? colors.GREEN : colors.BLUE),
-          x: planetX,
-          y: planetY,
-          zIndex: 6,
-        });
-        if (lastPlanetArm == arm) {
-          g.addEdge(pPatp, lastPlanetPatp, {
-            color: colors.DGREY,
-            size: planetEdgeSize,
-            zIndex: 5,
+        try {
+          g.addNode(pPatp, {
+            label: pPatp,
+            size: planetSize,
+            color: itsYou ? colors.YOU : (planet.dominion == 'l2' ? colors.GREEN : colors.BLUE),
+            x: planetX,
+            y: planetY,
+            zIndex: 6,
           });
-        } else {
-        if (numPlanetArms == 1) {
-           g.addEdge(pPatp, sPatp, {
-            color: colors.DGREY,
-            size: planetEdgeSize,
-            zIndex: 5,
-          });
-        }
-        }
-        if (planet.sponsor) {
-          sponsorEdges.push([pPatp, planet.sponsor, {
-            color: colors.GREEN,
-            size: planetEdgeSize,
-            zIndex: 11,
-          }]);
+          if (lastPlanetArm == arm) {
+            g.addEdge(pPatp, lastPlanetPatp, {
+              color: colors.DGREY,
+              size: planetEdgeSize,
+              zIndex: 5,
+            });
+          } else {
+            if (numPlanetArms == 1) {
+              g.addEdge(pPatp, sPatp, {
+                color: colors.DGREY,
+                size: planetEdgeSize,
+                zIndex: 5,
+              });
+            }
+          }
+          if (planet.sponsor) {
+            sponsorEdges.push([pPatp, planet.sponsor, {
+              color: colors.GREEN,
+              size: planetEdgeSize,
+              zIndex: 11,
+            }]);
+          }
+        } catch (e) {
+          console.error(`Couldn't add ${pPatp} to the graph`, e);
         }
         lastPlanetArm = arm;
         lastPlanetPatp = pPatp;

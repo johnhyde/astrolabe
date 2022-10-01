@@ -6,7 +6,7 @@ Each 3-letter syllable corresponds to sigil shape, or symbol.
 Since planet `@p`s have 4 syllables, a planet sigil is a 2x2 grid of 4 symbols.
 Star sigils have 2 symbols, and galaxies just 1.
 
-![planet sigils](/apps/astrolabe/src/assets/sigil-example.png)
+![planet sigils](/apps/astrolabe/sigil-example.png)
 
 ## Is there a pattern to the sigil shapes?
 
