@@ -8,6 +8,7 @@
   /comet/udon             Comets
   /patpee/udon            What is a @p?
   /phonemes/udon          Phonemes - Prefixes & Suffixes
+  /sigil/udon             What is a Sigil?
   /azimuth/udon           What is Azimuth?
   /l2/udon                Layer 1 and Layer 2
   /keys/udon              Networking Keys

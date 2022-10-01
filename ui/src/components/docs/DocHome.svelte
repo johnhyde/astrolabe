@@ -52,6 +52,9 @@
       </DocLink>
     </li>
   </ul>
+  <DocLink path="sigil" on:navigate>
+    <h2>What is a Sigil?</h2>
+  </DocLink>
   <DocLink path="azimuth" on:navigate>
     <h2>What is Azimuth?</h2>
   </DocLink>

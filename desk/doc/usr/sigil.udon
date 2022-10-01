@@ -1,4 +1,21 @@
 ;>
 # What is a Sigil?
 
-TODO: write this doc
+It's a default profile picture, based on your [`@p`](/~/scry/docs/usr/astrolabe/patpee.html).
+Each 3-letter syllable corresponds to sigil shape, or symbol.
+Since planet `@p`s have 4 syllables, a planet sigil is a 2x2 grid of 4 symbols.
+Star sigils have 2 symbols, and galaxies just 1.
+
+![planet sigils](/apps/astrolabe/src/assets/sigil-example.png)
+
+## Is there a pattern to the sigil shapes?
+
+Some syllables which sound similar have similar symbols,
+but there's no real system to it. The sigil shapes were manually selected and assigned,
+with a focus on visual design rather than algorithmic purity.
+
+## Where did they come from?
+
+Tlon saw that Urbit IDs need a visual representation,
+so they designed a system for generating default avatars.
+You can read about it in the blog post [_Creating Sigils_](https://urbit.org/blog/creating-sigils).

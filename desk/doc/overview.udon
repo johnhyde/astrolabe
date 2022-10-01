@@ -1,9 +1,9 @@
 ;>
 # Astrolabe
 
-Currently Astrolabe lets you type in `@p`s or Azimuth point numbers
-to look up ships on the network. There's also Help Documentation if
-you want to learn more about how Urbit IDs work.
+Currently Astrolabe lets you input `@p`s, Azimuth point numbers, or sigils
+to look up ships on the network. Use the Star Chart to explore visually.
+There's also Help Documentation if you want to learn more about how Urbit IDs work.
 
 ## Info
 

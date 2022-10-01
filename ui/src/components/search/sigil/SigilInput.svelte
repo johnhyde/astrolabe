@@ -66,7 +66,7 @@
         {:else}
         <SymbolInputNavButtons onClear={sigilQuery.isNotEmpty ? clear : null} />
         <p class="mt-2">
-          Allow Sigils which don't exist:
+          Allow impossible Sigils:
           <ToggleButton on:click={toggleAllowFictional} on={$searchSettings.allowFictionalSigils} />
         </p>
       {/if}

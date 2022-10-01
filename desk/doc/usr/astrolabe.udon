@@ -26,6 +26,33 @@ if you search for `***hec`, it will search for all stars under `~hec`,
 and all planets that match `~***hec-******`, but planets matching `~******-***hec`
 will be ignored to prevent the search from taking too long.
 
+## Sigil Search
+
+Clicking the symbol at the right of the search bar opens the Sigil Input Tool.
+Use the dropdown at the top to select Galaxy, Star, or Planet.
+Click on a square to start selecting sigil components.
+
+Select component catogeries on the right, and then tap the options on the sigil
+to add them to your search.
+
+The ^ button goes up a level so you can select another category.
+The X button will clear sigil components based on what type you're inputting.
+At the top level, the X button will clear all inputs.
+
+Your contacts will be searched for any search.
+When the search has become specific enough,
+all spawned ships with matching sigils will be shown.
+If your input is unambiguous, the page for the matching ship will be shown,
+whether the ship is spawned or not.
+
+NOTE: Some sigil inputs are considered ambiguous even if they exactly match
+a particular sigil, because further details could match a different sigil.
+E.g. `~zod` is a circle, but a circle in the suffix position might be intended as a more general search.
+A future version of Astrolabe will allow you to view the ship
+whose sigil most closely matches your search, even if the search is ambiguous.
+
+Read more about Sigils [here](/~/scry/docs/usr/astrolabe/sigil.html).
+
 ## The Star Chart
 
 Click and drag to move your view, use the mouse wheel to zoom in and out. Click on a dot
@@ -45,10 +72,7 @@ In both views, all galaxies are shown for completeness.
 
 ## Upcoming Features
 
-In addition to improving the search feature over time, Astrolabe will one day feature:
-- Sigil Search, with which you can select the shapes of a sigil and search for ships
-  that match.
-- Integrations with Groups, `%pals`, `%gora`, and whatever else seems fun and/or useful.
+In addition to improving the search features over time, Astrolabe will one day feature ntegrations with Groups, `%pals`, `%gora`, and whatever else seems fun and/or useful.
 
 ## Info
 
@@ -56,6 +80,7 @@ In addition to improving the search feature over time, Astrolabe will one day fe
 - License: MIT
 - App link: [~dister-midlev-mindyr/astrolabe](web+urbitgraph://~dister-midlev-mindyr/astrolabe)
 - Discussion Group: [~poster-hoster-midlev-mindyr/astrolabe](web+urbitgraph://group/~poster-hoster-midlev-mindyr/astrolabe)
+- [%quorum](web+urbitgraph://~dister-dister-sidnym-ladrut/quorum) board: ~poster-hoster-midlev-mindyr/astrolabe
 - Grant/Proposal: [https://urbit.org/grants/astrolabe](https://urbit.org/grants/astrolabe)
 - Source repo: [https://github.com/johnhyde/astrolabe](https://github.com/johnhyde/astrolabe)
 - Bug reports: [https://github.com/johnhyde/astrolabe/issues](https://github.com/johnhyde/astrolabe/issues)

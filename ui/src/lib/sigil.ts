@@ -69,7 +69,11 @@ export class SigilQuery {
   }
 
   get queryInts(): number[][] {
-    return this.activeSymbols.map(symbol => symbol.plausibleInts);
+    let ints = this.activeSymbols.map(symbol => symbol.plausibleInts);
+    if (ints.length > 1) {
+      ints[0] = without(ints[0], 0);
+    }
+    return ints;
   }
 
   get isDefinitive() {
@@ -115,7 +119,7 @@ export class SigilQuery {
       symbols = queryParts.map((parts) => {
         let symbol = new SymbolQuery(this, parts);
         if (symbol.components.length !== parts.length) {
-          throw new Error(`Invalid component ids: ${without(parts, symbol.components)}`);
+          throw new Error(`Invalid component ids: ${without(parts, ...symbol.components)}`);
         }
       });
     } catch (e) {
