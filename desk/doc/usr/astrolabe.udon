@@ -36,7 +36,8 @@ Select component catogeries on the right, and then tap the options on the sigil
 to add them to your search.
 
 The ^ button goes up a level so you can select another category.
-The X button will clear sigil components based on what type you're inputting.
+The X button will clear sigil components from the current symbol,
+except the basic shape. If only the basic shape remains, the X button will clear that.
 At the top level, the X button will clear all inputs.
 
 Your contacts will be searched for any search.

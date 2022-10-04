@@ -98,10 +98,13 @@
   }
 
   function clear() {
-    if (modes.length) {
-      symbolQuery = symbolQuery.clearPartType(modes[0] as PartType);
-    } else {
+    // If a geon is present it should be preserved, unless it's the only component
+    // If there's only 1 component, it should be removed
+    // Otherwise, at least one component might be a geon and should be preserved
+    if (symbolQuery.components.length === 1) {
       symbolQuery = symbolQuery.clear();
+    } else {
+      symbolQuery = symbolQuery.clearExceptPartType('geon');
     }
   }
 </script>

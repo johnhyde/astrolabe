@@ -343,6 +343,11 @@ export class SymbolQuery {
     return this;
   }
 
+  clearExceptPartType(partType: PartType) {
+    this.components = this.components.filter(c => c[0] === partType[0]);
+    return this;
+  }
+
   clear() {
     this.components = [];
     return this;
