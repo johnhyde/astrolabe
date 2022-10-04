@@ -48,5 +48,11 @@
         }
       ]
     }
+  ],
+  "grammarly.selectors": [
+    {
+      "language": "markdown",
+      "scheme": "file"
+    }
   ]
 }

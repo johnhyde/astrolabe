@@ -22,7 +22,7 @@ export interface ModeDefs {
 
 export const MODE_DEFS: ModeDefs = {
   geon: {
-    modes: {},
+    // modes: {},
     displayParts: ['ghb'],
   },
   line: {

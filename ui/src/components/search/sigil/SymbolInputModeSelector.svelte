@@ -14,87 +14,110 @@
   export let inputComponents: string[] = [];
   export let unfocusSymbol: Function = () => {};
 
-  let modes: string[] = [];
+  let mode: string = null;
+  let subMode: string = null;
   let modeDef: ModeDef = undefined;
-  let subModeDefs: ModeDefs = MODE_DEFS;
+  let unselectedSubModesExist: boolean = false;
+  let modeDefs: ModeDefs = MODE_DEFS;
+  let plausibleModeDefs: { name: string,  def: ModeDef }[] = [];
 
   function showGeonSelector() {
-    if (!symbolQuery.components.length && modes.length == 0) {
-      modes = ['geon'];
+    if (!symbolQuery.components.length && !mode) {
+      mode = 'geon';
+      subMode = null;
     }
   }
 
   $: symbolQuery.components, showGeonSelector();
 
-  function pushMode(mode: string) {
-    if (modeDef?.modes) {
-      modes = [...modes, mode];
+  function pushMode(newMode: string) {
+    const subModes = modeDef?.modes;
+    if (subModes || subMode) {
+      subMode = newMode;
     } else {
-      modes = [...modes.slice(0, -1), mode];
+      mode = newMode;
+      subMode = null;
     }
   }
 
   function popMode() {
-    if (modes.length) {
-      if (modeDef?.modes) {
-        modes = modes.slice(0, -1);
-      } else {
-        modes = modes.slice(0, -2);
-      }
+    if (mode || subMode) {
+      mode = null;
+      subMode = null;
     } else {
       unfocusSymbol();
     }
   }
 
   $: {
-    modeDef = undefined;
-    subModeDefs = MODE_DEFS;
-    for (let mode of modes) {
-      if (modeDef && modeDef.modes) {
-        subModeDefs = modeDef.modes;
+    let modeResolved = false;
+    let count = 0;
+    while (!modeResolved && count < 5) {
+      modeDef = undefined;
+      modeDefs = MODE_DEFS;
+      if (mode) {
+        modeDef = MODE_DEFS[mode];
       }
-      if (subModeDefs[mode]) {
-        modeDef = subModeDefs[mode];
+      unselectedSubModesExist = !!modeDef?.modes;
+      if (unselectedSubModesExist) {
+        modeDefs = modeDef.modes;
+        if (subMode) {
+          if (modeDefs[subMode]) {
+            modeDef = modeDefs[subMode];
+          } else {
+            console.error(`Unknown subMode: ${subMode} of ${mode} in defs:`, modeDefs);
+            subMode = null;
+          }
+        }
+      }
+      unselectedSubModesExist = !!modeDef?.modes;
+      if (!isDefPlausible(modeDef) && mode !== 'geon') {
+        if (subMode) {
+          subMode = null;
+        } else {
+          mode = null;
+        }
       } else {
-        console.error(`Unknown mode: ${mode} of ${modes} in defs:`, subModeDefs);
+        plausibleModeDefs = getPlausibleModeDefs(modeDefs);
+        if (unselectedSubModesExist) {
+          subMode = plausibleModeDefs[0].name;
+        } else {
+          modeResolved = true;
+        }
+      }
+      count++;
+      if (count >= 5 && !modeResolved) {
+        console.error("sigil input mode resulotion failed");
       }
     }
-
-    if (modeDef && modeDef.modes) {
-      subModeDefs = modeDef.modes;
-    }
-
-    if (modeDef?.parts?.length && !modeDef.modes) {
+    inputComponents = [];
+    if (modeDef?.parts?.length) {
       inputComponents = modeDef.parts;
       if (!$searchSettings.allowFictionalSigils) {
         inputComponents = symbolQuery.filterPlausibleParts(inputComponents);
       }
-    } else {
-      inputComponents = [];
     }
   }
 
-  $: plausibleModes = Object.entries(subModeDefs).map(([modeName, def]) => {
+  function isDefPlausible(def: ModeDef): boolean {
+    if (!def) return true;
     const deepParts = getDeepParts(def);
-    const plausible = $searchSettings.allowFictionalSigils || symbolQuery.arePartsPlausible(deepParts);
-    if (!plausible && modeName !== 'geon') return null;
-    const parts = filterPartsByGeon(def.displayParts || def.parts, symbolQuery.geon);
-    return { parts, modeName };
-  }).filter(mode => mode !== null);
+    return $searchSettings.allowFictionalSigils || symbolQuery.arePartsPlausible(deepParts);
+  }
 
-  $: {
-    const currentMode = modes.slice(-1)[0];
-    if (currentMode != 'geon') {
-      if (plausibleModes.length === 0) {
-        popMode();
-      } else if (plausibleModes.length >= 1) {
-        const leafMode = modeDef && !(modeDef.modes);
-        const plausibleModeNames = plausibleModes.map(({ modeName }) => modeName);
-        if ((modes.length == 1 && modeDef.modes) || (leafMode && !plausibleModeNames.includes(currentMode))) {
-          pushMode(plausibleModes[0].modeName);
-        }
-      }
-    }
+  function getPlausibleModeDefs(modeDefs: ModeDefs) {
+    return Object.entries(modeDefs).map(([modeName, def]) => {
+      const plausible = isDefPlausible(def);
+      if (!plausible && modeName !== 'geon') return null;
+      const parts = filterPartsByGeon(def.displayParts || def.parts, symbolQuery.geon);
+      return {
+        name: modeName,
+        def: {
+          ...def,
+          parts,
+        },
+      };
+    }).filter(mode => mode !== null);
   }
 
   function clear() {
@@ -116,17 +139,23 @@
 </style>
 
 <div class="mx-auto flex justify-center xs:items-center xs:flex-col">
-  <SymbolInputNavButtons onDone={popMode} onClear={clear} />
+  <SymbolInputNavButtons onDone={popMode} onClear={clear} hideClearButton={symbolQuery.components.length == 0} />
   <div class="max-w-[15rem] h-full grid grid-cols-custom gap-1 justify-center xs:max-w-[8rem]">
-    {#if modes[0] === 'geon'}
+    {#if mode === 'geon'}
       <GeonSelector bind:symbolQuery {popMode} />
     {:else}
-      {#each plausibleModes as { modeName, parts }}
-        <SymbolInputModeSelectorButton components={parts} focused={modes.slice(-1)[0] === modeName}
-          on:click={() => pushMode(modeName)}
+      {#each plausibleModeDefs as { name, def: { parts } }}
+        <SymbolInputModeSelectorButton components={parts} focused={mode === name || subMode === name}
+          on:click={() => pushMode(name)}
         />
       {/each}
     {/if}
   </div>
+  <!-- <p class="break-all w-24">
+    mode: {mode}
+  </p>
+  <p class="break-all w-24">
+    sub: {subMode}
+  </p> -->
 </div>
 

@@ -1,4 +1,4 @@
-/overview/udon       About Astrolabe
+/overview/udon            Overview
 /usr                      User
   /urbit-id/udon          What is an Urbit ID?
   /galaxy/udon            Galaxies
@@ -12,3 +12,4 @@
   /azimuth/udon           What is Azimuth?
   /l2/udon                Layer 1 and Layer 2
   /keys/udon              Networking Keys
+  /astrolabe/udon         About Astrolabe

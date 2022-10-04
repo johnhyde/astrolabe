@@ -82,7 +82,7 @@
   }
 
   function showSigilDoc() {
-    docs.show('sigil');
+    docs.show('sigil-input');
   }
 
   const buttonClasses = 'rounded-full bg-black text-white text-sm transition-opacity opacity-50 hover:opacity-80';

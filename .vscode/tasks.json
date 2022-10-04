@@ -3,11 +3,11 @@
 	"tasks": [
 		{
 			"type": "npm",
-			"script": "commit",
+			"script": "install:desk",
 			"path": "ui",
 			"problemMatcher": [],
-			"label": "npm: commit - ui",
-			"detail": "dotenv -c local npm run _commit"
+			"label": "npm: install:desk - ui",
+			"detail": "dotenv -c local npm run _install:desk"
 		}
 	]
 }
