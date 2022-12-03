@@ -252,105 +252,113 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
       if (itsYou) {
         g.setNodeAttribute(gPatp, 'color', colors.YOUR_GAL);
       }
-      g.addNode(sPatp, {
-        label: sPatp,
-        size: starSize,
-        color: itsYou ? colors.YOU : colors.GOLDT2,
-        x: starX,
-        y: starY,
-        zIndex: 8,
-      });
-      if (lastStarArm == arm) {
-        g.addEdge(sPatp, lastStarPatp, {
-          color: colors.LGREY,
-          size: 0.1,
-          zIndex: 7,
+      try {
+        g.addNode(sPatp, {
+          label: sPatp,
+          size: starSize,
+          color: itsYou ? colors.YOU : colors.GOLDT2,
+          x: starX,
+          y: starY,
+          zIndex: 8,
         });
-      } else {
-        g.addEdge(sPatp, gPatp, {
-          color: colors.LGREY,
-          size: 0.2,
-          zIndex: 9,
-        });
-      }
-      lastStarArm = arm;
-      lastStarPatp = sPatp;
-      if (star.sponsor) {
-        sponsorEdges.push([sPatp, star.sponsor, {
-          color: colors.GREEN,
-          size: 0.2,
-            zIndex: 11,
-        }]);
-      }
-    
-      const planets = star[subsKey] || [];
-      const numPlanets = planets.length;
-      // const maxPlanetDistance = starSize * 1.6 * 4000 * 64;
-      const maxPlanetDistance = minDistanceBetweenStars * 0.45;
-      const minPlanetDistance = maxPlanetDistance / 4;
-      const {
-        coords: planetCoords,
-        numArms: numPlanetArms,
-        minDistanceBetween: minDistanceBetweenPlanets,
-      } = arrangePointsInSpirals(numPlanets,
-        {
-          maxDistance: maxPlanetDistance,
-          minDistance: minPlanetDistance,
-          startX: starX,
-          startY: starY,
-          maxArms: 30,
-          makeSingleArmCircle: true,
-        });
-      let lastPlanetArm = null;
-      let lastPlanetPatp = null;
-      planets.forEach((planet, pi) => {
-        const pPatp = planet.patp;
-        const [planetX, planetY] = planetCoords[pi].coords;
-        const arm = planetCoords[pi].arm;
-        const planetSize = Math.sqrt(Math.min(minPlanetDistance, minDistanceBetweenPlanets)) / 1300;
-        const planetEdgeSize = planetSize / 3;
-        const itsYou = pPatp === '~' + window.ship;
-        if (itsYou) {
-          g.setNodeAttribute(sPatp, 'color', colors.YOUR_STAR);
-          g.setNodeAttribute(gPatp, 'color', colors.YOUR_GAL);
-        }
-        try {
-          g.addNode(pPatp, {
-            label: pPatp,
-            size: planetSize,
-            color: itsYou ? colors.YOU : (planet.dominion == 'l2' ? colors.GREEN : colors.BLUE),
-            x: planetX,
-            y: planetY,
-            zIndex: 6,
+        if (lastStarArm == arm) {
+          g.addEdge(sPatp, lastStarPatp, {
+            color: colors.LGREY,
+            size: 0.1,
+            zIndex: 7,
           });
-          if (lastPlanetArm == arm) {
-            g.addEdge(pPatp, lastPlanetPatp, {
-              color: colors.DGREY,
-              size: planetEdgeSize,
-              zIndex: 5,
+        } else {
+          g.addEdge(sPatp, gPatp, {
+            color: colors.LGREY,
+            size: 0.2,
+            zIndex: 9,
+          });
+        }
+        lastStarArm = arm;
+        lastStarPatp = sPatp;
+        if (star.sponsor) {
+          sponsorEdges.push([sPatp, star.sponsor, {
+            color: colors.GREEN,
+            size: 0.2,
+              zIndex: 11,
+          }]);
+        }
+      
+        const planets = star[subsKey] || [];
+        const numPlanets = planets.length;
+        // const maxPlanetDistance = starSize * 1.6 * 4000 * 64;
+        const maxPlanetDistance = minDistanceBetweenStars * 0.45;
+        const minPlanetDistance = maxPlanetDistance / 4;
+        const {
+          coords: planetCoords,
+          numArms: numPlanetArms,
+          minDistanceBetween: minDistanceBetweenPlanets,
+        } = arrangePointsInSpirals(numPlanets,
+          {
+            maxDistance: maxPlanetDistance,
+            minDistance: minPlanetDistance,
+            startX: starX,
+            startY: starY,
+            maxArms: 30,
+            makeSingleArmCircle: true,
+          });
+        let lastPlanetArm = null;
+        let lastPlanetPatp = null;
+        planets.forEach((planet, pi) => {
+          const pPatp = planet.patp;
+          const [planetX, planetY] = planetCoords[pi].coords;
+          const arm = planetCoords[pi].arm;
+          const planetSize = Math.sqrt(Math.min(minPlanetDistance, minDistanceBetweenPlanets)) / 1300;
+          const planetEdgeSize = planetSize / 3;
+          const itsYou = pPatp === '~' + window.ship;
+          if (itsYou) {
+            g.setNodeAttribute(sPatp, 'color', colors.YOUR_STAR);
+            g.setNodeAttribute(gPatp, 'color', colors.YOUR_GAL);
+          }
+          try {
+            g.addNode(pPatp, {
+              label: pPatp,
+              size: planetSize,
+              color: itsYou ? colors.YOU : (planet.dominion == 'l2' ? colors.GREEN : colors.BLUE),
+              x: planetX,
+              y: planetY,
+              zIndex: 6,
             });
-          } else {
-            if (numPlanetArms == 1) {
-              g.addEdge(pPatp, sPatp, {
+            if (lastPlanetArm == arm) {
+              g.addEdge(pPatp, lastPlanetPatp, {
                 color: colors.DGREY,
                 size: planetEdgeSize,
                 zIndex: 5,
               });
+            } else {
+              if (numPlanetArms == 1) {
+                g.addEdge(pPatp, sPatp, {
+                  color: colors.DGREY,
+                  size: planetEdgeSize,
+                  zIndex: 5,
+                });
+              }
             }
+            if (planet.sponsor) {
+              sponsorEdges.push([pPatp, planet.sponsor, {
+                color: colors.GREEN,
+                size: planetEdgeSize,
+                zIndex: 11,
+              }]);
+            }
+            lastPlanetArm = arm;
+            lastPlanetPatp = pPatp;
+          } catch (e) {
+            let msg = `Couldn't add ${pPatp} to the graph`;
+            console.error(msg, e);
+            alertMe(msg + '\n' + e.message);
           }
-          if (planet.sponsor) {
-            sponsorEdges.push([pPatp, planet.sponsor, {
-              color: colors.GREEN,
-              size: planetEdgeSize,
-              zIndex: 11,
-            }]);
-          }
-        } catch (e) {
-          console.error(`Couldn't add ${pPatp} to the graph`, e);
-        }
-        lastPlanetArm = arm;
-        lastPlanetPatp = pPatp;
-      });
+        });
+      } catch (e) {
+        let msg = `Couldn't add ${sPatp} to the graph`;
+        console.error(msg, e);
+        alertMe(msg + '\n' + e.message);
+      }
     });
   });
   sponsorEdges.forEach(([point, sponsor, attrs]) => {
@@ -360,4 +368,8 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
     setTimeout(callback, 0);
   }
   return g;
+}
+
+function alertMe(msg: string) {
+  alert('Encountered an error, please tell ~midlev-mindyr: ' + msg);
 }

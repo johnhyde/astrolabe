@@ -6,14 +6,11 @@
   $%  state-0
       state-1
       state-2
+      state-3
   ==
 +$  state-0
   $:  %0
       spa=spawned
-  ==
-+$  fropoints-1
-  $:  fopoints=opoints :: forward ordered points
-      ropoints=opoints :: reversed ordered points, e.g. .~palnet-sampel
   ==
 +$  state-1
   $:  %1
@@ -24,12 +21,22 @@
       spam=spawn-mip
       fropoints-1
   ==
++$  state-3
+  $:  %3
+      prev-spo=(map ship ship) :: so we know who the old sponsor was when sponsor changes
+      spam=spawn-mip
+      fropoints-1
+  ==
 ::
++$  fropoints-1
+  $:  fopoints=opoints :: forward ordered points
+      ropoints=opoints :: reversed ordered points, e.g. .~palnet-sampel
+  ==
 +$  spawned  (jug ship ship)
 +$  card  card:agent:gall
 --
 %-  agent:dbug
-=|  state-2
+=|  state-3
 =*  state  -
 ^-  agent:gall
 =<
@@ -49,9 +56,9 @@
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
   =^  cards-01  old
-    ?.  ?=(?(%0 %1) -.old)  `old
+    ?.  ?=(?(%0 %1 %2) -.old)  `old
     (on-naive-state:hc get-nas:hc)
-  ?>  ?=(%2 -.old)
+  ?>  ?=(%3 -.old)
   [cards-01 this(state old)]
 ++  on-poke  on-poke:def
 ++  on-watch  on-watch:def
@@ -147,17 +154,27 @@
   |=  [child=ship nas=^state:naive]
   ^-  _state
   =/  =npoint  (get-npoint-from-nas child nas)
-  =.  spam
-    =/  parent  (^sein:title child)
-    ?:  =(parent child)  spam
-    ?:  (is-npoint-locked npoint)  spam
-    =/  pdata  (pdata:smel (pmeta:smel child npoint) ~)
-    =*  spo  sponsor.net.npoint
-    =?  spam  &(has.spo !=(parent who.spo))
+  =/  parent  (^sein:title child)
+  ?:  =(parent child)  state
+  ?:  (is-npoint-locked npoint)  state
+  =/  pdata  (pdata:smel (pmeta:smel child npoint) ~)
+  =*  spo  sponsor.net.npoint
+  =/  spo-not-par  &(has.spo !=(parent who.spo))
+  =?  state  spo-not-par
+    =/  prev  (~(get by prev-spo) child)
+    =?  spam  &(?=(^ prev) !=(u.prev who.spo))
+      (~(del bi spam) u.prev child)
+    =.  prev-spo
+      %+  ~(put by prev-spo)
+        child
+      who.spo
+    =.  spam
       %^    ~(put bi-meta spam)
           who.spo
         child
       pdata
+    state
+  =.  spam
     %^    ~(put bi-meta spam)
         parent
       child

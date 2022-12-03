@@ -35,6 +35,7 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
     2. `|mount %astrolabe` to mount it.
     3. Set `ASTROLABE_DESK` in `.env.local` if the path to your desk is different.
 3. Create and upload `glob-http`, if applicable (see below)
+4. Bump the `version` in `desk.docket-0`.
 3. Install the desk
     1. From the `ui` folder: `npm run install:desk`
     2. From the distribution ship's dojo: `:treaty|unpublish %astrolabe`
