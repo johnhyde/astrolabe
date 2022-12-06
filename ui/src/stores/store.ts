@@ -3,12 +3,19 @@ import { writable } from 'svelte/store';
 import type { Rolodex } from '@urbit/api';
 import { subscribeToContacts, getPeers } from 'lib/api';
 import type { StoreState } from 'types/store';
-import {  normalizeId } from 'lib/id';
-import {  setStoreKey } from 'lib/utils';
+import { normalizeId } from 'lib/id';
+import { setStoreKey } from 'lib/utils';
+import { getPals, getPalStatus, getPal } from 'lib/pals';
 
 const initStore: StoreState = {
   contacts: {},
   peers: [],
+  pals: {
+    incoming: {},
+    outgoing: {},
+    mutuals: {},
+  },
+  palsInstalled: false,
   patpQuery: null,
   sigilQuery: null,
   searchMode: 'patp',
@@ -48,4 +55,12 @@ getPeers().then(({ points }) => {
   setStoreKey(store, 'peers', points.map(normalizeId));
 });
 
-export default { subscribe, set, searchPatp, searchSigil, reset };
+function refreshPals() {
+  getPals().then((pals) => {
+    setStoreKey(store, 'pals', pals);
+    setStoreKey(store, 'palsInstalled', true);
+  });
+}
+refreshPals();
+
+export default { subscribe, set, searchPatp, searchSigil, refreshPals, reset };

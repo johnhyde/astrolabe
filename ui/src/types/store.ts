@@ -7,6 +7,33 @@ export interface Contacts {
 export interface Docs {
   [doc: string]: string;
 };
+
+export interface PalNames {
+  [patp: Patp]: boolean;
+}
+
+export interface Pal {
+  tags: string[];
+  ack: boolean;
+}
+
+export interface PalList {
+  [patp: Patp]: Pal;
+}
+
+export interface Pals {
+  incoming: PalNames;
+  outgoing: PalList;
+  mutuals: PalList;
+}
+
+export const PAL_STATUSES = ['mutual', 'outgoing', 'incoming', 'unconnected'] as const;
+export type PalStatus = typeof PAL_STATUSES[number];
+export interface PalInfo extends Pal {
+  patp: Patp;
+  status: PalStatus;
+}
+
 export interface StoreState {
   // Urbit
   // groups: {
@@ -14,6 +41,8 @@ export interface StoreState {
   // };
   contacts: Rolodex;
   peers: Patp[];
+  pals: Pals;
+  palsInstalled: boolean;
   patpQuery: RegExp;
   sigilQuery: string[][];
   searchMode: ('patp' | 'sigil');

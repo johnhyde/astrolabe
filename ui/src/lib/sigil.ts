@@ -123,7 +123,7 @@ export class SigilQuery {
         }
       });
     } catch (e) {
-      console.error("Couldn't load in sigil query text", e);
+      console.log("Couldn't load in sigil query text:", e.message);
       this.clan = 'planet';
       symbols = [];
     }

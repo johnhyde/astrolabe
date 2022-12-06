@@ -2,9 +2,9 @@
     info+'Your guide to the Urbit constellations'
     color+0x1f.243c
     image+'https://raw.githubusercontent.com/johnhyde/astrolabe/main/ui/src/assets/astrolabe-tile.svg'
-    glob-http+['https://s3.us-east-2.amazonaws.com/warkgnall.com/urbit/astrolabe/globs/glob-0v2.9eih9.a77pv.83cmp.gc70u.ev4q7.glob' 0v2.9eih9.a77pv.83cmp.gc70u.ev4q7]
+    glob-http+['https://s3.us-east-2.amazonaws.com/warkgnall.com/urbit/astrolabe/globs/glob-0v4.fpk0a.pgb9r.m1e4o.ptne3.pnthp.glob' 0v4.fpk0a.pgb9r.m1e4o.ptne3.pnthp]
     base+'astrolabe'
-    version+[0 3 5]
+    version+[0 3 6]
     website+'https://github.com/johnhyde/astrolabe'
     license+'MIT'
 ==

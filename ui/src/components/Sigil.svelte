@@ -12,8 +12,12 @@
   export let fgColor: string = 'white';
   export let bgColor: string = 'black';
   export let altBgColor: string = undefined;
+  export let noShrink: boolean = false;
   let svgString: any;
   let imgSrc: any;
+
+  $: noShrinkClasses = noShrink ? 'shrink-0' : '';
+  $: noShrinkWidth = noShrink ? size+'px' : 'initial';
 
   $: shipClass = clan(patp);
   $: displaySigil = ['galaxy', 'star', 'planet'].includes(shipClass);
@@ -52,7 +56,7 @@
   }
 </script>
 
-<div class="grow" style:max-width="{size}px">
+<div class="grow {noShrinkClasses}" style:max-width="{size}px" style:width={noShrinkWidth}>
   {#if displaySigil}
     {@html svgString}
   {:else}

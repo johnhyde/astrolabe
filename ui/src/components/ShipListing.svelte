@@ -1,9 +1,12 @@
 <script lang="ts">
 
   import Sigil from "./Sigil.svelte";
+  import PalStatusIndicator from '@/pals/PalStatusIndicator.svelte';
   import { push } from 'svelte-spa-router'
   import { normalizeId } from 'lib/id';
   import { linkToShip as generateLinkToShip } from 'lib/link';
+  import { getPalStatus } from 'lib/pals';
+  import store from 'stores/store';
   export let ship: any;
   export let linkToShip: boolean = false;
   export let differentiateContacts = false;
@@ -24,13 +27,18 @@
 on:click={handleClick}
 on:click
 >
-  <div class="flex flex-wrap p-4 items-center">
-    <Sigil {patp} size={48} useNew />
+  <div class="flex p-4 items-center gap-x-4">
+    <Sigil {patp} size={48} useNew noShrink />
     <!-- {#if ship.avatar}
       <img src={ship.avatar} class="h-12 w-12 mr-4" />
     {/if} -->
-    <p class="ml-4 break-words">
-      {patp}<br/>{ship.nickname ? `(${ship.nickname})` : ''}
+    <p class="break-words grow">
+      <span class="align-middle mr-1">
+        {patp}
+      </span>
+      <PalStatusIndicator status={getPalStatus($store.pals, patp)} class="inline" />
+      <br/>
+      {ship.nickname ? `(${ship.nickname})` : ''}
     </p>
   </div>
 </div>

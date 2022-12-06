@@ -45,3 +45,13 @@ export function toggleStoreKey(store, key) {
 export function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export function uxToHex(ux: string) {
+  let value = ux;
+  if (ux.length > 2 && ux.substring(0, 2) === '0x') {
+    value = ux.substring(2)
+  }
+
+  value = value.replace('.', '').padStart(6, '0');
+  return '#' + value;
+}

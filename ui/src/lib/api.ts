@@ -10,6 +10,8 @@ const api: UrbitApi = new UrbitApi('', '', window.desk);
 api.ship = window.ship;
 // api.connect();
 
+export { api };
+
 export function scry<T = any>(path: string): Promise<T> {
   return api.scry<T>({ app: 'astrolabe', path });
 }

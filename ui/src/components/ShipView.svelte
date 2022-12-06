@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { clan, sein, patp2dec } from 'urbit-ob';
+  
+  
+  
+  import { clan, patp2dec } from 'urbit-ob';
   
   import { cite, normalizeId } from 'lib/id';
   import { getPoint, getSpawnedPoints } from 'lib/api';
+  import { generateParentChain, processPointInfo } from 'lib/ship';
   import Sigil from "./Sigil.svelte";
   import GoldBadge from './GoldBadge.svelte';
   import TooltipAndDocLink from "./TooltipAndDocLink.svelte";
@@ -12,73 +16,26 @@
   import CollapsibleContent from './CollapsibleContent.svelte';
   import ShipChain from './ShipChain.svelte';
   import ShipListings from './ShipListings.svelte';
-  import LoadingSpinner from './LoadingSpinner.svelte';
+  import LoadingSpinner from './LoadingSpinner.svelte';;
+  import GroupsShipViewExtension from './groups/GroupsShipViewExtension.svelte';
+  import PalsShipViewExtension from './pals/PalsShipViewExtension.svelte';
 
   export let patp: string;
 
   let parentChain: any[];
-  let sponsorChain: any[];
   let rawPointInfoPromise: any;
   let rawPointInfo: any = null;
   let pointInfo: any = {};
   let rawSpawnedPointsPromise: any;
   let rawSpawnedPoints: any = null;
   let spawnedPoints: string[] = [];
-  const spawnStatusOptions = {
-    unspawned: {
-      text: 'unspawned',
-      tooltip: 'This point has not yet been spawned by its parent',
-    },
-    locked: {
-      text: 'locked',
-      tooltip: 'This point is currently locked in a Linear Release Contract',
-    },
-    spawned: {
-      text: 'spawned',
-      tooltip: `This point has been spawned`,
-    },
-    spawnedNoKeys: {
-      text: 'spawned (no keys set)',
-      tooltip: 'This point has been spawned, but no keys have been set',
-    },
-  }
-  const layerOptions = {
-    l1: {
-      text: 'on layer 1',
-      tooltip: 'This point is secured as an NFT on the Ethereum blockchain',
-    },
-    l2: {
-      text: 'on layer 2',
-      tooltip: `This point is secured by Urbit's "Layer 2" solution`,
-    },
-    spawn: {
-      text: 'spawns on layer 2',
-      tooltip: 'This point lives on layer 1, but it spawns new points on layer 2',
-    },
-  }
 
   $: shipClass = clan(patp);
   $: azPoint = ['galaxy', 'star', 'planet'].includes(shipClass);
   $: canSpawnPoints = ['galaxy', 'star'].includes(shipClass);
   $: spawnableClassPlural = !canSpawnPoints ? '' : (shipClass === 'galaxy' ? 'Stars' : 'Planets');
   $: {
-    let parents = [patp];
-    let galaxyFound = false;
-    let count = 10;
-    while (!galaxyFound && count > 0) {
-      count--;
-      if (count == 0) {
-        throw new Error("You've got an infinite loop in building the parent chain");
-      }
-      let firstItem = parents[0];
-      if (clan(firstItem) == 'galaxy') {
-        galaxyFound = true;
-      } else {
-        parents.unshift(sein(firstItem))
-      }
-    }
-    parents.pop();
-    parentChain = parents;
+    parentChain = generateParentChain(patp);
   }
   $: {
     rawPointInfo = null;
@@ -110,71 +67,9 @@
   }
   $: {
     pointInfo = {};
-    let spawnStatus: any,
-      spawnedUnlocked: boolean = false,
-      layer: any,
-      life: number,
-      rift: number,
-      spawnedCount: number;
-    let keysSet = false;
-    if (!azPoint) {
-
-    } else if (rawPointInfo) {
-      if (rawPointInfo.point) {
-        const { point } = rawPointInfo;
-        const {
-          'probable-dominion': dominion,
-          npoint
-        } = point;
-        layer = layerOptions[dominion];
-        spawnedCount = point['spa-count'];
-        sponsorChain = point['sponsor-chain'].reverse();
-        if (npoint) {
-          life = npoint.net.keys.life;
-          rift = npoint.net.rift;
-          if (life > 0) {
-            keysSet = true;
-          }
-  
-          pointInfo.proxies = npoint.own;  
-          if (pointInfo.proxies.owner.address === '0x86cd9cd0992f04231751e3761de45cecea5d1801') {
-            spawnStatus = spawnStatusOptions.locked; 
-          } else if (keysSet) {
-            spawnStatus = spawnStatusOptions.spawned;
-            spawnedUnlocked = true;
-          } else {
-            spawnStatus = spawnStatusOptions.spawnedNoKeys;
-            spawnedUnlocked = true;
-          }
-          // const { sponsor } = npoint.net;
-          // if (sponsor.has) {
-          //   pointInfo.sponsor = normalizeId(sponsor.who);
-          // }
-        } else {
-          // no info found
-          spawnStatus = spawnStatusOptions.unspawned;
-          life = 0;
-          rift = 0;
-        }
-      } else {
-        // no info found
-        spawnStatus = spawnStatusOptions.unspawned;
-        life = 0;
-        rift = 0;
-      }
-    } else {
-      // request pending
+    if (azPoint) {
+      pointInfo = processPointInfo(rawPointInfo);
     }
-    pointInfo = {
-      ...pointInfo,
-      layer,
-      spawnStatus,
-      spawnedUnlocked,
-      keysSet,
-      life,
-      rift,
-      spawnedCount,
-    };
   }
 </script>
 
@@ -192,6 +87,9 @@
           {cite(patp)}
         </TooltipAndDocLink>
       </h2>
+      <!-- {#if (nickname)}
+        <h3 class="text-lg text-center text-gray-800">{nickname}</h3>
+      {/if} -->
       {#if (!azPoint)}
         <h3 class="text-lg text-center text-gray-700">{patp}</h3>
       {/if}
@@ -243,10 +141,10 @@
               {:then}
                 {#if shipClass !== 'galaxy'}
                   <p>
-                    {#if sponsorChain && sponsorChain.length > 0}
+                    {#if pointInfo.sponsorChain && pointInfo.sponsorChain.length > 0}
                       <p>
-                        {sponsorChain.length === 1 ? 'Sponsor:' : 'Sponsor Chain:'}
-                        <ShipChain shipChain={sponsorChain}></ShipChain>
+                        {pointInfo.sponsorChain.length === 1 ? 'Sponsor:' : 'Sponsor Chain:'}
+                        <ShipChain shipChain={pointInfo.sponsorChain}></ShipChain>
                       </p>
                     {:else}
                       Unsponsored
@@ -327,6 +225,10 @@
         {/if}
       </div>
     </div>
+  </div>
+  <div class="flex flex-wrap shrink min-h-0 h-fit -m-1 mt-2 justify-evenly justify-items-center">
+    <GroupsShipViewExtension {patp} />
+    <PalsShipViewExtension {patp} />
   </div>
   {#if canSpawnPoints}
     <div class="mt-5 p-3 border-t">
