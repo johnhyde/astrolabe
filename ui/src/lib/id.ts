@@ -1,6 +1,6 @@
 import BN from 'bn.js';
 import type { Patp } from '@urbit/api'
-import { hex2patp, patp2hex, patp as any2patp } from 'urbit-ob';
+import { hex2patp, patp2hex, patp as any2patp, sein } from 'urbit-ob';
 import { isStringNaN, listStrings } from './utils';
 
 // 340282366920938463463374607431768211455
@@ -501,6 +501,21 @@ function analyzeSearch(search: string): SearchAnalysis {
   return new SearchAnalysis(search);
 }
 
+function isMoonLength(patp: string): boolean {
+  return patp.length > 14 && patp.length <= 28;
+}
+
+function isCometLength(patp: string): boolean {
+  return patp.length > 28;
+}
+
+function filterIdsForChildMoons(ids: string[], parentId: string): string[] {
+  return ids.filter((peerId) => {
+    if (!isMoonLength(peerId)) return false;
+    return sein(peerId) === normalizeId(parentId);
+  })
+}
+
 export {
   prefixes,
   suffixes,
@@ -510,4 +525,7 @@ export {
   cite,
   convertSearchTextToRegex,
   analyzeSearch,
+  isMoonLength,
+  isCometLength,
+  filterIdsForChildMoons,
 };

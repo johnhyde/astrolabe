@@ -5,7 +5,8 @@ import { subscribeToContacts, getPeers } from 'lib/api';
 import type { StoreState } from 'types/store';
 import { normalizeId } from 'lib/id';
 import { setStoreKey } from 'lib/utils';
-import { getPals, getPalStatus, getPal } from 'lib/pals';
+import { getPals } from 'lib/pals';
+import { getKnownApps } from 'lib/apps';
 
 const initStore: StoreState = {
   contacts: {},
@@ -16,6 +17,10 @@ const initStore: StoreState = {
     mutuals: {},
   },
   palsInstalled: false,
+  apps: {
+    allies: {},
+    set: new Set(),
+  },
   patpQuery: null,
   sigilQuery: null,
   searchMode: 'patp',
@@ -56,11 +61,18 @@ getPeers().then(({ points }) => {
 });
 
 function refreshPals() {
-  getPals().then((pals) => {
+  return getPals().then((pals) => {
     setStoreKey(store, 'pals', pals);
     setStoreKey(store, 'palsInstalled', true);
   });
 }
 refreshPals();
 
-export default { subscribe, set, searchPatp, searchSigil, refreshPals, reset };
+function refreshKnownApps() {
+  return getKnownApps().then((apps) => {
+    setStoreKey(store, 'apps', apps);
+  });
+}
+refreshKnownApps();
+
+export default { subscribe, set, searchPatp, searchSigil, refreshPals, refreshKnownApps, reset };

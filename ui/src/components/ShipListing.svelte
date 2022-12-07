@@ -1,6 +1,6 @@
 <script lang="ts">
 
-  import Sigil from "./Sigil.svelte";
+  import Sigil from "@/common/Sigil.svelte";
   import PalStatusIndicator from '@/pals/PalStatusIndicator.svelte';
   import { push } from 'svelte-spa-router'
   import { normalizeId } from 'lib/id';

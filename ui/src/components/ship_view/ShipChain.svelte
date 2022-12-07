@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ShipLink from './ShipLink.svelte';
+  import ShipLink from '@/common/ShipLink.svelte';
 
   export let shipChain: string[];
 </script>

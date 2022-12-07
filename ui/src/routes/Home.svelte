@@ -7,7 +7,7 @@
   import { linkToShip, linkToChart, linkToSearch } from 'lib/link';
   import SearchBar from "@/search/SearchBar.svelte";
   import SearchResults from "@/search/SearchResults.svelte";
-  import ShipView from '@/ShipView.svelte';
+  import ShipView from '@/ship_view/ShipView.svelte';
   import StarChart from '@/StarChart.svelte';
   import ValidationProblems from '@/ValidationProblems.svelte';
   import HomeScreenTiles from '@/HomeScreenTiles.svelte';

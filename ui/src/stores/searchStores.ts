@@ -3,8 +3,9 @@ import { writable, derived } from 'svelte/store';
 import type { Contact, Rolodex } from '@urbit/api';
 import store from './store';
 import type { StoreState, SearchedContactsState } from 'types/store';
+import { createEmptyContact } from 'types/store';
 import { SearchSettings } from 'types/store';
-import { splitIdIntoSyls } from 'lib/id';
+import { splitIdIntoSyls, isMoonLength, isCometLength } from 'lib/id';
 import { filterObject } from 'lib/utils';
 
 const searchSettings = writable(new SearchSettings());
@@ -27,10 +28,10 @@ function deriveSearchedContacts([$store, $searchSettings]): SearchedContactsStat
     idMatches = idMatchesSyls;
   }
   function isIdAllowed(id) {
-    if (!$searchSettings.includeMoons && id.length > 14 && id.length <= 28) {
+    if (!$searchSettings.includeMoons && isMoonLength(id)) {
       return false;
     }
-    if (!$searchSettings.includeComets && id.length > 28) {
+    if (!$searchSettings.includeComets && isCometLength(id)) {
       return false;
     }
     return true;
@@ -52,10 +53,7 @@ function deriveSearchedContacts([$store, $searchSettings]): SearchedContactsStat
   const filteredContacts = filterObject($store.contacts, idMatches) as Rolodex;
   $store.peers.forEach((id) => {
     if (idMatches(id) && !filteredContacts[id]) {
-      filteredContacts[id] = {
-        nickname: null, bio: null, status: null, color: null, avatar: null,
-        cover: null, groups: [], 'last-updated': 0,
-      } as Contact
+      filteredContacts[id] = createEmptyContact();
     }
   })
   return filteredContacts;

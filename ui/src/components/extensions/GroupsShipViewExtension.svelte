@@ -3,7 +3,7 @@
   import { uxToHex } from 'lib/utils';
   import { normalizeId } from 'lib/id';
   import store from 'stores/store';
-  import Sigil from "@/Sigil.svelte";
+  import Sigil from "@/common/Sigil.svelte";
   import ExtensionWindow from '@/ExtensionWindow.svelte';
 
   export let patp: string;
@@ -16,7 +16,7 @@
   <ExtensionWindow name="Groups">
     <svelte:fragment slot="top-bar">
       {#if contact.nickname}
-        <div class="grow ml-1 my-1 flex justify-center align-center">
+        <div class="grow m-1 flex justify-center align-center">
           {contact.nickname}
         </div>
       {/if}
@@ -37,9 +37,11 @@
           <Sigil patp={patp} size={128} bgColor={color} useNew />
           {/if}
         </div>
-        <div class="text-sm p-3 bg-white rounded-tl-lg rounded-br-lg whitespace-pre-line">
-          <SvelteMarkdown source={contact.bio} />
-        </div>
+        {#if contact.bio}
+          <div class="text-sm p-3 bg-white rounded-tl-lg rounded-br-lg whitespace-pre-line">
+            <SvelteMarkdown source={contact.bio} />
+          </div>
+        {/if}
       </div>
       <!-- <p class="whitespace-pre-line">
         {contact.bio}

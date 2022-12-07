@@ -8,7 +8,7 @@
 
   let newTagText = '';
   $: newTags = newTagText.split(',').map(t => t.trim());
-  $: sanitizedNewTags = newTags.map(t => t.replaceAll(/[^-_.~a-z0-9]+/g, '_'));
+  $: sanitizedNewTags = newTags.map(t => t.toLocaleLowerCase().replaceAll(/[^-_.~a-z0-9]+/g, '_'));
   $: newTagsAreValid = newTags.every(tagIsValid);
   $: validationClasses = newTagsAreValid ? '' : 'border-red-500 bg-red-100'
 

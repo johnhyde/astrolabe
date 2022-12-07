@@ -1,5 +1,12 @@
 import type { ConnectionStatus } from './connection';
 import type { Patp, Group, Contact, Rolodex } from '@urbit/api';
+
+export function createEmptyContact(): Contact {
+  return {
+    nickname: null, bio: null, status: null, color: null, avatar: null,
+    cover: null, groups: [], 'last-updated': 0,
+  };
+}
 export interface Contacts {
   [contact: string]: Contact;
 };
@@ -34,6 +41,13 @@ export interface PalInfo extends Pal {
   status: PalStatus;
 }
 
+export interface Apps {
+  allies: {
+    [ally: string]: string[],
+  },
+  set: Set<string>,
+}
+
 export interface StoreState {
   // Urbit
   // groups: {
@@ -43,6 +57,7 @@ export interface StoreState {
   peers: Patp[];
   pals: Pals;
   palsInstalled: boolean;
+  apps: Apps,
   patpQuery: RegExp;
   sigilQuery: string[][];
   searchMode: ('patp' | 'sigil');

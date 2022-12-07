@@ -1,24 +1,22 @@
 <script lang="ts">
-  
-  
-  
   import { clan, patp2dec } from 'urbit-ob';
   
   import { cite, normalizeId } from 'lib/id';
   import { getPoint, getSpawnedPoints } from 'lib/api';
   import { generateParentChain, processPointInfo } from 'lib/ship';
-  import Sigil from "./Sigil.svelte";
-  import GoldBadge from './GoldBadge.svelte';
-  import TooltipAndDocLink from "./TooltipAndDocLink.svelte";
-  import ShipLink from './ShipLink.svelte';
-  import ChartLink from './ChartLink.svelte';
-  import EthAddressLink from './EthAddressLink.svelte';
-  import CollapsibleContent from './CollapsibleContent.svelte';
+  import Sigil from '@/common/Sigil.svelte';
+  import GoldBadge from '@/common/GoldBadge.svelte';
+  import TooltipAndDocLink from '@/common/TooltipAndDocLink.svelte';
+  import ShipLink from '@/common/ShipLink.svelte';
+  import ChartLink from '@/common/ChartLink.svelte';
+  import EthAddressLink from '@/common/EthAddressLink.svelte';
+  import LoadingSpinner from '@/common/LoadingSpinner.svelte';
+  import CollapsibleContent from '@/CollapsibleContent.svelte';
   import ShipChain from './ShipChain.svelte';
-  import ShipListings from './ShipListings.svelte';
-  import LoadingSpinner from './LoadingSpinner.svelte';;
-  import GroupsShipViewExtension from './groups/GroupsShipViewExtension.svelte';
-  import PalsShipViewExtension from './pals/PalsShipViewExtension.svelte';
+  import ShipChildrenTabs from './ShipChildrenTabs.svelte';
+  import GroupsShipViewExtension from '@/extensions/GroupsShipViewExtension.svelte';
+  import AppsShipViewExtension from '@/extensions/AppsShipViewExtension.svelte';
+  import PalsShipViewExtension from '@/pals/PalsShipViewExtension.svelte';
 
   export let patp: string;
 
@@ -26,14 +24,9 @@
   let rawPointInfoPromise: any;
   let rawPointInfo: any = null;
   let pointInfo: any = {};
-  let rawSpawnedPointsPromise: any;
-  let rawSpawnedPoints: any = null;
-  let spawnedPoints: string[] = [];
 
   $: shipClass = clan(patp);
   $: azPoint = ['galaxy', 'star', 'planet'].includes(shipClass);
-  $: canSpawnPoints = ['galaxy', 'star'].includes(shipClass);
-  $: spawnableClassPlural = !canSpawnPoints ? '' : (shipClass === 'galaxy' ? 'Stars' : 'Planets');
   $: {
     parentChain = generateParentChain(patp);
   }
@@ -46,23 +39,6 @@
       }).catch((error) => {
         rawPointInfo = { error };
       });
-    }
-  }
-  $: {
-    rawSpawnedPoints = null;
-    if (canSpawnPoints) {
-      rawSpawnedPointsPromise = getSpawnedPoints(patp);
-      rawSpawnedPointsPromise.then((info) => {
-        rawSpawnedPoints = info;
-      }).catch((error) => {
-        rawSpawnedPoints = { error };
-      });
-    }
-  }
-  $: {
-    spawnedPoints = [];
-    if (rawSpawnedPoints?.points) {
-      spawnedPoints = rawSpawnedPoints?.points.map(patp => ({ patp: normalizeId(patp) }));
     }
   }
   $: {
@@ -87,9 +63,6 @@
           {cite(patp)}
         </TooltipAndDocLink>
       </h2>
-      <!-- {#if (nickname)}
-        <h3 class="text-lg text-center text-gray-800">{nickname}</h3>
-      {/if} -->
       {#if (!azPoint)}
         <h3 class="text-lg text-center text-gray-700">{patp}</h3>
       {/if}
@@ -229,27 +202,11 @@
   <div class="flex flex-wrap shrink min-h-0 h-fit -m-1 mt-2 justify-evenly justify-items-center">
     <GroupsShipViewExtension {patp} />
     <PalsShipViewExtension {patp} />
+    <AppsShipViewExtension {patp} />
   </div>
-  {#if canSpawnPoints}
-    <div class="mt-5 p-3 border-t">
-      {#await rawPointInfoPromise then}
-        <h3 class="text-lg">
-          {#if pointInfo.spawnedCount}
-          {pointInfo.spawnedCount} Spawned {spawnableClassPlural}:
-          {:else}
-            No Spawned {spawnableClassPlural}
-          {/if}
-        </h3>
-      {/await}
-      {#await rawSpawnedPointsPromise}
-        Loading {spawnableClassPlural}...
-      {:then}
-        <!-- TODO: pagination -->
-        <ShipListings
-          ships={spawnedPoints}
-          linkToShips
-        />
-      {/await}
+  {#if azPoint}
+    <div class="mt-5 border-t">
+      <ShipChildrenTabs {patp} />
     </div>
   {/if}
 </div>

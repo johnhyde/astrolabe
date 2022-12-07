@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LoadingSpinner from './LoadingSpinner.svelte';
+  import LoadingSpinner from '@/common/LoadingSpinner.svelte';
 
   import { push } from 'svelte-spa-router'
 

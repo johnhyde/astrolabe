@@ -5,7 +5,7 @@
   import docLinks from "actions/docLinks";
   import docs from "stores/docs";
 
-  import LoadingSpinner from "@/LoadingSpinner.svelte";
+  import LoadingSpinner from "@/common/LoadingSpinner.svelte";
  
   export let path:string;
  
