@@ -9,6 +9,8 @@
 
   $: desk = path.split('/')[1];
   $: appPromise = getAppByPath(path);
+  $: appUrbitGraphLink = `web+urbitgraph://${path}`;
+  $: appLink = `/apps/grid/perma?ext=${appUrbitGraphLink}`;
 
   let overrideText = null;
 
@@ -25,25 +27,24 @@
 </script>
 
 <div class="w-20 text-sm text-center">
-  <div class="w-20 h-20 border border-gray-300 bg-gray-600 text-white rounded-lg overflow-hidden">
+  <a class="block w-20 h-20 border border-gray-300 bg-gray-600 text-white rounded-lg overflow-hidden"
+  href={appLink} target="_blank">
     {#await appPromise}
       <div class="flex h-full items-center">
         <LoadingSpinner />
       </div>
     {:then app}
-      <a style:background-color={uxToHex(app.color)} class="block h-full w-full text-sm"
-        href="web+urbitgraph://{path}" target="_blank"
-      >
+      <div style:background-color={uxToHex(app.color)} class="h-full w-full text-sm">
       {#if app.image}
         <img src={app.image} alt="app icon"
         class="aspect-square object-cover w-full h-full"
         />
         {/if}
-      </a>
+      </div>
     {:catch}
-    {path}
+      {path}
     {/await}
-  </div>
+  </a>
   <CopyToClipboard text={path} on:copy={handleSuccessfullyCopied} on:fail={handleFailedCopy} let:copy>
     <span on:click={copy}>
       {#if overrideText}
@@ -52,7 +53,6 @@
         {#await appPromise}
           {desk}
         {:then app}
-          <!-- {desk} -->
           {app.title}
         {/await}
       {/if}

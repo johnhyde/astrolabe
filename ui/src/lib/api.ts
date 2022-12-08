@@ -88,7 +88,7 @@ export function subscribeToContacts(e: (data: any) => void): Promise<any> {
       console.error(`Subscription to contact-store/all just get "err"`);
     },
     quit: () => {
-      console.error(`Subscription to contact-store/all just get "quit"`)
+      console.error(`Subscription to contact-store/all just get "quit"`);
     }
   })
 }

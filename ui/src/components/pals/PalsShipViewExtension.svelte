@@ -10,9 +10,10 @@
   $: pal = getPal($store.pals, patp);
   $: palAdded = pal.status == 'outgoing' || pal.status == 'mutual';
   $: [buttonText, buttonFunc]  = palAdded ? ['Remove Pal', removePal] : ['Add Pal', addPal];
+  $: itsUs = patp.substring(1) === window.ship;
 </script>
 
-{#if $store.palsInstalled}
+{#if $store.palsInstalled && !itsUs}
   <ExtensionWindow name="%pals" halfWidth>
     <svelte:fragment slot="top-bar">
       <div class="grow ml-1 my-2 flex justify-center align-center">

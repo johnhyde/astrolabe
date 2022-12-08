@@ -14,9 +14,10 @@
   import CollapsibleContent from '@/CollapsibleContent.svelte';
   import ShipChain from './ShipChain.svelte';
   import ShipChildrenTabs from './ShipChildrenTabs.svelte';
-  import GroupsShipViewExtension from '@/extensions/GroupsShipViewExtension.svelte';
-  import AppsShipViewExtension from '@/extensions/AppsShipViewExtension.svelte';
+  import ProfileShipViewExtension from '~/components/extensions/ProfileShipViewExtension.svelte';
   import PalsShipViewExtension from '@/pals/PalsShipViewExtension.svelte';
+  import AppsShipViewExtension from '@/extensions/AppsShipViewExtension.svelte';
+  // import GroupsShipViewExtension from '~/components/extensions/GroupsShipViewExtension.svelte';
 
   export let patp: string;
 
@@ -200,9 +201,10 @@
     </div>
   </div>
   <div class="flex flex-wrap shrink min-h-0 h-fit -m-1 mt-2 justify-evenly justify-items-center">
-    <GroupsShipViewExtension {patp} />
+    <ProfileShipViewExtension {patp} />
     <PalsShipViewExtension {patp} />
     <AppsShipViewExtension {patp} />
+    <!-- <GroupsShipViewExtension {patp} /> -->
   </div>
   {#if azPoint}
     <div class="mt-5 border-t">

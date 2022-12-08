@@ -2,11 +2,11 @@ import { writable } from 'svelte/store';
 
 import type { Rolodex } from '@urbit/api';
 import { subscribeToContacts, getPeers } from 'lib/api';
-import type { StoreState } from 'types/store';
+import type { StoreState, Apps } from 'types/store';
 import { normalizeId } from 'lib/id';
 import { setStoreKey } from 'lib/utils';
 import { getPals } from 'lib/pals';
-import { getKnownApps } from 'lib/apps';
+import { subscribeToApps } from 'lib/apps';
 
 const initStore: StoreState = {
   contacts: {},
@@ -68,11 +68,15 @@ function refreshPals() {
 }
 refreshPals();
 
-function refreshKnownApps() {
-  return getKnownApps().then((apps) => {
-    setStoreKey(store, 'apps', apps);
+function updateApps(callback: (apps) => Apps): void {
+  update($store => {
+    return {
+      ...$store,
+      apps: callback($store.apps),
+    };
   });
 }
-refreshKnownApps();
 
-export default { subscribe, set, searchPatp, searchSigil, refreshPals, refreshKnownApps, reset };
+subscribeToApps(updateApps);
+
+export default { subscribe, set, searchPatp, searchSigil, refreshPals, reset };

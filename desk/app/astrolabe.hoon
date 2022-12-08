@@ -59,7 +59,11 @@
     ?.  ?=(?(%0 %1 %2) -.old)  `old
     (on-naive-state:hc get-nas:hc)
   ?>  ?=(%3 -.old)
-  [cards-01 this(state old)]
+  =/  cards=(list card)
+    =/  ug-vase  !>([/astrolabe '/apps/astrolabe/#'])
+    [%pass /monkey-ug %agent [our.bowl %monkey] %poke [%bind-ug ug-vase]]~
+  =.  cards  (weld cards-01 cards)
+  [cards this(state old)]
 ++  on-poke  on-poke:def
 ++  on-watch  on-watch:def
 ++  on-leave  on-leave:def

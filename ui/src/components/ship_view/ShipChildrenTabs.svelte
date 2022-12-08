@@ -16,7 +16,7 @@
   $: shipClass = clan(patp);
   $: azPoint = ['galaxy', 'star', 'planet'].includes(shipClass);
   $: canSpawnPoints = ['galaxy', 'star'].includes(shipClass);
-  $: spawnableClassPlural = !canSpawnPoints ? '' : (shipClass === 'galaxy' ? 'Stars' : 'Planets');
+  $: spawnableClassPlural = !canSpawnPoints ? '' : (shipClass === 'galaxy' ? 'Star' : 'Planet');
   $: {
     rawSpawnedPoints = null;
     if (canSpawnPoints) {
@@ -37,7 +37,7 @@
   $: trueSpawnedCount = spawnedCount || spawnedPoints.length;
   $: spawnedTab = {
     name: 'Spawned',
-    plural: 'Spawned ' + spawnableClassPlural + (trueSpawnedCount > 1 ? 's' : ''),
+    plural: 'Spawned ' + spawnableClassPlural + (trueSpawnedCount == 1 ? '' : 's'),
     promise: rawSpawnedPointsPromise,
     points: spawnedPoints,
     count: trueSpawnedCount,
@@ -45,7 +45,7 @@
   $: moons = filterIdsForChildMoons($store.peers, patp).map(patpToShip);
   $: moonsTab = {
     name: 'Moons',
-    plural: 'Known Moon' + (moons.length > 1 ? 's' : ''),
+    plural: 'Known Moon' + (moons.length == 1 ? '' : 's'),
     promise: true,
     points: moons,
     count: moons.length,

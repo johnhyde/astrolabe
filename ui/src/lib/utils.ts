@@ -55,3 +55,7 @@ export function uxToHex(ux: string) {
   value = value.replace('.', '').padStart(6, '0');
   return '#' + value;
 }
+
+export function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
