@@ -1,5 +1,5 @@
 /-  sur=astrolabe
-/+  azimuth, naive, mip
+/+  azimuth, naive
 =<  [sur .]
 =,  sur
 |%
@@ -25,7 +25,6 @@
   ^-  ?
   (rev-f lte a b)
 ::
-+$  opoints  (tree [@ @])  :: ordered points [ship ~]
 ++  ors  ((on @q @) rpor)
 ++  or-meta  ((on @p tape) por:naive)
 ++  bi-meta

@@ -1,42 +1,12 @@
 /-  *astrolabe
-/+  *astrolabe, *search, *mip, naive, default-agent, dbug, agentio
+/+  *astrolabe, *search, slib=state
+/+  *mip, naive, default-agent, dbug, agentio
 /$  udon-to-docu  %udon  %docu
 |%
-+$  versioned-state
-  $%  state-0
-      state-1
-      state-2
-      state-3
-  ==
-+$  state-0
-  $:  %0
-      spa=spawned
-  ==
-+$  state-1
-  $:  %1
-      fropoints-1
-  ==
-+$  state-2
-  $:  %2
-      spam=spawn-mip
-      fropoints-1
-  ==
-+$  state-3
-  $:  %3
-      prev-spo=(map ship ship) :: so we know who the old sponsor was when sponsor changes
-      spam=spawn-mip
-      fropoints-1
-  ==
-::
-+$  fropoints-1
-  $:  fopoints=opoints :: forward ordered points
-      ropoints=opoints :: reversed ordered points, e.g. .~palnet-sampel
-  ==
-+$  spawned  (jug ship ship)
 +$  card  card:agent:gall
 --
 %-  agent:dbug
-=|  state-3
+=|  state-latest
 =*  state  -
 ^-  agent:gall
 =<
@@ -55,15 +25,15 @@
   |=  old-state=vase
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
-  =^  cards-01  old
-    ?.  ?=(?(%0 %1 %2) -.old)  `old
+  =/  [cards-01=(list card) new=state-latest]
+    ?.  ?=(?(%0 %1 %2 %3) -.old)  `old
     (on-naive-state:hc get-nas:hc)
-  ?>  ?=(%3 -.old)
+  ?>  ?=(%4 -.new)
   =/  cards=(list card)
     =/  ug-vase  !>([/astrolabe '/apps/astrolabe/#'])
     [%pass /monkey-ug %agent [our.bowl %monkey] %poke [%bind-ug ug-vase]]~
   =.  cards  (weld cards-01 cards)
-  [cards this(state old)]
+  [cards this(state new)]
 ++  on-poke  on-poke:def
 ++  on-watch  on-watch:def
 ++  on-leave  on-leave:def
@@ -72,11 +42,14 @@
   |=  =path
   ^-  (unit (unit cage))
   ?+    path  (on-peek:def path)
+      [%x %nop ~]
+    ``noun+!>(~)
       [%x %point @ ~]
     ``astrolabe-point+!>((get-point:hc &3.path))
       [%x %point @ %spawned ?(~ [spawned-filter ~])]
     =/  =ship  `@p`(slav %p &3.path)
-    =/  arg  ?~(t.t.t.t.path %all i.t.t.t.t.path)
+    =/  filter  t.t.t.t.path
+    =/  arg  ?~(filter %all -.filter)
     ``astrolabe-point-set+!>((get-spawned-points:hc ship arg))
       [%x %search %patp @ ?(~ [%narrow ~])]
     =/  =search-text  (trip &4.path)
@@ -158,32 +131,7 @@
   |=  [child=ship nas=^state:naive]
   ^-  _state
   =/  =npoint  (get-npoint-from-nas child nas)
-  =/  parent  (^sein:title child)
-  ?:  =(parent child)  state
-  ?:  (is-npoint-locked npoint)  state
-  =/  pdata  (pdata:smel (pmeta:smel child npoint) ~)
-  =*  spo  sponsor.net.npoint
-  =/  spo-not-par  &(has.spo !=(parent who.spo))
-  =?  state  spo-not-par
-    =/  prev  (~(get by prev-spo) child)
-    =?  spam  &(?=(^ prev) !=(u.prev who.spo))
-      (~(del bi spam) u.prev child)
-    =.  prev-spo
-      %+  ~(put by prev-spo)
-        child
-      who.spo
-    =.  spam
-      %^    ~(put bi-meta spam)
-          who.spo
-        child
-      pdata
-    state
-  =.  spam
-    %^    ~(put bi-meta spam)
-        parent
-      child
-    pdata
-  state
+  (put-in-spawn-mip:slib child npoint state)
 ::
 ++  on-naive-state
   |=  nas=^state:naive

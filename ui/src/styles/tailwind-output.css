@@ -728,6 +728,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .-mb-16 {
   margin-bottom: -4rem;
 }
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
 .-mt-0\.5 {
   margin-top: -0.125rem;
 }

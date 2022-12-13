@@ -149,7 +149,9 @@
 </script>
 
 <div class="p-4 space-y-4 min-h-full flex flex-col items-center 2xs:p-8 2xs:space-y-8">
-  <SearchBar bind:analysis bind:sigilQuery bind:search bind:searchMode bind:patp {placeholderText} />
+  <SearchBar bind:analysis bind:sigilQuery bind:search bind:searchMode bind:patp {placeholderText}
+    allowSigilSearch={params.mode !== 'chart'}
+  />
   <!-- <div class="bg-white">
     <p>
       Search: {search}
@@ -164,7 +166,7 @@
       Patp: {patp}
     </p>
   </div> -->
-  {#if params.mode == "chart"}
+  {#if params.mode == 'chart'}
     <StarChart patp={patp || null} />
   {:else if patp}
     <ShipView {patp} />

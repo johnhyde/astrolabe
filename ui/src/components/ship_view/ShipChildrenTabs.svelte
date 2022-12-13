@@ -2,7 +2,7 @@
   import { clan } from 'urbit-ob';
   
   import { normalizeId, filterIdsForChildMoons } from 'lib/id';
-  import { getSpawnedPoints } from 'lib/api';
+  import { getSpawnedPoints, getUnlockedSpawnedPoints, getLockedSpawnedPoints } from 'lib/api';
   import store from 'stores/store';
   import ShipListings from '@/ShipListings.svelte';
 
@@ -11,7 +11,10 @@
 
   let rawSpawnedPointsPromise: any;
   let rawSpawnedPoints: any = null;
+  let rawLockedPointsPromise: any;
+  let rawLockedPoints: any = null;
   let spawnedPoints: string[] = [];
+  let lockedPoints: string[] = [];
 
   $: shipClass = clan(patp);
   $: azPoint = ['galaxy', 'star', 'planet'].includes(shipClass);
@@ -19,8 +22,19 @@
   $: spawnableClassPlural = !canSpawnPoints ? '' : (shipClass === 'galaxy' ? 'Star' : 'Planet');
   $: {
     rawSpawnedPoints = null;
+    rawLockedPoints = null;
     if (canSpawnPoints) {
-      rawSpawnedPointsPromise = getSpawnedPoints(patp);
+      let galaxy = shipClass === 'galaxy';
+      let getSpawnedPointsFunc = galaxy ? getUnlockedSpawnedPoints : getSpawnedPoints;
+      if (galaxy) {
+        rawLockedPointsPromise = getLockedSpawnedPoints(patp);
+        rawLockedPointsPromise.then((info) => {
+          rawLockedPoints = info;
+        }).catch((error) => {
+          rawLockedPoints = { error };
+        });
+      }
+      rawSpawnedPointsPromise = getSpawnedPointsFunc(patp);
       rawSpawnedPointsPromise.then((info) => {
         rawSpawnedPoints = info;
       }).catch((error) => {
@@ -34,6 +48,12 @@
       spawnedPoints = rawSpawnedPoints?.points.map(patpToShip);
     }
   }
+  $: {
+    lockedPoints = [];
+    if (rawLockedPoints?.points) {
+      lockedPoints = rawLockedPoints?.points.map(patpToShip);
+    }
+  }
   $: trueSpawnedCount = spawnedCount || spawnedPoints.length;
   $: spawnedTab = {
     name: 'Spawned',
@@ -41,6 +61,13 @@
     promise: rawSpawnedPointsPromise,
     points: spawnedPoints,
     count: trueSpawnedCount,
+  };
+  $: lockedTab = {
+    name: 'Locked',
+    plural: 'Locked ' + spawnableClassPlural + (lockedPoints.length == 1 ? '' : 's'),
+    promise: rawLockedPointsPromise,
+    points: lockedPoints,
+    count: lockedPoints.length,
   };
   $: moons = filterIdsForChildMoons($store.peers, patp).map(patpToShip);
   $: moonsTab = {
@@ -56,6 +83,9 @@
     tabs = [];
     if (spawnedCount !== undefined || spawnedPoints.length > 0) {
       tabs.push(spawnedTab);
+    }
+    if (lockedPoints.length > 0) {
+      tabs.push(lockedTab);
     }
     if (azPoint) {
       tabs.push(moonsTab);
@@ -82,8 +112,8 @@
     </div>
   {/if}
   {#if tab}
-    <div class="mt-2">
-      <h3 class="text-lg">
+    <div>
+      <h3 class="text-lg m-2">
         {#if tab.count}
         {tab.count} {tab.plural}:
         {:else}
@@ -97,6 +127,7 @@
       <ShipListings
       ships={tab.points}
       linkToShips
+      differentiateContacts
       />
       {/await}
     </div>

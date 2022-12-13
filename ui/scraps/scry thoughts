@@ -1,5 +1,0 @@
-::  get list of group ids
-.^((set [ship term]) %gy /(scot %p our)/group-store/(scot %da now)/groups)
-.^(* %gx /(scot %p our)/group-store/(scot %da now)/groups/ship/~poster-hoster-midlev-mindyr/astrolabe/noun)
-
-web+urbitgraph://astrolabe/ship/~midlev-mindyr

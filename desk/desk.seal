@@ -1,0 +1,7 @@
+:-  :~  [%watch & %azimuth /event]
+        [%reads %gall `%x `%azimuth /]
+        [%reads %clay `%u ~ /]
+        [%reads %clay `%x ~ /]
+        [%reads %ames `%x ~ /peers]
+    ==
+~

@@ -12,8 +12,9 @@
   export let differentiateContacts = false;
   
   $: patp = normalizeId(ship.patp);
+  $: contact = $store.contacts[ship.patp];
   $: borderClass = differentiateContacts ? (
-    'border-l-8 ' + (Object.keys(ship).length > 1 ? 'border-gold' : 'border-gray-300')
+    'border-l-8 ' + (contact ? 'border-gold' : 'border-gray-300')
   ) : '';
 
   function handleClick() {
@@ -29,16 +30,13 @@ on:click
 >
   <div class="flex p-4 items-center gap-x-4">
     <Sigil {patp} size={48} useNew noShrink />
-    <!-- {#if ship.avatar}
-      <img src={ship.avatar} class="h-12 w-12 mr-4" />
-    {/if} -->
     <p class="break-words grow">
       <span class="align-middle mr-1">
         {patp}
       </span>
       <PalStatusIndicator status={getPalStatus($store.pals, patp)} class="inline" />
       <br/>
-      {ship.nickname ? `(${ship.nickname})` : ''}
+      {contact?.nickname ? `(${contact.nickname})` : ''}
     </p>
   </div>
 </div>

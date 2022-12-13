@@ -23,6 +23,7 @@
   let firstRender = true;
   let mouseDown = false;
   let isDragging = false;
+  let stoppedDragging = Date.now();
 
   function sigma(container: HTMLElement, params: any = {}) {
     try {
@@ -38,7 +39,9 @@
       });
 
       s.on('clickNode', ({ node }) => {
-        push(linkToShip(node));
+        if (!isDragging && 100 < Date.now() - stoppedDragging) {
+          push(linkToShip(node));
+        }
       });
       s.on('afterRender', () => {
         if (firstRender) {
@@ -58,6 +61,8 @@
       mc.on('mouseup', () => {
         if (!isDragging) {
           clearHighlight();
+        } else {
+          stoppedDragging = Date.now();
         }
         mouseDown = false;
         isDragging = false;

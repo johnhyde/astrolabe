@@ -38,6 +38,7 @@ Regardless of what you run to develop, Vite will hot-reload code changes as you 
 4. Bump the `version` in `desk.docket-0`.
 3. Install the desk
     1. From the `ui` folder: `npm run install:desk`
+    2. (first time only, on dev ship): `|install our %astrolabe`
     2. From the distribution ship's dojo: `:treaty|unpublish %astrolabe`
     2. From middleman or distribution ship's dojo: `|commit %astrolabe`
     3. (if using a comet as a middleman) `|public %astrolabe`

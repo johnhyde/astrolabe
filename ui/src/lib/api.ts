@@ -24,6 +24,14 @@ export function getSpawnedPoints(patp: string): Promise<any> {
   return scry<any>(`/point/${patp}/spawned`);
 }
 
+export function getLockedSpawnedPoints(patp: string): Promise<any> {
+  return scry<any>(`/point/${patp}/spawned/locked`);
+}
+
+export function getUnlockedSpawnedPoints(patp: string): Promise<any> {
+  return scry<any>(`/point/${patp}/spawned/unlocked`);
+}
+
 export function getPeers(): Promise<any> {
   return scry<any>(`/peers`);
 }

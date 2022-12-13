@@ -12,8 +12,16 @@
   export let sigilQuery: SigilQuery = new SigilQuery('planet');
   sigilQuery.urlString = search;
   export let searchMode: ('patp' | 'sigil') = 'patp';
-  export let placeholderText = "Search by @p or #.  '*' matches any character";
+  export let allowSigilSearch: boolean = true;
+  let defaultPlaceholderText = "Search by @p or #.  '*' matches any character";
+  export let placeholderText = defaultPlaceholderText;
 
+  $: {
+    placeholderText = placeholderText ? placeholderText : defaultPlaceholderText;
+  }
+  $: {
+    searchMode = allowSigilSearch ? searchMode : 'patp';
+  }
   $: showSigilInput = searchMode == 'sigil';
   
   let bouncySearch: string = search;
@@ -113,13 +121,15 @@
       value={search}
       autofocus
     />
-    <button
-      on:click={openSigilInput}
-      class="absolute top-1 right-1 w-8 h-8 {buttonClasses}"
-    >
-      <Symbol components={'gci.lvf.lhf.lbhb.atrf4.al3.cbl2lf.cbl2mb'.split('.')} size={32}
-        altBgColor="transparent"
-        />
-    </button>
+    {#if allowSigilSearch}
+      <button
+        on:click={openSigilInput}
+        class="absolute top-1 right-1 w-8 h-8 {buttonClasses}"
+      >
+        <Symbol components={'gci.lvf.lhf.lbhb.atrf4.al3.cbl2lf.cbl2mb'.split('.')} size={32}
+          altBgColor="transparent"
+          />
+      </button>
+    {/if}
   {/if}
 </div>
