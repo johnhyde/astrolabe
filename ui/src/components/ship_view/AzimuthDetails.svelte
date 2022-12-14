@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { clan, patp2dec } from 'urbit-ob';
-  import { getPoint, getSpawnedPoints } from 'lib/api';
-  import { generateParentChain, processPointInfo } from 'lib/ship';
+  import { clan } from 'urbit-ob';
   import TooltipAndDocLink from '@/common/TooltipAndDocLink.svelte';
   import EthAddressLink from '@/common/EthAddressLink.svelte';
   import ShipChain from './ShipChain.svelte';
@@ -14,7 +12,7 @@
   $: azPoint = ['galaxy', 'star', 'planet'].includes(shipClass);
 </script>
 
-{#if azPoint}
+{#if azPoint && pointInfo.life !== undefined}
   {#if shipClass !== 'galaxy'}
     <p>
       {#if pointInfo.sponsorChain && pointInfo.sponsorChain.length > 0}

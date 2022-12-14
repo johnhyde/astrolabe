@@ -35,27 +35,35 @@
       urlSearchMode = getUrlSearchMode(searchParams);
       urlChangedSinceShipQuery = true;
       navigating = false;
+      // console.log('url changed');
     }
   }
   $: {
     urlChangedSinceShipQuery = (search || true) && searchMode && false;
+    // console.log('search changed');
   }
   function autoNav() {
+    // console.log('autonav');
     if ((search !== urlSearch || searchMode !== urlSearchMode)) {
       if (urlChangedSinceShipQuery) {
         search = urlSearch;
         searchMode = urlSearchMode;
+        // console.log('url wins');
       } else {
         navigating = true;
+        // console.log('search wins');
         // create a temp one because the real one doesn't always update in time!
         let tempAnalysis = new SearchAnalysis(search);
         if (params.mode === 'chart') {
+          // console.log('to chart');
           navToChart(tempAnalysis.patpIsValid);
         } else {
           if (tempAnalysis.patpIsValid) {
+            // console.log('to ship view');
             navToShipView(tempAnalysis.patp, true);
           } else {
             const fromShipMode = params.mode === 'ship';
+            // console.log('to search');
             navToSearch(fromShipMode);
           }
         }
@@ -156,6 +164,9 @@
     allowSigilSearch={params.mode !== 'chart'}
   />
   <!-- <div class="bg-white">
+    <p>
+      Mode: {params.mode}
+    </p>
     <p>
       Search: {search}
     </p>

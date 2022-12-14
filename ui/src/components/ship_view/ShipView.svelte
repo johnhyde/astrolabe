@@ -69,12 +69,7 @@
         <h3 class="text-lg text-center text-gray-700">{patp}</h3>
       {/if}
       <h4 class="text-center text-gray-700 break-words">
-        <!-- <TooltipAndDocLink
-          text="The integer representation of this ID"
-          doc="patpee" class="inline"
-        > -->
           {patp2dec(patp)}
-        <!-- </TooltipAndDocLink> -->
       </h4>
       <div class="flex flex-wrap justify-center gap-1.5 my-1.5">
         <GoldBadge title={"it's a " + shipClass} doc={shipClass}>{shipClass}</GoldBadge>
@@ -108,22 +103,16 @@
           </p>
         {/if}
         {#if azPoint}
+        {#await rawPointInfoPromise}
+          <LoadingSpinner spinnerClass="text-black" />
+        {:then}
           <CollapsibleContent>
             <b slot="title">Azimuth Details</b>
             <div slot="content">
-              {#await rawPointInfoPromise}
-                <LoadingSpinner spinnerClass="text-black" />
-              {:then}
                 <AzimuthDetails {patp} {pointInfo}></AzimuthDetails>
-
-                <!-- {#if value && value.point}
-                  <pre class="text-sm overflow-scroll">
-                    Raw Info:{JSON.stringify(rawPointInfo, null, 2)}
-                  </pre>
-                {/if} -->
-              {/await}
-            </div>
-          </CollapsibleContent>
+              </div>
+            </CollapsibleContent>
+          {/await}
         {/if}
       </div>
     </div>
@@ -132,7 +121,6 @@
     <ProfileShipViewExtension {patp} />
     <PalsShipViewExtension {patp} />
     <AppsShipViewExtension {patp} />
-    <!-- <GroupsShipViewExtension {patp} /> -->
   </div>
   {#if azPoint}
     <div class="mt-5 border-t">

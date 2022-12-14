@@ -1,7 +1,8 @@
 <script lang="ts">
   import LoadingSpinner from '@/common/LoadingSpinner.svelte';
 
-  import { push } from 'svelte-spa-router'
+  import { push } from 'svelte-spa-router';
+  import { onDestroy } from 'svelte';
 
   import Sigma from 'sigma-jh';
   import Graph from 'graphology';
@@ -9,7 +10,7 @@
   import { clan } from 'urbit-ob';
   import DocLink from './docs/DocLink.svelte';
   import store from 'stores/store';
-  import { cite, normalizeId } from 'lib/id';
+  import keys from 'stores/keys';
   import { parseChartData, populateGraph } from 'lib/graph';
   import { getChartData } from 'lib/api';
   import { linkToShip } from 'lib/link';
@@ -150,6 +151,18 @@
   let filterSet: Set<string> = null;
   $: peersSet = new Set($store.peers);
   $: palsSet = new Set(Object.keys($store.pals.outgoing));
+
+  function closeChart() {
+    push('/');
+  }
+
+  $: {
+    $keys.keyup.get('escape').set('starChart', closeChart);
+  }
+  
+  onDestroy(() => {
+    $keys.keyup.get('escape').delete('starChart');
+  });
 </script>
 
 <div class="border border-gold bg-navy w-full grow flex flex-col relative">

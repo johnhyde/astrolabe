@@ -23,11 +23,11 @@ function getParams(paramsOrContent:any = {}, overrides = {}) {
 
 export default function tooltip(node, paramsOrContent: any = {}) {
   const onTrigger = () => {
-    console.log('triggered');
+    // console.log('triggered');
     node.dispatchEvent(new CustomEvent("tooltipTriggered"));
 	};
   const onUntrigger = () => {
-    console.log('untriggered');
+    // console.log('untriggered');
     node.dispatchEvent(new CustomEvent("tooltipUntriggered"));
 	};
   const onClickOutside = (_, e) => {
