@@ -26,7 +26,7 @@
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
   =/  [cards-01=(list card) new=state-latest]
-    ?.  ?=(?(%0 %1 %2 %3) -.old)  `old
+    ?.  |(?=(?(%0 %1 %2 %3) -.old) (lth bump.old bump))  `old
     (on-naive-state:hc get-nas:hc)
   ?>  ?=(%4 -.new)
   =/  cards=(list card)

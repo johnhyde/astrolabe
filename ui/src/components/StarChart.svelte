@@ -3,11 +3,12 @@
 
   import { push } from 'svelte-spa-router'
 
-  import Sigma from 'sigma';
+  import Sigma from 'sigma-jh';
   import Graph from 'graphology';
   
   import { clan } from 'urbit-ob';
   import DocLink from './docs/DocLink.svelte';
+  import store from 'stores/store';
   import { cite, normalizeId } from 'lib/id';
   import { parseChartData, populateGraph } from 'lib/graph';
   import { getChartData } from 'lib/api';
@@ -33,7 +34,7 @@
         allowInvalidContainer: true,
         // labelColor: { color: WHITE },
         labelFont: 'monospace',
-        labelRenderedSizeThreshold: 9,
+        labelRenderedSizeThreshold: 2.2,
         zIndex: true,
         maxCameraRatio: 10,
       });
@@ -93,8 +94,8 @@
       rawChartData = { error };
     });
   }
-  $: parsedChartData = parseChartData(rawChartData);
-  $: [parsedChartData, bySponsor], populateGraph(g, parsedChartData, bySponsor, () => {
+  $: parsedChartData = parseChartData(rawChartData, filterSet);
+  $: [parsedChartData, childKey], populateGraph(g, parsedChartData, childKey, () => {
     searchFunc();
   });
 
@@ -145,7 +146,10 @@
       "w-full" :
       "border-r";
   }
-  let bySponsor = true;
+  let childKey: ('sponsees' | 'children') = 'sponsees';
+  let filterSet: Set<string> = null;
+  $: peersSet = new Set($store.peers);
+  $: palsSet = new Set(Object.keys($store.pals.outgoing));
 </script>
 
 <div class="border border-gold bg-navy w-full grow flex flex-col relative">
@@ -187,13 +191,20 @@
     on:click={() => push('/') }>
     X
   </div>
-  <div class="flex flex-col absolute -bottom-2 inset-x-0 text-white z-10 2xs:-bottom-3.5">
+  <div class="flex absolute -bottom-2 inset-x-0 text-white z-10 2xs:-bottom-3.5">
     <!-- <div class="ml-8 px-4 py-1 flex gap-x-1 items-center text-white"> -->
       <!-- <span>Arrange by</span> -->
-      <InlineSelect bind:value={bySponsor}
+      <InlineSelect bind:value={childKey}
         options={[
-          ['Sponsors', true],
-          ['Parents', false]
+          ['Sponsors', 'sponsees'],
+          ['Parents', 'children']
+        ]}
+        ></InlineSelect>
+      <InlineSelect bind:value={filterSet}
+        options={[
+          ['All', null],
+          ['Peers', peersSet],
+          ['Pals', palsSet],
         ]}
         ></InlineSelect>
     <!-- </div> -->

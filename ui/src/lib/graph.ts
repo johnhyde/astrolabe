@@ -6,123 +6,161 @@ const example = '[0[3216291:t;9219219;4608:s[156546;1612196;219621:~;321965149:4
 export interface ChartPoint {
   patp: string,
   dominion: ('l1' | 'l2' | 'spawn'),
+  picked: boolean,
+  pickedChildren?: boolean,
+  pickedSponsees?: boolean,
   sponsor?: string,
   parent?: string,
   children?: ChartPoint[],
   sponsees?: ChartPoint[],
 }
 
-function parseMetaString(metaString: string): ChartPoint {
-  let idString, subMetaString = '';
-  const colIndex = metaString.indexOf(':');
-  if (colIndex === -1) {
-    idString = metaString;
-  } else {
-    idString = metaString.slice(0, colIndex);
-    subMetaString = metaString.slice(colIndex + 1);
+interface ChartSubs {
+  children: ChartPoint[],
+  sponsees: ChartPoint[],
+}
+
+class ChartDataParser {
+  filter: Set<string>;
+
+  constructor(filter: Set<string>) {
+    this.filter = filter;
   }
-  const meta: ChartPoint = {
-    patp: '~' + idString,
-    dominion: 'l1',
-  }
-  if (subMetaString) {
-    const firstChar = subMetaString[0];
-    if (firstChar === 't') {
-      meta.dominion = 'l2';
-      subMetaString = subMetaString.slice(1);
-    } else if (firstChar === 's') {
-      meta.dominion = 'spawn';
-      subMetaString = subMetaString.slice(1);
+
+  parseMetaString(metaString: string): ChartPoint {
+    let idString, subMetaString = '';
+    const colIndex = metaString.indexOf(':');
+    if (colIndex === -1) {
+      idString = metaString;
+    } else {
+      idString = metaString.slice(0, colIndex);
+      subMetaString = metaString.slice(colIndex + 1);
+    }
+    const patp = '~' + idString;
+    const meta: ChartPoint = {
+      patp,
+      picked: !this.filter ? true : (this.filter.has(patp)),
+      dominion: 'l1',
     }
     if (subMetaString) {
-      if (subMetaString[0] === '~') {
-        meta.sponsor = null;
-      } else {
-        let [sponsor, parent] = subMetaString.slice(1).split('!');
-        meta.sponsor = '~' + sponsor;
-        meta.parent = '~' + parent;
+      const firstChar = subMetaString[0];
+      if (firstChar === 't') {
+        meta.dominion = 'l2';
+        subMetaString = subMetaString.slice(1);
+      } else if (firstChar === 's') {
+        meta.dominion = 'spawn';
+        subMetaString = subMetaString.slice(1);
+      }
+      if (subMetaString) {
+        if (subMetaString[0] === '~') {
+          meta.sponsor = null;
+        } else {
+          let [sponsor, parent] = subMetaString.slice(1).split('!');
+          meta.sponsor = '~' + sponsor;
+          meta.parent = '~' + parent;
+        }
       }
     }
+    return meta;
   }
-  return meta;
-}
 
-function extractMeta(data: string): [ChartPoint, string] {
-  const index = data.search(/[[;]/);
-  if (index === -1) {
-    throw new Error(`No point meta present in ${data}`);
+  extractMeta(data: string): [ChartPoint, string] {
+    const index = data.search(/[[;]/);
+    if (index === -1) {
+      throw new Error(`No point meta present in ${data}`);
+    }
+    const metaString = data.slice(0, index);
+    data = data.slice(index);
+    return [this.parseMetaString(metaString), data];
   }
-  const metaString = data.slice(0, index);
-  data = data.slice(index);
-  return [parseMetaString(metaString), data];
-}
 
-function extractChildren(data: string, sup: string = undefined): [ChartPoint[], ChartPoint[], string] {
-  if (data[0] === ';') return [[], [], data.slice(1)];
-  if (data[0] !== '[') throw new Error('Invalid children in data: ' + data.slice(0, 20));
+  extractChildren(data: string, sup: string = undefined): [ChartSubs, string] {
+    if (data[0] === ';')
+      return [{
+        children: [],
+        sponsees: [],
+      }, data.slice(1)];
+    if (data[0] !== '[') throw new Error('Invalid children in data: ' + data.slice(0, 20));
 
-  let endFound = false;
-  let counter = 0;
-  data = data.slice(1);
-  const children = [];
-  const sponsees = [];
-  while (!endFound && data.length && counter < 20000) {
-    if (data[0] === ']') {
-      endFound = true;
-      data = data.slice(1);
-    } else {
-      let sub;
-      [sub, data] = extractChartPoint(data);
-      if (!sub.parent || sub.parent === sup)
-        children.push(sub);
-      if (sub.sponsor === undefined || sub.sponsor === sup)
-        sponsees.push(sub);
+    let endFound = false;
+    let counter = 0;
+    data = data.slice(1);
+    const children = [];
+    const sponsees = [];
+    while (!endFound && data.length && counter < 20000) {
+      if (data[0] === ']') {
+        endFound = true;
+        data = data.slice(1);
+      } else {
+        let sub;
+        [sub, data] = this.extractChartPoint(data);
+        if (!sub.parent || sub.parent === sup)
+          children.push(sub);
+        if (sub.sponsor === undefined || sub.sponsor === sup)
+          sponsees.push(sub);
+      }
+      counter++;
     }
-    counter++;
+    return [{ children, sponsees }, data];
   }
-  return [children, sponsees, data];
-}
 
-function extractChartPoint(data: string): [ChartPoint, string] {
-  let point, children, sponsees;
-  [point, data] = extractMeta(data);
-  [children, sponsees, data] = extractChildren(data, point.patp);
-  point.children = children;
-  point.sponsees = sponsees;
-  return [point, data];
-}
-
-function linkChartData(points: ChartPoint[], store: any): ChartPoint[] {
-  if (!points) return points;
-  return points.map(point => {
-    if (!store[point.patp]) return point;
-    if (!point.children?.length) {
-      point.children = linkChartData(store[point.patp].children, store);
-    }
-    if (!point.sponsees?.length) {
-      point.sponsees = linkChartData(store[point.patp].sponsees, store);
-    }
-    return point;
-  });
-}
-
-function _parseChartData(str: string): ChartPoint[] {
-  if (!str) return [];
-  let [baseChildren, _] = extractChildren(str);
-  let store = {};
-  baseChildren.forEach(child => {
-    store[child.patp] = {
-      children: child.children,
-      sponsees: child.sponsees,
+  extractChartPoint(data: string): [ChartPoint, string] {
+    let point, subs;
+    [point, data] = this.extractMeta(data);
+    [subs, data] = this.extractChildren(data, point.patp);
+    point = {
+      ...point,
+      ...subs,
     };
-  });
+    return [point, data];
+  }
 
-  return linkChartData(store['~base'].children, store);
+  linkChartData(points: ChartPoint[], store: any): ChartPoint[] {
+    if (!points) return points;
+    return points.map(point => {
+      if (!store[point.patp]) return point;
+      if (!point.children?.length) {
+        point.children = this.linkChartData(store[point.patp].children, store);
+        let picked = point.children.filter(child => child.picked || child.pickedChildren);
+        point.pickedChildren = picked.length > 0;
+      }
+      if (!point.sponsees?.length) {
+        point.sponsees = this.linkChartData(store[point.patp].sponsees, store);
+        let picked = point.sponsees.filter(child => child.picked || child.pickedSponsees);
+        point.pickedSponsees = picked.length > 0;
+      }
+      return point;
+    });
+  }
+
+  parse(str: string): ChartSubs {
+    if (!str) return { children: [], sponsees: [] };
+    let [{ children: baseChildren }, _] = this.extractChildren(str, undefined);
+    let store = {};
+    baseChildren.forEach(child => {
+      store[child.patp] = {
+        children: child.children,
+        sponsees: child.sponsees,
+      };
+    });
+    let base: ChartPoint = {
+      patp: '~base',
+      dominion: 'l1',
+      picked: true,
+    }
+
+    let points = this.linkChartData([base], store);
+    return {
+      children: points[0].children || [],
+      sponsees: points[0].sponsees || [],
+    }
+  }
 }
 
-export function parseChartData(data: string): ChartPoint[] {
+export function parseChartData(data: string, filter: Set<string>): ChartSubs {
   let start = Date.now();
-  let parsed = _parseChartData(data);
+  let parser = new ChartDataParser(filter);
+  let parsed = parser.parse(data);
   // console.log(`finished parsing chart data to js object in ${Date.now() - start} ms`);
   return parsed;
 }
@@ -188,16 +226,23 @@ export function arrangePointsInSpirals(
     minDistanceBetween,
   };
 }
-
-export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: boolean, callback?): Graph {
-  if (!(chartData instanceof Array)) return;
+type childKey = ('sponsees' | 'children');
+export function populateGraph(g: Graph, chartSubs: ChartSubs, subsKey: childKey, callback?): Graph {
+  let pickedSubsKey = subsKey == 'children' ? 'pickedChildren' : 'pickedSponsees';
+  function pickedColor(point: ChartPoint, normal: string) {
+    return point.picked ? normal : (point[pickedSubsKey] ? colors.SUB_PICKED : colors.NOT_PICKED);
+  }
+  function pickedArmColor(point: ChartPoint, normal: string) {
+    return point[pickedSubsKey] ? normal : colors.NOT_PICKED;
+  }
+  let points = chartSubs[subsKey];
+  if (!(points instanceof Array)) return;
   if (!g) {
     g = new Graph();
   } else {
     g.clear();
   }
 
-  let subsKey = bySponsor ? 'sponsees' : 'children';
   let sponsorEdges = [];
 
   let offsetX = 0;
@@ -207,7 +252,7 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
   let b = 9000000;
   let theta = 0;
 
-  chartData.forEach((galaxy, gi) => {
+  points.forEach((galaxy, gi) => {
     offsetX = 0 + (a + b * theta) * Math.cos(theta);
     offsetY = 0 + (a + b * theta) * Math.sin(theta);
 
@@ -217,7 +262,7 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
     g.addNode(gPatp, {
       label: gPatp,
       size: 3,
-      color: itsYou ? colors.YOU : colors.WHITE,
+      color: itsYou ? colors.YOU : pickedColor(galaxy,  colors.WHITE),
       x: offsetX,
       y: offsetY,
       zIndex: 10,
@@ -242,6 +287,7 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
       });
     let lastStarArm = null;
     let lastStarPatp = null;
+    let GSarmColor = pickedArmColor(galaxy, colors.LGREY)
     stars.forEach((star, si) => {
       const sPatp = star.patp;
 
@@ -256,20 +302,20 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
         g.addNode(sPatp, {
           label: sPatp,
           size: starSize,
-          color: itsYou ? colors.YOU : colors.GOLDT2,
+          color: itsYou ? colors.YOU :  pickedColor(star, colors.GOLDT2),
           x: starX,
           y: starY,
           zIndex: 8,
         });
         if (lastStarArm == arm) {
           g.addEdge(sPatp, lastStarPatp, {
-            color: colors.LGREY,
+            color: GSarmColor,
             size: 0.1,
             zIndex: 7,
           });
         } else {
           g.addEdge(sPatp, gPatp, {
-            color: colors.LGREY,
+            color: GSarmColor,
             size: 0.2,
             zIndex: 9,
           });
@@ -304,7 +350,8 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
           });
         let lastPlanetArm = null;
         let lastPlanetPatp = null;
-        planets.forEach((planet, pi) => {
+        let SParmColor = pickedArmColor(star, colors.DGREY)
+          planets.forEach((planet, pi) => {
           const pPatp = planet.patp;
           const [planetX, planetY] = planetCoords[pi].coords;
           const arm = planetCoords[pi].arm;
@@ -319,21 +366,21 @@ export function populateGraph(g: Graph, chartData: ChartPoint[], bySponsor: bool
             g.addNode(pPatp, {
               label: pPatp,
               size: planetSize,
-              color: itsYou ? colors.YOU : (planet.dominion == 'l2' ? colors.GREEN : colors.BLUE),
+              color: itsYou ? colors.YOU : pickedColor(planet, planet.dominion == 'l2' ? colors.GREEN : colors.BLUE),
               x: planetX,
               y: planetY,
               zIndex: 6,
             });
             if (lastPlanetArm == arm) {
               g.addEdge(pPatp, lastPlanetPatp, {
-                color: colors.DGREY,
+                color: SParmColor,
                 size: planetEdgeSize,
                 zIndex: 5,
               });
             } else {
               if (numPlanetArms == 1) {
                 g.addEdge(pPatp, sPatp, {
-                  color: colors.DGREY,
+                  color: SParmColor,
                   size: planetEdgeSize,
                   zIndex: 5,
                 });

@@ -1,5 +1,5 @@
 /-  *astrolabe
-/+  *astrolabe, *state, *test
+/+  *astrolabe, *state, *mip, *test
 |%
 ++  test-put-in-spawn-mip
   =|  state=state-latest
@@ -13,18 +13,18 @@
     %+  expect-eq
       !>  :-
         `~zod  :: new prev-spo
-      %.y  :: spawn-mip has something under ~zod
+      "marzod:s;"  :: spawn-mip has something under ~zod
     !>  =-  :-
         (~(get by prev-spo) ~marzod)
-      (~(has by spam) ~zod)
+      (~(gut bi spam) ~zod ~marzod "nothing!")
     (put-in-spawn-mip ~marzod *npoint state)
     ::
     %+  expect-eq
       !>  :*
         `~hec  :: new prev-spo
-        %.n  :: nothing under ~zod
+        "marzod:s:hec!zod;"  :: under ~zod
         %.n  :: nothing under ~bus
-        %.y  :: something under ~hec
+        "marzod:s:hec!zod;"  :: under ~hec
       ==
     !>
     =.  state  (put-in-spawn-mip ~marzod *npoint state)
@@ -32,17 +32,17 @@
     =+  (put-in-spawn-mip ~marzod moved-to-hec state)
     :*
       (~(get by prev-spo) ~marzod)
-      (~(has by spam) ~zod)
+      (~(gut bi spam) ~zod ~marzod "nothing!")
       (~(has by spam) ~bus)
-      (~(has by spam) ~hec)
+      (~(gut bi spam) ~hec ~marzod "nothing!")
     ==
     ::
     %+  expect-eq
       !>  :*
         `~zod  :: new prev-spo
-        %.y  :: something under ~zod
+        "marzod:s;"  :: under ~zod
         %.n  :: nothing under ~bus
-        %.n  :: something under ~hec
+        %.n  :: nothing under ~hec
       ==
     !>
     =.  state  (put-in-spawn-mip ~marzod *npoint state)
@@ -51,7 +51,7 @@
     =+  (put-in-spawn-mip ~marzod *npoint state)
     :*
       (~(get by prev-spo) ~marzod)
-      (~(has by spam) ~zod)
+      (~(gut bi spam) ~zod ~marzod "nothing!")
       (~(has by spam) ~bus)
       (~(has by spam) ~hec)
     ==

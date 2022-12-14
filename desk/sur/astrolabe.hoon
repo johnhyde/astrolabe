@@ -29,7 +29,7 @@
   ==
 +$  state-4
   $:  %4
-      bump=@ud  :: bump to update state without changing the type
+      bump=_1  :: bump to update state without changing the type
       prev-spo=(map ship ship) :: so we know who the old sponsor was when sponsor changes
       spam=spawn-mip
       fropoints-1

@@ -51,7 +51,7 @@
     "bn.js": "^5.2.0",
     "graphology": "^0.24.1",
     "lodash": "^4.17.21",
-    "sigma": "^2.3.1",
+    "sigma-jh": "^2.4.2",
     "svelte-copy-to-clipboard": "^0.2.5",
     "svelte-markdown": "^0.2.3",
     "tippy.js": "^6.3.7",
