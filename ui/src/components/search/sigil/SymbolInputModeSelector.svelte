@@ -5,6 +5,7 @@
   import SymbolInputModeSelectorButton from './SymbolInputModeSelectorButton.svelte';
 
   import { searchSettings } from 'stores/searchStores';
+  import keys from 'stores/keys';
   import type { PartType, ModeDef, ModeDefs } from 'types/sigil';
   import type { SymbolQuery } from 'lib/sigil';
   import { MODE_DEFS } from 'types/sigil';
@@ -129,6 +130,12 @@
     } else {
       symbolQuery = symbolQuery.clearExceptPartType('geon');
     }
+  }
+
+  $: {
+    $keys.keyup.get('x').set('sigilMode', clear);
+    $keys.keyup.get('backspace').set('sigilMode', clear);
+    $keys.keyup.get('escape').set('sigilMode', popMode);
   }
 </script>
 

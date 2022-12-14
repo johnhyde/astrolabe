@@ -9,6 +9,16 @@ spawned ships with partial or wildcard searches, e.g. `sampel-***net`.
 There's also Help Documentation if
 you want to learn more about how Urbit IDs work.
 
+## Keyboard Shortcuts
+
+- `/` - focus the search bar
+- `escape` - leave text fields, close help pages, etc
+- `?` - open the help docs
+- `s` - switch to sigil search
+- `p` - switch to patp search
+- `backspace` or `x` - clear sigil input info
+
+
 ## How to Use Search
 
 When you type part of a `@p` into the search bar, all your contacts and peers will be
@@ -71,9 +81,9 @@ The Parent view simply shows each point under the point that spawned it. All spa
 are shown in this view, with the exception of locked stars.
 In both views, all galaxies are shown for completeness.
 
-## Upcoming Features
-
-In addition to improving the search features over time, Astrolabe will one day feature integrations with Groups, `%pals`, `%gora`, and whatever else seems fun and/or useful.
+The All/Peers/Pals selector lets you filter which points are easily visible in the graph.
+If you select Peers, only those ships that your ship has talked to will be full-colored.
+If you select Pals, only ships you've added in `%pals` will be full-colored.
 
 ## Info
 

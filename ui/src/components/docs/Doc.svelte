@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onDestroy } from 'svelte';
   import DocContent from './DocContent.svelte';
   import DocHome from './DocHome.svelte';
   import Hamburger from '@/buttons/Hamburger.svelte';
   import CloseButton from '@/buttons/CloseButton.svelte';
+  import keys from 'stores/keys';
   
   export let path: string;
 
@@ -17,6 +18,14 @@
   function navigate(path) {
     dispatch('navigate', path);
   }
+
+  $: {
+    $keys.globalkeyup.get('escape').set('doc', close);
+  }
+
+  onDestroy(() => {
+    $keys.globalkeyup.get('escape').delete('doc');
+	});
 </script>
 
 <div class="rounded-lg bg-white">

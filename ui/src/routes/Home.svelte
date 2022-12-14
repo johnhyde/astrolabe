@@ -12,6 +12,7 @@
   import ValidationProblems from '@/ValidationProblems.svelte';
   import HomeScreenTiles from '@/HomeScreenTiles.svelte';
   export let params: any = {};
+
   let analysis: SearchAnalysis = new SearchAnalysis();
   let sigilQuery: SigilQuery = new SigilQuery('planet');
   let navigating = false;
@@ -34,21 +35,17 @@
       urlSearchMode = getUrlSearchMode(searchParams);
       urlChangedSinceShipQuery = true;
       navigating = false;
-      console.log('url changed most recently!');
     }
   }
   $: {
     urlChangedSinceShipQuery = (search || true) && searchMode && false;
   }
   function autoNav() {
-    console.log('judgement day, mfers!');
     if ((search !== urlSearch || searchMode !== urlSearchMode)) {
       if (urlChangedSinceShipQuery) {
         search = urlSearch;
         searchMode = urlSearchMode;
-        console.log('url wins!');
       } else {
-        console.log('search wins!');
         navigating = true;
         // create a temp one because the real one doesn't always update in time!
         let tempAnalysis = new SearchAnalysis(search);
@@ -56,11 +53,9 @@
           navToChart(tempAnalysis.patpIsValid);
         } else {
           if (tempAnalysis.patpIsValid) {
-            console.log('going to ship view!', search, tempAnalysis.patp);
             navToShipView(tempAnalysis.patp, true);
           } else {
             const fromShipMode = params.mode === 'ship';
-            console.log('going to search view!');
             navToSearch(fromShipMode);
           }
         }

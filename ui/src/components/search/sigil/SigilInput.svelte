@@ -6,8 +6,9 @@
   import ToggleButton from '@/buttons/ToggleButton.svelte';
 
   import type { SigilQuery } from 'lib/sigil';
-  import { searchSettings } from 'stores/searchStores';
   import { toggleStoreKey } from 'lib/utils';
+  import { searchSettings } from 'stores/searchStores';
+  import keys from 'stores/keys';
 
   export let sigilQuery: SigilQuery;
   let focusedSymbolIndex: number = undefined;
@@ -36,6 +37,17 @@
 
   $: {
     sigilQuery.allowFictional = $searchSettings.allowFictionalSigils;
+  }
+
+  function keyboardClear() {
+    if (!focusedSymbol) {
+      clear();
+    }
+  }
+
+  $: {
+    $keys.keyup.get('x').set('sigilInput', keyboardClear);
+    $keys.keyup.get('backspace').set('sigilInput', keyboardClear);
   }
 </script>
 

@@ -3,6 +3,7 @@
   import Symbol from './sigil/Symbol.svelte';
 
   import docs from 'stores/docs';
+  import keys from 'stores/keys';
   import { SearchAnalysis } from 'lib/id';
   import { SigilQuery } from 'lib/sigil';
 
@@ -78,8 +79,22 @@
     }
   }
 
+  let searchInput;
+  let searchFocused = false;
+	function onFocus() { searchFocused = true; }
+	function onBlur() { searchFocused = false; }
+  function focus() { if (searchInput) searchInput.focus() }
+  function blur() { if (searchInput) searchInput.blur() }
+  $:{
+    $keys.keyup.get('/').set('searchBar', focus);
+    // generic binding in App.svelte takes care of blur
+    $keys.keyup.get('p').set('searchBar', closeSigilInput);
+    $keys.keyup.get('s').set('searchBar', openSigilInput);
+  }
+
   function openSigilInput() {
-    searchMode = 'sigil';
+    if (allowSigilSearch)
+      searchMode = 'sigil';
   }
 
   function closeSigilInput() {
@@ -118,6 +133,8 @@
       spellcheck="false"
       placeholder={placeholderText}
       on:input={(e) => bouncySearch = e.target.value}
+      on:focus={onFocus} on:blur={onBlur}
+      bind:this={searchInput}
       value={search}
       autofocus
     />
