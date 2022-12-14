@@ -23,11 +23,13 @@ export function getApp(ship: string, desk: string): Promise<any> {
 export async function getAppByPath(path: string, retry: number = 2): Promise<any> {
   try {
     return await api.scry<any>({ app: 'treaty', path: `/treaty/${path}` });
-  } catch {
+  } catch (e) {
     if (retry > 0) {
       console.log(`Got error when fetching app: ${path}.\nTrying at most ${retry} more time(s)`);
       await sleep(750);
       return getAppByPath(path, retry - 1);
+    } else {
+      throw e;
     }
   }
 }

@@ -34,11 +34,40 @@
       urlSearchMode = getUrlSearchMode(searchParams);
       urlChangedSinceShipQuery = true;
       navigating = false;
+      console.log('url changed most recently!');
     }
   }
   $: {
     urlChangedSinceShipQuery = (search || true) && searchMode && false;
   }
+  function autoNav() {
+    console.log('judgement day, mfers!');
+    if ((search !== urlSearch || searchMode !== urlSearchMode)) {
+      if (urlChangedSinceShipQuery) {
+        search = urlSearch;
+        searchMode = urlSearchMode;
+        console.log('url wins!');
+      } else {
+        console.log('search wins!');
+        navigating = true;
+        // create a temp one because the real one doesn't always update in time!
+        let tempAnalysis = new SearchAnalysis(search);
+        if (params.mode === 'chart') {
+          navToChart(tempAnalysis.patpIsValid);
+        } else {
+          if (tempAnalysis.patpIsValid) {
+            console.log('going to ship view!', search, tempAnalysis.patp);
+            navToShipView(tempAnalysis.patp, true);
+          } else {
+            const fromShipMode = params.mode === 'ship';
+            console.log('going to search view!');
+            navToSearch(fromShipMode);
+          }
+        }
+      }
+    }
+  }
+  $: urlSearch, urlSearchMode, search, searchMode, autoNav();
   function nav(path, addToHistory = false) {
     (addToHistory ? push : replace)(path);
   }
@@ -51,7 +80,7 @@
       nav('/' + buildQuerystring({ mode: searchMode }), addToHistory);
     }
   }
-  function navToShipView(addToHistory = false) {
+  function navToShipView(patp, addToHistory = false) {
     params.mode = 'ship';
     params.arg = patp;
     if (patp === search) {
@@ -87,27 +116,6 @@
         navHome(addToHistory);
     }
   }
-  function autoNav() {
-    if ((search !== urlSearch || searchMode !== urlSearchMode)) {
-      if (urlChangedSinceShipQuery) {
-        search = urlSearch;
-        searchMode = urlSearchMode;
-      } else {
-        navigating = true;
-        if (params.mode === 'chart') {
-          navToChart(analysis.patpIsValid);
-        } else {
-          if (patp) {
-            navToShipView(true);
-          } else {
-            const fromShipMode = params.mode === 'ship';
-            navToSearch(fromShipMode);
-          }
-        }
-      }
-    }
-  }
-  $: urlSearch, urlSearchMode, search, searchMode, autoNav();
   $: {
     let properMode = params.mode;
     if (properMode === 'chart') {
