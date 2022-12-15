@@ -36,8 +36,8 @@
       ~&  wex.bowl
       ~&  sup.bowl
       [%pass /monkey-ug %agent [our.bowl %monkey] %poke [%bind-ug ug-vase]]
-      :: [%pass /gorae/~midlev-mindyr %agent [~midlev-mindyr %gora] %leave ~]
-      :: [%pass /gorae/~hiddev-midlev-mindyr %agent [~hiddev-midlev-mindyr %gora] %leave ~]
+      :: [%pass /gorae-wex/~midlev-mindyr %agent [~midlev-mindyr %gora] %leave ~]
+      :: [%pass /gorae-wex/~hiddev-midlev-mindyr %agent [~hiddev-midlev-mindyr %gora] %leave ~]
       :: [%give %kick [/gorae]~ ~]
       :: [%give %kick [/gorae/~midlev-mindyr]~ ~]
       :: [%give %kick [/gorae/~hiddev-midlev-mindyr]~ ~]
