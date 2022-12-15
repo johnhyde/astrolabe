@@ -18,6 +18,7 @@
   import ProfileShipViewExtension from '~/components/extensions/ProfileShipViewExtension.svelte';
   import PalsShipViewExtension from '@/pals/PalsShipViewExtension.svelte';
   import AppsShipViewExtension from '@/extensions/AppsShipViewExtension.svelte';
+  import GoraShipViewExtension from '@/extensions/GoraShipViewExtension.svelte';
   // import GroupsShipViewExtension from '~/components/extensions/GroupsShipViewExtension.svelte';
 
   export let patp: string;
@@ -121,6 +122,7 @@
     <ProfileShipViewExtension {patp} />
     <PalsShipViewExtension {patp} />
     <AppsShipViewExtension {patp} />
+    <GoraShipViewExtension {patp} />
   </div>
   {#if azPoint}
     <div class="mt-5 border-t">

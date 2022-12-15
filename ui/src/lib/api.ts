@@ -100,3 +100,29 @@ export function subscribeToContacts(e: (data: any) => void): Promise<any> {
     }
   })
 }
+
+export function handleGoraInit(patp: Patp, updateGora) {
+  return (newGorae) => {
+    console.log('just got new gorae');
+    console.log(newGorae);
+    // console.log(`received contact-update: ${Object.keys(contactUpdate)}`)
+    // const reducers = [initialContacts, addContact, removeContact];
+    // const reducer = compose(reducers.map(r => sta => r(contactUpdate, sta)));
+    updateGora(patp, newGorae);
+  };
+}
+
+export function subscribeToGorae(patp: Patp, e: (patp: string, gorae: string[]) => void): Promise<any> {
+  let path = '/gorae/' + normalizeId(patp);
+  return api.subscribe({
+    app: 'astrolabe',
+    path: '/gorae/' + normalizeId(patp),
+    event: handleGoraInit(patp, e),
+    err: () => {
+      console.error(`Subscription to /astrolabe/${path} just got "err"`);
+    },
+    quit: () => {
+      console.error(`Subscription to /astrolabe/${path} just got "quit"`);
+    }
+  })
+}

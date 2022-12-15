@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store';
 
 import type { Rolodex } from '@urbit/api';
-import { subscribeToContacts, getPeers } from 'lib/api';
-import type { StoreState, Apps } from 'types/store';
+import { subscribeToContacts, getPeers, subscribeToGorae } from 'lib/api';
+import type { StoreState, Apps, Gorae } from 'types/store';
 import { normalizeId } from 'lib/id';
 import { setStoreKey } from 'lib/utils';
 import { getPals } from 'lib/pals';
@@ -21,6 +21,7 @@ const initStore: StoreState = {
     allies: {},
     set: new Set(),
   },
+  gorae: {},
   patpQuery: null,
   sigilQuery: null,
   searchMode: 'patp',
@@ -56,6 +57,23 @@ function updateContacts(callback: (contacts: Rolodex) => Rolodex): void {
 
 subscribeToContacts(updateContacts);
 
+function updateGorae(patp: string, gorae: string[]): void {
+  update($store => {
+    return {
+      ...$store,
+      gorae: {
+        ...$store.gorae,
+        [patp]: gorae || ['nope.jpg'],
+      },
+    };
+  });
+}
+
+function getGorae(patp: string) {
+  subscribeToGorae(patp, updateGorae);
+}
+
+
 getPeers().then(({ points }) => {
   setStoreKey(store, 'peers', points.map(normalizeId));
 });
@@ -79,4 +97,4 @@ function updateApps(callback: (apps) => Apps): void {
 
 subscribeToApps(updateApps);
 
-export default { subscribe, set, searchPatp, searchSigil, refreshPals, reset };
+export default { subscribe, set, searchPatp, searchSigil, refreshPals, getGorae, reset };

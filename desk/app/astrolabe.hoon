@@ -1,6 +1,6 @@
 /-  *astrolabe
 /+  *astrolabe, *search, slib=state
-/+  *mip, naive, default-agent, dbug, agentio
+/+  *mip, re, naive, default-agent, dbug, agentio
 /$  udon-to-docu  %udon  %docu
 |%
 +$  card  card:agent:gall
@@ -31,11 +31,52 @@
   ?>  ?=(%4 -.new)
   =/  cards=(list card)
     =/  ug-vase  !>([/astrolabe '/apps/astrolabe/#'])
-    [%pass /monkey-ug %agent [our.bowl %monkey] %poke [%bind-ug ug-vase]]~
+    :~
+      ~&  "kick gorae subs!"
+      ~&  wex.bowl
+      ~&  sup.bowl
+      [%pass /monkey-ug %agent [our.bowl %monkey] %poke [%bind-ug ug-vase]]
+      :: [%pass /gorae/~midlev-mindyr %agent [~midlev-mindyr %gora] %leave ~]
+      :: [%pass /gorae/~hiddev-midlev-mindyr %agent [~hiddev-midlev-mindyr %gora] %leave ~]
+      :: [%give %kick [/gorae]~ ~]
+      :: [%give %kick [/gorae/~midlev-mindyr]~ ~]
+      :: [%give %kick [/gorae/~hiddev-midlev-mindyr]~ ~]
+      :: [%give %kick ~ ~]
+    ==
   =.  cards  (weld cards-01 cards)
   [cards this(state new)]
-++  on-poke  on-poke:def
-++  on-watch  on-watch:def
+
+++  on-poke
+  |=  [=mark =vase]
+  ^-  (quip card _this)
+  ?>  =(our src):bowl
+  ?+    mark  (on-poke:def mark vase)
+      %subs
+    ~&  wex.bowl
+    ~&  sup.bowl
+    `this
+  ==
+++  on-watch
+  |=  =path
+  ^-  (quip card _this)
+  ?+    path
+    (on-watch:def path)
+  ::
+      [%gorae @ta ~]
+    ~&  "got a gorae sub"
+    :: ?>  =(our src):bowl
+    =/  ship-s  &2.path
+    =/  =ship  `@p`(slav %p ship-s)
+    %-  (slog leaf+"Eyre subscribed to {(spud path)}." ~)
+    =/  order=[id=@ta =inbound-request:eyre]
+      :-  'astrolabe-query'
+      [%.y %.y *address:eyre %'GET' '/apps/gora/public' ~ ~]
+    :_  this
+    :~
+      [%pass /gorae-wex/[ship-s] %agent [ship %gora] %watch /http-response/[id.order]]
+      [%pass /gorae-wex/[ship-s] %agent [ship %gora] %poke [%handle-http-request !>(order)]]
+    ==
+  ==
 ++  on-leave  on-leave:def
 ::
 ++  on-peek
@@ -44,9 +85,9 @@
   ?+    path  (on-peek:def path)
       [%x %nop ~]
     ``noun+!>(~)
-      [%x %point @ ~]
+      [%x %point @ta ~]
     ``astrolabe-point+!>((get-point:hc &3.path))
-      [%x %point @ %spawned ?(~ [spawned-filter ~])]
+      [%x %point @ta %spawned ?(~ [spawned-filter ~])]
     =/  =ship  `@p`(slav %p &3.path)
     =/  filter  t.t.t.t.path
     =/  arg  ?~(filter %all -.filter)
@@ -76,8 +117,10 @@
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
   |^
+  =<  ~&(- .)
   ?+  wire  (on-agent:def wire sign)
     [%azimuth-events ~]   (azimuth-event sign)
+    [%gorae-wex @ta ~]  (gorae-response sign &2.wire)
   ==
   ::
   ++  azimuth-event
@@ -107,6 +150,70 @@
         [cards this]
       ==
     ==
+  ++  gorae-response
+    |=  [=sign:agent:gall ship-s=@ta]
+    =/  =ship  `@p`(slav %p ship-s)
+    ^-  (quip card _this)
+    ~&  "on-agent from gora {<ship-s>}: {<-.sign>}"
+    =/  res-paths  [/gorae/[ship-s]]~
+    ?-    -.sign
+        %poke-ack
+      ?~  p.sign  [~ this]
+      ~&  "negative poke-ack"
+      (not-found res-paths ship-s)^this
+        %watch-ack
+      ?~  p.sign  [~ this]
+      ~&  "negative watch-ack"
+      (not-found res-paths ship-s)^this
+      :: (four-oh-four res-paths ship-s)^this
+        %kick
+      :_  this
+      :-  [%pass /gorae-wex/[ship-s] %agent [ship %gora] %watch /http-response/astrolabe-query]
+      (not-found res-paths ship-s)
+      :: =.  pins  (~(del by pins) eyre-id)
+      :: :_  this
+      :: [%give %kick res-paths ~]~
+        %fact
+      ?+    p.cage.sign  (on-agent:def wire sign)
+        ::   %http-response-header
+        :: ~&  "header received"
+        :: :_  this
+        :: [%give %fact res-paths cage.sign]~
+          ::
+          %http-response-data
+        ~&  "got http response data"
+        :_  this
+        =/  data  !<((unit octs) q.cage.sign)
+        =/  kicks  (kick res-paths ship-s)
+        ?~  data  (empty res-paths ship-s)
+        ?.  ((sane %t) q.u.data)  (empty)
+        =/  text  (trip q.u.data)
+        =/  urange  (alt:re "images = \\[(?:[', ]+([^'\\]]+)[', ]+)+\\]" text)
+        (empty res-paths ship-s)
+        :: :_  kicks
+        :: [%give %fact res-paths %http-response-data !>(data)]~
+      ==
+    ==
+  
+  ++  empty
+    |=  [paths=(list path) ship-s=@ta]
+    ^-  (list card)
+    :_  (kick paths ship-s)
+    [%give %fact paths %gorae !>(`(list @t)`~)]
+  ++  kick
+    |=  [paths=(list path) ship-s=@ta]
+    ^-  (list card)
+    :~
+      [%give %kick paths ~]
+      :: [%pass /gorae/[ship-s] %agent [ship %gora] %watch /http-response/[id.order]]
+      [%pass /gorae-wex/[ship-s] %agent [`@p`(slav %p ship-s) %gora] %leave ~]
+      [%pass /http-response/[ship-s] %agent [`@p`(slav %p ship-s) %gora] %leave ~]
+    ==
+  ++  not-found
+    |=  [paths=(list path) ship-s=@ta]
+    ^-  (list card)
+    :_  (kick paths ship-s)
+    [%give %fact paths %gorae-unknown !>(~)]
   --
 ::
 ++  on-arvo  on-arvo:def

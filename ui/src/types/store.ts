@@ -48,6 +48,10 @@ export interface Apps {
   set: Set<string>,
 }
 
+export interface Gorae {
+  [ship: string]: string[];
+}
+
 export interface StoreState {
   // Urbit
   // groups: {
@@ -58,6 +62,7 @@ export interface StoreState {
   pals: Pals;
   palsInstalled: boolean;
   apps: Apps,
+  gorae: Gorae,
   patpQuery: RegExp;
   sigilQuery: string[][];
   searchMode: ('patp' | 'sigil');
