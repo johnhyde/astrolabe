@@ -1,8 +1,8 @@
 <script lang="ts">
   import { clan } from 'urbit-ob';
-  import { sigil as sigil1, stringRenderer as sr1 } from '@tlon/sigil-js';
+  // import { sigil as sigil1, stringRenderer as sr1 } from '@tlon/sigil-js';
   import { sigil as sigil2, stringRenderer as sr2 } from '@johnhyde/sigil-js';
-  import { sigilScalingFunction } from 'lib/sigil';
+  import { sigilScalingFunction, crowdedSigilScalingFunction } from 'lib/sigil';
   import moonPng from 'assets/moon.png';
   import cometSvg from 'assets/comet.svg';
 
@@ -20,46 +20,46 @@
   $: noShrinkWidth = noShrink ? size+'px' : 'initial';
 
   $: shipClass = clan(patp);
-  $: displaySigil = ['galaxy', 'star', 'planet'].includes(shipClass);
+  $: crowded = ['comet', 'moon'].includes(shipClass);
   $: {
-    if (displaySigil) {
-      let sigil = sigil1;
-      let sr = sr1;
-      let svgAST;
-      if (useNew) {
-        sigil = sigil2;
-        sr = sr2;
-        svgAST = sigil({
+    // if (displaySigil) {
+      // let sigil = sigil1;
+      // let sr = sr1;
+      // let svgAST;
+      // if (useNew) {
+      let sigil = sigil2;
+      let sr = sr2;
+      let svgAST = sigil({
           patp: patp,
           size,
           colors: [bgColor, fgColor],
           autoScaleStrokes: true,
-          strokeScalingFunctionV2: sigilScalingFunction,
+          strokeScalingFunctionV2: crowded ? crowdedSigilScalingFunction : sigilScalingFunction,
         });
-      } else {
-        svgAST = sigil({
-          patp: patp,
-          size,
-          colors: [bgColor, fgColor],
-        });
-      }
+      // } else {
+      //   svgAST = sigil({
+      //     patp: patp,
+      //     size,
+      //     colors: [bgColor, fgColor],
+      //   });
+      // }
       svgAST.attributes.preserveAspectRatio = 'xMidYMin slice';
       svgString = sr(svgAST);
       if (altBgColor) {
         svgString = svgString.replace(/rect fill="[^"]+"/, `rect fill="${altBgColor}"`);
       }
-    } else if (shipClass === 'moon') {
-      imgSrc = moonPng;
-    } else {
-      imgSrc = cometSvg;
-    }
+    // } else if (shipClass === 'moon') {
+    //   imgSrc = moonPng;
+    // } else {
+    //   imgSrc = cometSvg;
+    // }
   }
 </script>
 
 <div class="grow {noShrinkClasses}" style:max-width="{size}px" style:width={noShrinkWidth}>
-  {#if displaySigil}
+  <!-- {#if displaySigil} -->
     {@html svgString}
-  {:else}
+  <!-- {:else}
     <img src={imgSrc} alt={shipClass} class="mx-auto" />
-  {/if}
+  {/if} -->
 </div>

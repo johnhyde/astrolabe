@@ -11,6 +11,10 @@ export function sigilScalingFunction(size: number): number {
   return 3.5 * Math.sqrt(51 / size);
 }
 
+export function crowdedSigilScalingFunction(size: number): number {
+  return 2.8 * Math.sqrt(51 / size);
+}
+
 export class SigilQuery {
   clan: Clan;
   symbols: SymbolQuery[];

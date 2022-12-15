@@ -1,10 +1,10 @@
 :~  title+'Astrolabe'
-    info+'Your guide to the Urbit constellations'
+    info+'Your guide to the Urbit constellations. Search for ships, view their info, and explore the Star Chart.'
     color+0x1f.243c
     image+'https://raw.githubusercontent.com/johnhyde/astrolabe/main/ui/src/assets/astrolabe-tile.svg'
-    glob-http+['https://s3.us-east-2.amazonaws.com/warkgnall.com/urbit/astrolabe/globs/glob-0v6.g0rdr.d6ja2.qomtg.hqt4o.i0i83.glob' 0v6.g0rdr.d6ja2.qomtg.hqt4o.i0i83]
+    glob-http+['https://s3.us-east-2.amazonaws.com/warkgnall.com/urbit/astrolabe/globs/glob-0v4.88rt1.guqn5.nnatp.lca68.ej9aj.glob' 0v4.88rt1.guqn5.nnatp.lca68.ej9aj]
     base+'astrolabe'
-    version+[0 3 8]
+    version+[1 0 0]
     website+'https://github.com/johnhyde/astrolabe'
     license+'MIT'
 ==
