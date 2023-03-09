@@ -31,7 +31,9 @@
   ?>  ?=(%4 -.new)
   =/  cards=(list card)
     =/  ug-vase  !>([/astrolabe '/apps/astrolabe/#'])
-    [%pass /monkey-ug %agent [our.bowl %monkey] %poke [%bind-ug ug-vase]]~
+    :~  [%pass /monkey-ug %agent [our.bowl %monkey] %poke [%bind-ug ug-vase]]
+        groups-link-patch-card:hc
+    ==
   =.  cards  (weld cards-01 cards)
   [cards this(state new)]
 ++  on-poke  on-poke:def
@@ -307,6 +309,14 @@
     =/  npoint  (get-npoint-from-nas gal nas)
     (pdata:smel (pmeta:smel gal npoint) ~)
   s+(crip :(weld "[" gal-data main-data "]"))
+::
+::
+++  groups-link-patch-card
+  =/  catch  [%cord '/apps/groups/desk.js']
+  =/  hatch  [%before "."]
+  =/  patch  [/apps/astrolabe catch hatch groups-link-thatch]
+  =/  patch-kit-vase  !>([/groups/astrolabe/link patch])
+  [%pass /monkey/patch/groups/link %agent [our.bowl %monkey] %poke [%patch patch-kit-vase]]
 ::
 ++  read-doc
   |=  =path
