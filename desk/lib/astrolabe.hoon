@@ -211,9 +211,10 @@ setInterval(() => {
   const spans = document.querySelectorAll('section > div > div > div > span > span:first-child');
   spans.forEach((span) => {
     if (span.innerHTML !== '~') return;
-    let c = span.parentElement.parentElement;
-    if (c.children.length > 1) return;
-    let patp = c.innerText;
+    let cspan = span.parentElement;
+    if (cspan.nextSibling) return;
+    let c = cspan.parentElement;
+    let patp = cspan.innerText;
     let b = document.createElement('a');
     b.innerHTML = "View in Astrolabe";
     b.className = 'button ml-4';
