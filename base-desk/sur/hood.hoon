@@ -1,147 +1,159 @@
 =,  clay
 =*  dude  dude:gall
 |%
-::  $snap: kiln snapshot
-::
-+$  snap  (map desk arak)
-::  $diff: subscription update
-::
-+$  diff
-  $%  [%block =desk =arak =weft blockers=(set desk)]
-      [%reset =desk =arak]
-      [%commit =desk =arak]
-      [%merge-sunk =desk =arak =tang]
-      [%merge-fail =desk =arak =tang]
-      [%suspend =desk =arak]
-      [%revive =desk =arak]
++$  pike
+  $:  sync=(unit [=ship =desk])
+      hash=@uv
+      =zest
+      wic=(set weft)
   ==
-::  $arak: foreign vat tracker
 ::
-::    .rail: upstream tracking state, if any
-::    .rein: configuration for agents
++$  pikes  (map desk pike)
 ::
-+$  arak
-  $:  rail=(unit rail)
-      =rein
-  ==
-::  $rail: upstream tracking state
-::
-::    .publisher: Ship that originally published desk, if available
-::    .paused: is tracking paused? or live
-::    .ship: upstream ship (could be .our)
-::    .desk: name of upstream desk
-::    .aeon: next aeon to pull from upstream
-::    .next: list of pending commits with future kelvins
-::
-+$  rail
-  $:  publisher=(unit ship)
-      paused=?
-      =ship
-      =desk
-      =aeon
-      next=(list rung)
-  ==
 ::  $rung: reference to upstream commit
 ::
 +$  rung  [=aeon =weft]
-::  $rein: diff from desk manifest
 ::
-::    .liv: suspended? if suspended, no agents should run
-::    .add: agents not in manifest that should be running
-::    .sub: agents in manifest that should not be running
-::
-+$  rein
-  $:  liv=_&
-      add=(set dude)
-      sub=(set dude)
-  ==
-::
-+$  vat  [=desk hash=@uv =cass =arak]
-::  +report-vats: report on all desk installations
-::
++$  sync-state  [nun=@ta kid=(unit desk) let=@ud]
++$  sink        (unit [her=@p sud=desk kid=(unit desk) let=@ud])
 ++  report-vats
-  |=  [our=@p now=@da]
-  ^-  tang
-  =+  .^  raz=(list vat)
-          %gx  /(scot %p our)/hood/(scot %da now)/kiln/vats/noun
+  =|  $:  =cone
+          sor=(map desk [ship desk])
+          zyn=(map [desk ship desk] sync-state)
+          desks=(set desk)
+          =pikes
+          =rock:tire:clay
+          kel=weft
       ==
-  :-  (report-kids our now)
-  (turn raz |=(v=vat (report-vat our now v)))
-::  +report-vat: report on a single desk installation
-::
-++  report-vat
-  |=  [our=ship now=@da vat]
-  ^-  tank
-  ?:  =(ud.cass 0)
-    leaf+"desk does not yet exist: {<desk>}"
-  =/  kel-path
-    /(scot %p our)/[desk]/(scot %da now)/sys/kelvin
-  ?.  .^(? %cu kel-path)
-    leaf+"bad desk: {<desk>}"
-  =+  .^(=weft %cx kel-path)
-  :+  %rose  ["" "{<desk>}" "::"]
-  ^-  tang
-  =/  meb  (mergebase-hashes our desk now arak)
-  =/  poz
-    ?~  rail.arak  "local"
-    ?:(paused.u.rail.arak "paused" "tracking")
-  =/  sat  ?:(liv.rein.arak "running" "suspended")
-  =/  pen
-    ?~  rail.arak  "~"
-    <(turn next.u.rail.arak |=([@ lal=@tas num=@] [lal num]))>
-  :~  leaf/"/sys/kelvin:      {<[lal num]:weft>}"
-      leaf/"base hash:        {?.(=(1 (lent meb)) <meb> <(head meb)>)}"
-      leaf/"%cz hash:         {<hash>}"
-      ::
-      leaf/"app status:       {sat}"
-      leaf/"force on:         {?:(=(~ add.rein.arak) "~" <add.rein.arak>)}"
-      leaf/"force off:        {?:(=(~ sub.rein.arak) "~" <sub.rein.arak>)}"
-      ::
-      leaf/"publishing ship:  {?~(rail.arak <~> <publisher.u.rail.arak>)}"
-      leaf/"updates:          {poz}"
-      leaf/"source ship:      {?~(rail.arak <~> <ship.u.rail.arak>)}"
-      leaf/"source desk:      {?~(rail.arak <~> <desk.u.rail.arak>)}"
-      leaf/"source aeon:      {?~(rail.arak <~> <aeon.u.rail.arak>)}"
-      leaf/"pending updates:  {pen}"
-  ==
-::  +report-kids: non-vat cz hash report for kids desk
-::
-++  report-kids
-  |=  [our=ship now=@da]
-  ^-  tank
-  =/  dek  %kids
-  =/  ego  (scot %p our)
-  =/  wen  (scot %da now)
-  ?.  (~(has in .^((set desk) %cd /[ego]//[wen])) dek)
-    leaf/"no %kids desk"
-  =+  .^(hash=@uv %cz /[ego]/[dek]/[wen])
-  leaf/"%kids %cz hash:     {<hash>}"
-::  +read-kelvin-foreign: read /sys/kelvin from a foreign desk
-::
-++  read-kelvin-foreign
-  |=  [=ship =desk =aeon]
-  ^-  weft
-  ~|  read-foreign-kelvin/+<
-  =/  her  (scot %p ship)
-  =/  syd  (scot %tas desk)
-  =/  yon  (scot %ud aeon)
-  ::
-  =/  dom  .^(dome cv/~[her syd yon])
-  =/  tak  (scot %uv (~(got by hit.dom) let.dom))
-  =/  yak  .^(yaki cs/~[her syd yon %yaki tak])
-  =/  lob  (scot %uv (~(got by q.yak) /sys/kelvin))
-  =/  peg  .^(page cs/~[her syd yon %blob lob])
-  ;;(weft q.peg)
-::  +read-kelvin-local: read /sys/kelvin from a local desk
-::
-++  read-kelvin-local
-  |=  [our=ship =desk now=@da]
-  ^-  (unit weft)
-  ~|  read-kelvin-local+desk
-  =/  pax  (en-beam [our desk da+now] /sys/kelvin)
-  ?.  .^(? cu/pax)
-    ~
-  [~ .^(weft cx/pax)]
+  |_  [our=@p now=@da]
+  +*  ego  (scot %p our)
+      wen  (scot %da now)
+  ++  $
+    |=  [? ? ? ? ?]
+     (report-vats:abed +<)
+  ++  abed 
+    %=    ..abed
+      cone  .^(^cone %cx /[ego]//[wen]/domes)
+      sor  .^((map desk [ship desk]) %gx /[ego]/hood/[wen]/kiln/sources/noun)
+      zyn  .^  (map [desk ship desk] sync-state)  %gx
+             /[ego]/hood/[wen]/kiln/syncs/noun
+           ==
+      desks  .^((set desk) %cd /[ego]/base/[wen])
+      pikes  .^(^pikes %gx /[ego]/hood/[wen]/kiln/pikes/kiln-pikes)
+      rock  .^(rock:tire:clay %cx /[ego]//[wen]/tire)
+      kel  (weft .^(* cx/(en-beam [our %base da+now] /sys/kelvin)))  
+    ==
+  ++  vat-info
+    |=  desk=_`desk`%base
+    =/  pike  (~(got by pikes) desk)
+    =/  zest  -:(~(got by rock) desk)
+    =/  kel-path  /[ego]/[desk]/[wen]/sys/kelvin
+    =/  sink=sink
+      ?~  s=(~(get by sor) desk)
+        ~
+      ?~  z=(~(get by zyn) desk u.s)
+        ~
+      `[-.u.s +.u.s +.u.z]
+    =/  hash  .^(@uv %cz /[ego]/[desk]/[wen])
+    =/  dek  (~(got by rock) desk)
+    =/  =dome  (~(got by cone) our desk)
+    =+  .^(=waft %cx kel-path)
+    :*  &1  &2  &3  &4  &5  &6  &7  &8
+        desk=desk
+        ^=  running  =(%live zest)
+        ^=  suspended  =(%dead zest)
+        ^=  exists  !=(ud.cass 0):.^(=cass %cw /[ego]/[desk]/[wen])
+        ^=  bad-desk  ?!(.^(? %cu kel-path))
+        ^=  meb   ::  =(list @uv)
+          ?~  sink  [hash]~
+          (mergebase-hashes our desk now her.u.sink sud.u.sink)
+        ^-  [on=(list [@tas ?]) of=(list [@tas ?])]
+          (skid ~(tap by ren.dome) |=([* ?] +<+))
+        ^=  sat
+          ?-  zest.dek
+            %live  "running"
+            %dead  "suspended"
+            %held  "suspended until next update"
+          ==
+        ^-  kul=tape
+          %+  roll
+            %+  sort
+              ~(tap in (waft-to-wefts:clay waft))
+            |=  [a=weft b=weft]
+            ?:  =(lal.a lal.b)
+              (lte num.a num.b)
+            (lte lal.a lal.b)
+          |=  [=weft =tape]
+          (welp " {<[lal num]:weft>}" tape)
+        ^=  blocking
+            ?&  !=(%base desk)
+                !=(%live zest.pike)
+                !(~(has in wic.pike) kel) 
+    ==      ==
+  ++  report-vats
+    |=  $:  verb=?
+            show-suspended=?
+            show-running=?
+            show-blocking=?
+            show-nonexistent=?
+        ==
+    %+  turn
+      %+  skim
+        %+  turn  ~(tap in desks)
+        |=  =desk  (vat-info desk)
+      |=  vat-info
+      :: just unconditionally show "bad" desks, whatever that means
+      ?|  bad-desk
+          &(suspended show-suspended)
+          &(running show-running)
+          &(blocking show-blocking)
+          &(!exists show-nonexistent)
+      ==
+    |=  =vat-info
+    :+  %rose  [" " " " "::"]
+    :-  leaf+"{<desk.vat-info>}"
+    %-  flop
+    %-  report-vat
+    [verb vat-info]
+  ++  report-vat
+    |=  [verb=? vat-info]
+    ^-  tang
+    ?:  !exists
+      ~[leaf+"desk does not yet exist: {<desk>}"]
+    ?:  =(%kids desk)
+      ~[leaf+"%kids %cz hash:     {<hash>}"]
+    ?:  bad-desk
+      ~[leaf+"bad desk: {<desk>}"]
+    %-  flop
+    ?.  verb
+      :~  leaf/"/sys/kelvin:     {kul}"
+          leaf/"app status:       {sat}"
+          leaf/"publishing ship:  {?~(sink <~> <(get-publisher our desk now)>)}"
+          leaf/"pending updates:  {<`(list [@tas @ud])`~(tap in wic.dek)>}"
+      ==
+    :~  leaf/"/sys/kelvin:     {kul}"
+        leaf/"base hash:        {?.(=(1 (lent meb)) <meb> <(head meb)>)}"
+        leaf/"%cz hash:         {<hash>}"
+        ::
+        leaf/"app status:       {sat}"
+        leaf/"force on:         {?:(=(~ on) "~" <on>)}"
+        leaf/"force off:        {?:(=(~ of) "~" <of>)}"
+        ::
+        leaf/"publishing ship:  {?~(sink <~> <(get-publisher our desk now)>)}"
+        leaf/"updates:          {?~(sink "local" "remote")}"
+        leaf/"source ship:      {?~(sink <~> <her.u.sink>)}"
+        leaf/"source desk:      {?~(sink <~> <sud.u.sink>)}"
+        leaf/"source aeon:      {?~(sink <~> <let.u.sink>)}"
+        leaf/"kids desk:        {?~(sink <~> ?~(kid.u.sink <~> <u.kid.u.sink>))}"
+        leaf/"pending updates:  {<`(list [@tas @ud])`~(tap in wic.dek)>}"
+    ==
+  ++  report-kids
+    ^-  tank
+    ?.  (~(has in .^((set desk) %cd /[ego]//[wen])) %kids)
+      leaf/"no %kids desk"
+    =+  .^(hash=@uv %cz /[ego]/kids/[wen])
+    leaf/"%kids %cz hash:     {<hash>}"
+  --
 ::  +read-bill-foreign: read /desk/bill from a foreign desk
 ::
 ++  read-bill-foreign
@@ -152,7 +164,7 @@
   =/  syd  (scot %tas desk)
   =/  yon  (scot %ud aeon)
   ::
-  =/  dom  .^(dome cv/~[her syd yon])
+  =/  dom  .^(domo cv/~[her syd yon])
   =/  tak  ~|  aeons=~(key by hit.dom)
            (scot %uv (~(got by hit.dom) aeon))
   =/  yak  .^(yaki cs/~[her syd yon %yaki tak])
@@ -169,21 +181,6 @@
   ?.  .^(? cu/pax)
     *(list dude)
   .^((list dude) cx/pax)
-::  +adjust-dudes: which agents should be started and stopped
-::
-::    Will ask Gall to start agents that it's already running
-::    but that should be ok, and might be safer in case other
-::    unprocessed moves would have turned them off.
-::
-++  adjust-dudes
-  |=  $:  local=[our=ship =desk now=@da]
-          =rein
-      ==
-  ^-  [jolt=(list dude) idle=(list dude)]
-  =/  all=(list dude)  (read-bill local)
-  =/  want  (get-apps-want local all rein)
-  =/  have  (get-apps-live local)
-  [want (skip have ~(has in (sy want)))]
 ::
 ++  get-remote-diff
   |=  [our=ship here=desk now=@da her=ship there=desk when=aeon]
@@ -210,38 +207,18 @@
   ^-  (list [=dude live=?])
   %~  tap  in
   .^((set [=dude live=?]) ge+/(scot %p our)/[desk]/(scot %da now))
-::  +get-apps-want: find which apps should be running on a desk
-::
-++  get-apps-want
-  |=  [local=[our=ship =desk now=@da] duz=(list dude) =rein]
-  ^-  (list dude)
-  ?.  liv.rein  ~
-  ?.  |(=(`zuse+zuse (read-kelvin-local local)) =(%base desk.local))  ~
-  =.  duz  (skip duz ~(has in sub.rein))
-  =.  duz  (weld duz (skip ~(tap in add.rein) ~(has in (sy duz))))
-  duz
 ::
 ++  mergebase-hashes
-  |=  [our=@p =desk now=@da =arak]
-  ?~  rail.arak
-    ~
-  =/  her  (scot %p ship.u.rail.arak)
+  |=  [our=@p syd=desk now=@da her=ship sud=desk]
+  =/  her  (scot %p her)
   =/  ego  (scot %p our)
   =/  wen  (scot %da now)
-  %+  turn  .^((list tako) %cs ~[ego desk wen %base her desk.u.rail.arak])
-  |=(=tako .^(@uv %cs ~[ego desk wen %hash (scot %uv tako)]))
+  %+  turn  .^((list tako) %cs ~[ego syd wen %base her sud])
+  |=(=tako .^(@uv %cs ~[ego syd wen %hash (scot %uv tako)]))
 ::
 ++  enjs
   =,  enjs:format
   |%
-  ++  vats
-    |=  v=(list ^vat)
-    ^-  json
-    %-  pairs
-    %+  turn  v
-    |=  va=^vat
-    [desk.va (vat va)]
-  ::
   ++  tim
     |=  t=@
     ^-  json
@@ -252,15 +229,6 @@
     %-  pairs
     :~  ud+(numb ud.c)
         da+(tim da.c)
-    ==
-  ::
-  ++  vat
-    |=  v=^vat
-    %-  pairs
-    :~  desk+s+desk.v
-        hash+s+(scot %uv hash.v)
-        cass+(cass cass.v)
-        arak+(arak arak.v)
     ==
   ::
   ++  weft
@@ -275,31 +243,6 @@
     %-  pairs
     :~  aeon+(numb aeon.r)
         weft+(weft weft.r)
-    ==
-  ::
-  ++  rein
-    |=  r=^rein
-    %-  pairs
-    :~  add+a+(turn ~(tap in add.r) (lead %s))
-        sub+a+(turn ~(tap in sub.r) (lead %s))
-    ==
-  ::
-  ++  arak
-    |=  a=^arak
-    %-  pairs
-    :~  rail+?~(rail.a ~ (rail u.rail.a))
-        rein+(rein rein.a)
-    ==
-  ::
-  ++  rail
-    |=  r=^rail
-    %-  pairs
-    :~  ship+s+(scot %p ship.r)
-        publisher+?~(publisher.r ~ s+(scot %p u.publisher.r))
-        desk+s+desk.r
-        paused+b+paused.r
-        aeon+(numb aeon.r)
-        next+a+(turn next.r rung)
     ==
   --
 --
