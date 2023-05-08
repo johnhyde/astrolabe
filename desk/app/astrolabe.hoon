@@ -20,6 +20,7 @@
   :_  this
   :~  ug-handler-card:hc
       groups-link-patch-card:hc
+      talk-link-patch-card:hc
       az-events-card:hc
   ==
 ::
@@ -35,6 +36,7 @@
   =/  cards=(list card)
     :~  ug-handler-card:hc
         groups-link-patch-card:hc
+        talk-link-patch-card:hc
     ==
   =.  cards  (weld cards-01 cards)
   [cards this(state new)]
@@ -322,6 +324,12 @@
   =/  patch  [/apps/groups catch hatch groups-link-thatch]
   =/  patch-kit-vase  !>([/groups/astrolabe/link patch])
   [%pass /monkey/patch/groups/link %agent [our.bowl %monkey] %poke [%patch patch-kit-vase]]
+++  talk-link-patch-card
+  =/  catch  [%cord '/apps/talk/desk.js']
+  =/  hatch  [%before "."]
+  =/  patch  [/apps/talk catch hatch groups-link-thatch]
+  =/  patch-kit-vase  !>([/talk/astrolabe/link patch])
+  [%pass /monkey/patch/talk/link %agent [our.bowl %monkey] %poke [%patch patch-kit-vase]]
 ::
 ++  read-doc
   |=  =path

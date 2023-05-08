@@ -217,10 +217,12 @@ setInterval(() => {
     let patp = cspan.innerText;
     let b = document.createElement('a');
     b.innerHTML = "View in Astrolabe";
-    b.className = 'button ml-4';
+    b.className = 'button';
     b.href = 'web+urbitgraph://astrolabe/ship/' + patp;
     b.target = '_blank';
     b.style.backgroundColor = "navy";
+    b.style.marginLeft = "1rem";
+    b.style.color = "white";
     c.appendChild(b);
   });
 }, 100);

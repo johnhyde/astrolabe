@@ -7,7 +7,7 @@ import path from 'path';
 export default ({ mode }) => {
   Object.assign(process.env, loadEnv(mode, process.cwd()));
   const SHIP_URL = process.env.SHIP_URL || process.env.VITE_SHIP_URL || 'http://localhost:8080';
-  console.log(SHIP_URL);
+  console.log('SHIP_URL', SHIP_URL);
 
   return defineConfig({
     plugins: [
