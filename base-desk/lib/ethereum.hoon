@@ -652,7 +652,7 @@
     :^  url  %post
       %-  ~(gas in *math)
       ~['Content-Type'^['application/json']~]
-    (some (as-octt (en-json:html jon)))
+    (some (as-octs (en:json:html jon)))
   ::  +light-json-request: like json-request, but for %l
   ::
   ::    TODO: Exorcising +purl from our system is a much longer term effort;
@@ -665,7 +665,7 @@
     :*  %'POST'
         (crip (en-purl:html url))
         ~[['content-type' 'application/json']]
-        (some (as-octt (en-json:html jon)))
+        (some (as-octs (en:json:html jon)))
     ==
   ::
   ++  batch-read-request
@@ -733,7 +733,7 @@
     ::
         %eth-get-block-by-number
       :-  'eth_getBlockByNumber'
-      :~  (tape (num-to-hex bon.req))
+      :~  (tape (num-to-hex-minimal bon.req))
           b+txs.req
       ==
     ::
@@ -941,6 +941,12 @@
     "0"
   %-  render-hex-bytes
   (as-octs:mimes:html n)
+::
+++  num-to-hex-minimal
+  |=  n=@
+  ^-  tape
+  %-  prefix-hex
+  ((x-co:co 1) n)
 ::
 ++  address-to-hex
   |=  a=address

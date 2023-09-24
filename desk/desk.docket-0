@@ -4,7 +4,7 @@
     image+'https://raw.githubusercontent.com/johnhyde/astrolabe/main/ui/src/assets/astrolabe-tile.svg'
     glob-http+['https://s3.us-east-2.amazonaws.com/warkgnall.com/urbit/astrolabe/globs/glob-0v4.88rt1.guqn5.nnatp.lca68.ej9aj.glob' 0v4.88rt1.guqn5.nnatp.lca68.ej9aj]
     base+'astrolabe'
-    version+[1 0 6]
+    version+[1 0 7]
     website+'https://github.com/johnhyde/astrolabe'
     license+'MIT'
 ==

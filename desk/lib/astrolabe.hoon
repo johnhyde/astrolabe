@@ -207,23 +207,27 @@
 ::
 ++  groups-link-thatch
 '''
+const buttonText = 'View in Astrolabe';
 setInterval(() => {
+  const footer = document.querySelectorAll('section > div > footer')?.[0];
+  if (!footer) return;
+  if (footer.children[0].innerText === buttonText) return;
   const spans = document.querySelectorAll('section > div > div > div > span > span:first-child');
   spans.forEach((span) => {
     if (span.innerHTML !== '~') return;
+    if (footer.children[0].innerText === buttonText) return;
     let cspan = span.parentElement;
-    if (cspan.nextSibling) return;
-    let c = cspan.parentElement;
     let patp = cspan.innerText;
     let b = document.createElement('a');
-    b.innerHTML = "View in Astrolabe";
+    b.innerHTML = buttonText;
     b.className = 'button';
-    b.href = 'web+urbitgraph://astrolabe/ship/' + patp;
+    // b.href = 'web+urbitgraph://astrolabe/ship/' + patp;
+    b.href = '/apps/astrolabe/#/ship/' + patp;
     b.target = '_blank';
     b.style.backgroundColor = "navy";
     b.style.marginLeft = "1rem";
     b.style.color = "white";
-    c.appendChild(b);
+    footer.prepend(b);
   });
 }, 100);
 '''
